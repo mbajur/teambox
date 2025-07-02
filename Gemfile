@@ -86,3 +86,5 @@ gem "rails_autolink", "~> 1.1", require: true
 gem "country_select", "~> 11.0"
 
 gem "friendly_id", "~> 5.5"
+
+gem "rails-observers", "~> 0.1.5"
