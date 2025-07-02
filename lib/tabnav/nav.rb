@@ -2,7 +2,7 @@ module Tabnav
   class Nav
     attr_accessor :tabs, :html, :name
 
-    def initialize(name, opts={})
+    def initialize(name, opts = {})
       @name = name || :main
       @tabs = []
       @html = opts[:html] || {}
@@ -10,4 +10,4 @@ module Tabnav
       @html[:class] ||= @html[:id]
     end
   end
-end  
+end

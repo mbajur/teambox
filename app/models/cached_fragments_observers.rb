@@ -45,7 +45,7 @@ class CachedFragmentsObservers < ActiveRecord::Observer
 
   def expire_people_fragments_for_project(project, user_id = nil)
     Rails.logger.info "FRAGMENT CACHE: Enqueueing expire job: people fragment for the project #{project.permalink}"
-    user_ids = Person.where(:project_id => project.id).select(:user_id).collect(&:user_id)
+    user_ids = Person.where(project_id: project.id).select(:user_id).collect(&:user_id)
     user_ids << user_id if user_id
     user_ids.each { |user_id| Rails.cache.write "projects_people_data.#{user_id}", Person.people_data_for_user(User.find_by_id(user_id)) }
   end
@@ -55,4 +55,3 @@ class CachedFragmentsObservers < ActiveRecord::Observer
     organization.users.each { |user| Rails.cache.write "json_organizations.#{user.id}", Organization.json_organizations(user) }
   end
 end
-

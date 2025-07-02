@@ -1,10 +1,9 @@
 class User
-
   def stats
-    settings['stats'] || {}
+    settings["stats"] || {}
   end
 
-  def increment_stat(key, inc=1)
+  def increment_stat(key, inc = 1)
     save_stats stats.merge({ key => stats[key].to_i + inc })
   end
 
@@ -18,8 +17,7 @@ class User
 
   private
 
-    def save_stats hash
-      write_setting 'stats', hash
+    def save_stats(hash)
+      write_setting "stats", hash
     end
-
 end
