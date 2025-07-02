@@ -4,7 +4,7 @@ class TeamboxData < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :organization
-  concerned_with :serialization, :attributes, :teambox, :basecamp, :validations
+  # concerned_with :serialization, :attributes, :teambox, :basecamp, :validations
 
   attr_accessible :project_ids, :type_name, :processed_data, :user_map, :target_organization, :service, :organization_id
 
