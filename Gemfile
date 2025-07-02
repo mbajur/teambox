@@ -54,6 +54,8 @@ group :development, :test do
   gem "shoulda-matchers", "~> 6.0"
   gem "factory_bot_rails"
   gem "rspec_junit_formatter"
+  gem "simplecov"
+  gem "simplecov-cobertura"
 end
 
 group :development do

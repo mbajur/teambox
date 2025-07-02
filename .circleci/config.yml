@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   ruby: circleci/ruby@2.5.3
+  codecov: codecov/codecov@3
   # node: circleci/node@2
 
 jobs:
@@ -51,6 +52,7 @@ jobs:
           command: bundle exec rails db:schema:load --trace
       # Run rspec in parallel
       - ruby/rspec-test
+      - codecov/upload
 
 workflows:
   version: 2
