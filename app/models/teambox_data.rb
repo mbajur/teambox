@@ -6,8 +6,6 @@ class TeamboxData < ActiveRecord::Base
   belongs_to :organization
   # concerned_with :serialization, :attributes, :teambox, :basecamp, :validations
 
-  attr_accessible :project_ids, :type_name, :processed_data, :user_map, :target_organization, :service, :organization_id
-
   has_attached_file :processed_data,
     url: "/:data_type/:id/:basename.:extension",
     path: Rails.configuration.teambox.amazon_s3 ?
