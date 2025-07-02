@@ -12,7 +12,6 @@ This is not a direct continuation — it’s a ground-up rewrite. The objectives
 ### Core Architecture
 - [ ] Upgrade to Rails 8
 - [ ] Refactor as a mountable Rails engine
-- [ ] Use Zeitwerk autoloading
 - [ ] Support installation into existing Rails apps
 
 ### Frontend
@@ -39,6 +38,7 @@ This is not a direct continuation — it’s a ground-up rewrite. The objectives
 - [ ] Provide development setup instructions and seed data
 - [ ] Write specs for all core modules
 - [ ] Ensure engine is testable in isolation and within a host app
+- [ ] CI / Specs suite
 
 ## 🎓 Tribute
 
