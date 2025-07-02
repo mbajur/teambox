@@ -1,9 +1,8 @@
 class Comment
-    
   def previously_closed?
-    [:rejected, :resolved].include? previous_status_name
+    [ :rejected, :resolved ].include? previous_status_name
   end
-  
+
   def transition?
     status_transition? || assigned_transition? || due_on_change? || urgent_change?
   end
@@ -31,7 +30,7 @@ class Comment
   def assigned_transition?
     assigned_id != previous_assigned_id
   end
-  
+
   def status_transition?
     previous_status && status != previous_status
   end
@@ -59,13 +58,12 @@ class Comment
   def previous_status_open?
     Task::STATUSES[:open] == previous_status
   end
-  
+
   def status_name
     Task::STATUS_NAMES[status || 0]
   end
-  
+
   def previous_status_name
     Task::STATUS_NAMES[previous_status]
   end
-  
 end

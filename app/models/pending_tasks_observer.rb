@@ -13,7 +13,7 @@ class PendingTasksObserver < ActiveRecord::Observer
       assigned_was.user.clear_pending_tasks! if assigned_was and assigned_was.user
     when Project
       if record.archived_changed?
-        Person.where(:project_id => record.id).each do |person|
+        Person.where(project_id: record.id).each do |person|
           person.user.clear_pending_tasks!
         end
       end
@@ -32,6 +32,4 @@ class PendingTasksObserver < ActiveRecord::Observer
       end
     end
   end
-
 end
-

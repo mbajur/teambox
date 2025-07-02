@@ -1,7 +1,7 @@
 class TaskList
   before_create :init_list
   after_create :log_create
-  
+
   def init_list
     unless self.position
       self.position = 0
@@ -12,7 +12,6 @@ class TaskList
   end
 
   def log_create
-    self.project.log_activity(self,'create')
+    self.project.log_activity(self, "create")
   end
-
 end

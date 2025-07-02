@@ -1,16 +1,15 @@
 class Project
-  
   after_create :log_create, :update_user_stats
   after_destroy :remove_from_recent_projects
   after_save :remove_recent_unless_archived
-  
+
   def remove_recent_unless_archived
     remove_from_recent_projects if archived?
   end
-  
+
   def log_create
     add_user(user)
-    log_activity(self, 'create', user_id)
+    log_activity(self, "create", user_id)
 
     # We'll add automagically an administration membership to the creator of the first project
     if organization.memberships.count == 0 and organization.projects.count == 1
@@ -27,7 +26,6 @@ class Project
     end
 
     def update_user_stats
-      user.increment_stat 'projects' if user
+      user.increment_stat "projects" if user
     end
-
 end

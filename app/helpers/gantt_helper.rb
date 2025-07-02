@@ -15,7 +15,7 @@ module GanttChart
     def initialize(start, final, description = nil, link = nil)
       @start = set_destination(start)
       @final = set_destination(final)
-      @description = ERB::Util.h(description) || [@start,@final].join('-')
+      @description = ERB::Util.h(description) || [ @start, @final ].join("-")
       @link = link
     end
 
@@ -35,36 +35,35 @@ module GanttChart
 
     def set_destination(position)
       case position
-        when Date
+      when Date
           (position - Time.current.to_date).to_i + 1
-        when Fixnum
+      when Fixnum
           position
-        when NilClass
+      when NilClass
           nil
-        else
+      else
           raise "Invalid date"
       end
-    end 
-
+    end
   end
 
   class Base
     attr_accessor :task_lists, :rows
 
-    def initialize(task_lists=nil)
+    def initialize(task_lists = nil)
       @task_lists = task_lists
       @offset = 10
     end
 
-    def ruler_to_html(days,day_width)
-      html = ''
+    def ruler_to_html(days, day_width)
+      html = ""
       (0..days).each do |i|
         date = Time.current + i.day
         day_width_max = (i * day_width) + @offset
         five_spaces = day_width_max - (date.day > 9 ? 5 : 1)
         ten_spaces  = day_width_max - (date.day == 1 ? 10 : 0)
 
-        major = [0,6].include?(date.wday) ? 'major' : ''
+        major = [ 0, 6 ].include?(date.wday) ? "major" : ""
         date_day = date.day == 1 ? Date::ABBR_MONTHNAMES[date.month] : date.day
 
         html << "<div class='date #{major}' style='left: #{five_spaces}px;'>#{date_day}</div>"
@@ -73,26 +72,26 @@ module GanttChart
       "<div class='ruler'>#{html}</div>".html_safe
     end
 
-    def to_html(day_width=30, margin=50, expanded=true)
+    def to_html(day_width = 30, margin = 50, expanded = true)
       @expanded = expanded
-      
+
       return if !@rows or @rows.empty?
-      html = ruler_to_html(@final-@start,day_width)
-      html << list_rows(@start,@final,day_width)
+      html = ruler_to_html(@final-@start, day_width)
+      html << list_rows(@start, @final, day_width)
       html.html_safe
     end
 
-    def process(start=1,final=10)
+    def process(start = 1, final = 10)
       @start = start
       @final = final
       @rows = []
 
-      @task_lists.sort! do |a,b|
+      @task_lists.sort! do |a, b|
         if !a.start; -1
         elsif !b.start; 1
         else a.start <=> b.start; end
       end
-    
+
       @task_lists.each do |task_list|
         # Clip the task_list to the given time window
         next if !task_list.start && !task_list.final # undefinated start and end
@@ -106,7 +105,7 @@ module GanttChart
           task_list.final = final+1
           task_list.classes = "undefined_end"
         end
-        
+
         next if task_list.start > final # not visible (future)
         next if task_list.final < start # not visible (past)
 
@@ -114,21 +113,21 @@ module GanttChart
       end
       @rows.nil? || @rows.empty?
     end
-        
+
     protected
-      
-      def list_rows(start,final,day_width)
-        @rows.inject('') do |html,row|
+
+      def list_rows(start, final, day_width)
+        @rows.inject("") do |html, row|
           row_width = (final - start) * day_width
           html << "<div class='row' style='width: #{row_width}px; z-index:50'>"
-          html << list_periods(row,start,day_width)
+          html << list_periods(row, start, day_width)
           html << "</div>"
           html
         end.html_safe
       end
 
-      def list_periods(row,start,day_width)
-        row.inject('') do |html, task_list|
+      def list_periods(row, start, day_width)
+        row.inject("") do |html, task_list|
           task_list_width = task_list.length * day_width
           task_list_offset = (task_list.start - start) * day_width + @offset
           html << %(<div class='task_list #{task_list.classes}' style='width: #{task_list_width}px; left: #{task_list_offset}px'>)
@@ -137,7 +136,7 @@ module GanttChart
           html
         end.html_safe
       end
-      
+
       def add_to_rows(task_list)
         # Tries to fit the task_list in the best possible row
         unless @expanded
@@ -149,8 +148,8 @@ module GanttChart
             end
           end
         end
-      
-        @rows << [task_list] # If no rows were suitable, a new one must be created
+
+        @rows << [ task_list ] # If no rows were suitable, a new one must be created
       end
   end
 end
