@@ -1,39 +1,34 @@
 # Teambox
-## Collaboration just got better
+## ⚙️ About This Project
 
-[Teambox is collaboration and  project management software][teambox] built on Ruby on Rails.
+This project is a full reimagining of Teambox — an open-source project management and collaboration tool originally developed by Redbooth and last updated in 2012.
 
-Teambox workflow is project-centered; with each project visible only to the people invited to it.
-Projects have a status wall, conversations, tasks, shared pages and file uploads.
-You can even post to Teambox by email.
+While Teambox has been dormant for over a decade, its spirit and ideas live on. This repository aims to revive and modernize the project using current tools and best practices, while honoring its roots.
 
-## NOTICE
+## ✨ Goals & Vision
 
-This project is a full rewrite of [teambox](https://github.com/redbooth/teambox).
+This is not a direct continuation — it’s a ground-up rewrite. The objectives of this revamped version include:
 
-The original codebase has been removed, and development continues under a new direction.
+### 🧱 Modern Architecture
 
+- [ ] Upgrade to Rails 8 with Zeitwerk and Hotwired ecosystem (Turbo + Stimulus).
+- [ ] Refactor into a mountable Rails engine, so it can be embedded into other apps easily.
 
-Project info
-------------
+### 🧩 Plugin-Based Extensibility
 
-- Official website: <http://teambox.com/>
-- v3: Code repository: <http://github.com/teambox/teambox>
-- v3: License: [GNU Affero GPL 3][license]
-- v3: Open-source contributors: <http://github.com/teambox/teambox/contributors>
-- v4: Try it online at <https://teambox.com/>
-- v4: On-premise version at <http://teambox.com/on-premise>
+- [ ] Strip down to a lean, core functionality, moving optional or advanced features into external plugins.
+- [ ] Design an extensible system that allows easy contribution of plugins and integrations.
 
-Installation
-------------
+### 💻 Frontend Overhaul
 
-Hop to [our wiki](http://wiki.github.com/teambox/teambox/ "Teambox wiki") to get detailed information on
-installing Teambox.
+- [ ] Replace the legacy frontend with Tailwind CSS and fully responsive design principles.
+- [ ] Adopt modern HTML-over-the-wire techniques via Turbo Frames/Streams where applicable.
 
-[teambox]: http://teambox.com
-[cloud service]: http://teambox.com
-[tour]: http://teambox.com/tour
-[on-premise]: http://www.teambox.com/on-premise
-[license]: http://www.gnu.org/licenses/agpl-3.0.html
+### 🚀 Developer Experience
 
-Thanks to the many Ruby projects we're using and the Famfamfam icon collection.
+- [ ] Prioritize clean architecture, well-documented internals, and modularity.
+- [ ] Deliver a modern, batteries-included but flexible codebase that’s easy to understand and extend.
+
+## 🎓 Tribute
+
+This project is inspired by and pays tribute to the original Teambox and its creators at Redbooth. Without their foundational work, this project wouldn't exist.
