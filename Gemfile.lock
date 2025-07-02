@@ -113,6 +113,12 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
+    faraday (2.13.1)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.1)
+      net-http (>= 0.5.0)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
     ffi (1.17.2-arm-linux-gnu)
@@ -137,6 +143,7 @@ GEM
       activesupport (>= 5.1)
       haml (>= 4.0.6)
       railties (>= 5.1)
+    hashie (5.0.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -152,6 +159,8 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.12.2)
+    jwt (3.1.2)
+      base64
     kamal (2.7.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -185,6 +194,10 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.9)
       date
       net-protocol
@@ -216,6 +229,28 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-musl)
       racc (~> 1.4)
+    oa-core (0.0.3)
+      rack
+    oa-oauth (0.0.1)
+      json
+      nokogiri
+      oa-core (~> 0.0.0)
+      oauth
+      oauth2
+    oauth (1.1.0)
+      oauth-tty (~> 1.0, >= 1.0.1)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
+    oauth-tty (1.0.5)
+      version_gem (~> 1.1, >= 1.1.1)
+    oauth2 (2.0.12)
+      faraday (>= 0.17.3, < 4.0)
+      jwt (>= 1.0, < 4.0)
+      logger (~> 1.2)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0, >= 2.0.3)
+      version_gem (>= 1.1.8, < 3)
     ostruct (0.6.2)
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
@@ -364,6 +399,9 @@ GEM
       simplecov (~> 0.19)
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
+    snaky_hash (2.0.3)
+      hashie (>= 0.1.0, < 6)
+      version_gem (>= 1.1.8, < 3)
     solid_cable (3.0.11)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -420,6 +458,7 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
+    version_gem (1.1.8)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -456,6 +495,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  oa-oauth (~> 0.0.1)
   paperclip (~> 6.1)
   permalink_fu (~> 1.0)
   propshaft

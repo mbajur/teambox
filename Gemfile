@@ -88,3 +88,5 @@ gem "country_select", "~> 11.0"
 gem "friendly_id", "~> 5.5"
 
 gem "rails-observers", "~> 0.1.5"
+
+gem "oa-oauth", "~> 0.0.1"
