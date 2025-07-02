@@ -1,0 +1,4 @@
+= form_for [@current_project,@task_list,@task], :html => {:class => 'app_form new_task', :multipart => true} do |f|
+  = f.object.errors.full_messages
+  = render 'tasks/fields', :f => f, :project => @current_project, :task_list => @task_list, :task => @task
+  = f.submit t('.submit'), :'data-disable-with' => t('.sending')

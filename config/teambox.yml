@@ -1,0 +1,9 @@
+shared:
+  amazon_s3: false
+  allow_search: true
+  daily_task_reminder_email_time: 8
+  activities_per_page: 25
+
+  smtp_settings:
+    domain: localhost
+    safe_from: hello@example.com
