@@ -2,9 +2,9 @@ class TeamboxData
   attr_accessor :data
   attr_accessor :import_data
 
-  serialize :project_ids
-  serialize :processed_objects
-  serialize :user_map
+  serialize :project_ids, coder: JSON
+  serialize :processed_objects, coder: JSON
+  serialize :user_map, coder: JSON
 
   TYPE_LOOKUP = { import: 0, export: 1 }
   TYPE_CODES = TYPE_LOOKUP.invert
