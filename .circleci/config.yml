@@ -7,9 +7,11 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7-node
+      - image: cimg/ruby:3.3.5-node
     steps:
       - checkout
+      - ruby/install:
+          version: '3.3.5'
       - ruby/install-deps
       # Store bundle cache
       # - node/install-packages:
