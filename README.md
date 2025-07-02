@@ -9,25 +9,36 @@ While Teambox has been dormant for over a decade, its spirit and ideas live on. 
 
 This is not a direct continuation — it’s a ground-up rewrite. The objectives of this revamped version include:
 
-### 🧱 Modern Architecture
+### Core Architecture
+- [ ] Upgrade to Rails 8
+- [ ] Refactor as a mountable Rails engine
+- [ ] Use Zeitwerk autoloading
+- [ ] Support installation into existing Rails apps
 
-- [ ] Upgrade to Rails 8 with Zeitwerk and Hotwired ecosystem (Turbo + Stimulus).
-- [ ] Refactor into a mountable Rails engine, so it can be embedded into other apps easily.
+### Frontend
+- [ ] Replace legacy UI with Tailwind CSS
+- [ ] Implement fully responsive design (RWD)
+- [ ] Integrate Hotwire (Turbo + Stimulus) for interactivity
+- [ ] Remove legacy JavaScript dependencies (jQuery, Backbone, etc.)
 
-### 🧩 Plugin-Based Extensibility
+### Extensibility
+- [ ] Modularize major features into optional plugins
+- [ ] Design plugin API for extending or replacing core functionality
+- [ ] Provide minimal default setup with no preloaded features
+- [ ] Document how to write and load plugins
 
-- [ ] Strip down to a lean, core functionality, moving optional or advanced features into external plugins.
-- [ ] Design an extensible system that allows easy contribution of plugins and integrations.
+### Functionality (Core Features to Reintroduce)
+- [ ] User authentication and roles
+- [ ] Projects and task management
+- [ ] Comments and discussions
+- [ ] Basic notifications (Turbo Stream or similar)
+- [ ] Minimal UI for core features
 
-### 💻 Frontend Overhaul
-
-- [ ] Replace the legacy frontend with Tailwind CSS and fully responsive design principles.
-- [ ] Adopt modern HTML-over-the-wire techniques via Turbo Frames/Streams where applicable.
-
-### 🚀 Developer Experience
-
-- [ ] Prioritize clean architecture, well-documented internals, and modularity.
-- [ ] Deliver a modern, batteries-included but flexible codebase that’s easy to understand and extend.
+### Developer Experience
+- [ ] Use modern Rails conventions and patterns
+- [ ] Provide development setup instructions and seed data
+- [ ] Write specs for all core modules
+- [ ] Ensure engine is testable in isolation and within a host app
 
 ## 🎓 Tribute
 
