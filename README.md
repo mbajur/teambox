@@ -1,24 +1,39 @@
-# README
+# Teambox
+## Collaboration just got better
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[Teambox is collaboration and  project management software][teambox] built on Ruby on Rails.
 
-Things you may want to cover:
+Teambox workflow is project-centered; with each project visible only to the people invited to it.
+Projects have a status wall, conversations, tasks, shared pages and file uploads.
+You can even post to Teambox by email.
 
-* Ruby version
+## NOTICE
 
-* System dependencies
+This project is a full rewrite of [teambox](https://github.com/redbooth/teambox).
 
-* Configuration
+The original codebase has been removed, and development continues under a new direction.
 
-* Database creation
 
-* Database initialization
+Project info
+------------
 
-* How to run the test suite
+- Official website: <http://teambox.com/>
+- v3: Code repository: <http://github.com/teambox/teambox>
+- v3: License: [GNU Affero GPL 3][license]
+- v3: Open-source contributors: <http://github.com/teambox/teambox/contributors>
+- v4: Try it online at <https://teambox.com/>
+- v4: On-premise version at <http://teambox.com/on-premise>
 
-* Services (job queues, cache servers, search engines, etc.)
+Installation
+------------
 
-* Deployment instructions
+Hop to [our wiki](http://wiki.github.com/teambox/teambox/ "Teambox wiki") to get detailed information on
+installing Teambox.
 
-* ...
+[teambox]: http://teambox.com
+[cloud service]: http://teambox.com
+[tour]: http://teambox.com/tour
+[on-premise]: http://www.teambox.com/on-premise
+[license]: http://www.gnu.org/licenses/agpl-3.0.html
+
+Thanks to the many Ruby projects we're using and the Famfamfam icon collection.
