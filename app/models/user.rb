@@ -393,8 +393,7 @@ class User < ApplicationRecord
       begin
         counter += 1
         tag = "#{DELETED_TAG}#{counter}__"
-        user = User.find_with_deleted(:first,
-                conditions: "login LIKE '#{tag}#{login}' OR email LIKE '#{tag}#{email}'")
+        user = User.with_deleted.where("login LIKE '#{tag}#{login}' OR email LIKE '#{tag}#{email}'").first
       end while user
       tag
     end
