@@ -124,7 +124,7 @@ class Upload < RoleRecord
 
   def cleanup_activities
     unless self.comment
-      Activity.destroy_all target_type: self.class.name, target_id: self.id
+      Activity.where(target_type: self.class.name, target_id: self.id).destroy_all
     end
   end
 

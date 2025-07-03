@@ -1,0 +1,98 @@
+require "rails_helper"
+
+describe Page, type: :model do
+  xit { should belong_to(:user) }
+  it { should belong_to(:project) }
+  it { should have_many(:notes) }
+  it { should have_many(:dividers) }
+  it { should have_many(:uploads) }
+
+  describe "factories" do
+    it "should generate a valid page" do
+      page = FactoryBot.create(:page)
+      page.valid?.should be true
+    end
+  end
+
+  describe "destruction" do
+    before do
+      @page = FactoryBot.create(:page)
+      @note = @page.build_note({ name: 'Office Ettiquete' }).tap do |n|
+        n.updated_by = @page.user
+        n.save
+      end
+      @divider = @page.build_divider({ name: 'Office Ettiquete' }).tap do |n|
+        n.updated_by = @page.user
+        n.save
+      end
+    end
+
+    it "should destroy all page slots and objects" do
+      @page.destroy
+
+      Page.count.should == 0
+      PageSlot.count.should == 0
+      Divider.count.should == 0
+      Note.count.should == 0
+    end
+
+    xit "should destroy all page slots when objects are destroyed" do
+      upload = @page.uploads.create(asset_file_name: "SomeFile.txt") do |u|
+        u.project_id = @page.project_id
+        u.page_id = @page.id
+        u.user_id = @page.user_id
+      end
+      upload.save
+
+      lambda {
+        upload.destroy
+      }.should change(PageSlot, :count)
+
+      lambda {
+        @divider.destroy
+      }.should change(PageSlot, :count)
+
+      lambda {
+        @note.destroy
+      }.should change(PageSlot, :count)
+    end
+
+    it "should destroy all page slots and objects when the project is destroyed" do
+      @page.project.destroy
+
+      Page.count.should == 0
+      Divider.count.should == 0
+      Note.count.should == 0
+      PageSlot.count.should == 0
+    end
+  end
+
+
+  describe "format" do
+    before do
+      @page=FactoryBot.create(:page)
+      @note=@page.build_note({ name: 'A note', body: <<-STR
+<table border="1">
+<tr>
+<th></th>
+<th align="center"> heading 1 </th>
+<th>heading 2</th>
+<th>heading 3</th>
+<tr>
+</table>
+      STR
+      }).tap do |n|
+        n.updated_by = @page.user
+        n.save
+      end
+    end
+
+    # We temporary moved to simple_format so the output is different.
+    # @todo figure out what to do with that
+    xit "should display the correct format" do
+      @note.body_html.should include('<tr>')
+      @note.body_html.should include('<table>')
+      @note.body_html.should include('<th>')
+    end
+  end
+end
