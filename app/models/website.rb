@@ -1,5 +1,5 @@
 class Website < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :card
 
   TYPES = [ "Work", "Personal", "Other" ]
 
