@@ -1,4 +1,4 @@
-module TaskList::Teambox
+module TeamboxData::Teambox
   extend ActiveSupport::Concern
 
   def unserialize_teambox(dump, object_maps, opts = {})

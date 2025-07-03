@@ -1,4 +1,4 @@
-module TaskList::Teambox
+module TeamboxData::Teambox
   extend ActiveSupport::Concern
 
   included do

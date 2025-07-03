@@ -1,4 +1,4 @@
-module TaskList::Serialization
+module TeamboxData::Serialization
   extend ActiveSupport::Concern
 
   included do
