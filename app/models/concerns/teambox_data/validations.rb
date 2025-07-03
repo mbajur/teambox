@@ -1,4 +1,4 @@
-module TeamboxData::Teambox
+module TeamboxData::Validations
   extend ActiveSupport::Concern
 
   included do
