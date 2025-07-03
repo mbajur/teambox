@@ -1,5 +1,5 @@
 class Im < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :card
 
   ACCOUNT_TYPES = [ "AIM", "MSN", "ICQ", "Jabber", "Yahoo", "Skype", "QQ", "Sametime", "Gadu-Gadu", "Google Talk", "Other" ]
   TYPES = [ "Work", "Personal", "Other" ]

@@ -1,5 +1,5 @@
 class EmailAddress < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :card
 
   TYPES = [ "Work", "Home", "Other" ]
 

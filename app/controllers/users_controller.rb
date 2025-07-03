@@ -278,12 +278,12 @@ class UsersController < ApplicationController
                                    people_attributes: [ :id, :digest, :watch_new_task, :watch_new_conversation, :watch_new_page ],
                                    card_attributes: [
                                     :id,
-                                    phone_numbers_attributes: [ :name, :account_type ],
-                                    email_addresses_attributes: [ :name, :account_type ],
-                                    websites_attributes: [ :name, :account_type ],
-                                    addresses_attributes: [ :street, :city, :state, :zip, :country, :account_type ],
-                                    ims_attributes: [ :name, :account_im_type, :account_type ],
-                                    social_networks_attributes: [ :name, :account_network_type, :account_type ]
+                                    phone_numbers_attributes: [ :id, :name, :account_type ],
+                                    email_addresses_attributes: [ :id, :name, :account_type ],
+                                    websites_attributes: [ :id, :name, :account_type ],
+                                    addresses_attributes: [ :id, :street, :city, :state, :zip, :country, :account_type ],
+                                    ims_attributes: [ :id, :name, :account_im_type, :account_type ],
+                                    social_networks_attributes: [ :id, :name, :account_network_type, :account_type ]
                                    ])
     end
 

@@ -1,5 +1,6 @@
 class SocialNetwork < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, optional: true
+
   NETWORK_TYPES = [ "Twitter", "Facebook", "Linked In", "FriendFeed", "MySpace", "Seesmic", "Delicious", "Stumble Upon", "Other" ]
   TYPES = [ "Personal", "Business", "Other" ]
 
