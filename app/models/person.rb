@@ -12,7 +12,7 @@ class Person < ApplicationRecord
 
   belongs_to :user
   belongs_to :project
-  belongs_to :source_user, class_name: "User"
+  belongs_to :source_user, class_name: "User", optional: true
   has_many :tasks, foreign_key: "assigned_id", dependent: :nullify
   has_many :notifications, dependent: :delete_all
 

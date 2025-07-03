@@ -102,6 +102,8 @@ GEM
     dotenv (3.1.8)
     drb (2.2.3)
     ed25519 (1.4.0)
+    email_validator (2.2.4)
+      activemodel
     erb (5.0.1)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -410,6 +412,7 @@ DEPENDENCIES
   cancan (~> 1.6)
   country_select (~> 11.0)
   debug
+  email_validator (~> 2.2)
   friendly_id (~> 5.5)
   haml-rails (~> 2.1)
   importmap-rails
