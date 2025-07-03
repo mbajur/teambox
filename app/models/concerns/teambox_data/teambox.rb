@@ -1,4 +1,6 @@
-class TeamboxData
+module TeamboxData::Teambox
+  extend ActiveSupport::Concern
+
   def unserialize_teambox(dump, object_maps, opts = {})
     ActiveRecord::Base.transaction do
       @object_map = {

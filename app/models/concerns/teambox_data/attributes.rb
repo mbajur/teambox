@@ -1,10 +1,5 @@
-class TeamboxData
-  attr_accessor :data
-  attr_accessor :import_data
-
-  serialize :project_ids
-  serialize :processed_objects
-  serialize :user_map
+module TeamboxData::Attributes
+  extend ActiveSupport::Concern
 
   TYPE_LOOKUP = { import: 0, export: 1 }
   TYPE_CODES = TYPE_LOOKUP.invert
@@ -14,6 +9,15 @@ class TeamboxData
 
   EXPORT_STATUS_NAMES = [ :selecting, :pre_processing, :processing, :exported ]
   EXPORT_STATUSES = EXPORT_STATUS_NAMES.each_with_index.each_with_object({}) { |(name, code), all| all[name] = code }
+
+  included do
+    attr_accessor :data
+    attr_accessor :import_data
+
+    serialize :project_ids, coder: JSON
+    serialize :processed_objects, coder: JSON
+    serialize :user_map, coder: JSON
+  end
 
   def user_map
     if self[:user_map].nil?

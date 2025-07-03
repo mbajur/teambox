@@ -49,6 +49,13 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails", "~> 8.0.0"
+  gem "shoulda-matchers", "~> 6.0"
+  gem "factory_bot_rails"
+  gem "rspec_junit_formatter"
+  gem "simplecov"
+  gem "simplecov-cobertura"
 end
 
 group :development do
@@ -81,3 +88,7 @@ gem "country_select", "~> 11.0"
 gem "friendly_id", "~> 5.5"
 
 gem "email_validator", "~> 2.2"
+
+gem "rails-observers", "~> 0.1.5"
+
+gem "oa-oauth", "~> 0.0.1"

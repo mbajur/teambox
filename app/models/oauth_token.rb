@@ -6,7 +6,7 @@ class OauthToken < ActiveRecord::Base
   before_validation :generate_keys, on: :create
   before_validation :init_scope, on: :create
   before_create :set_expiry_time
-  serialize :scope
+  serialize :scope, coder: JSON
 
   ALLOWED_SCOPES = [ :offline_access, :read_projects, :write_projects ]
 

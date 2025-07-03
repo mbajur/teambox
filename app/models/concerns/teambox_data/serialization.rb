@@ -1,5 +1,23 @@
-class TeamboxData
-  attr_writer :data
+module TeamboxData::Serialization
+  extend ActiveSupport::Concern
+
+  included do
+    attr_writer :data
+  end
+
+  class_methods do
+    def import_from_file(name, user_map, opts = {})
+      data = File.open(name, "r") do |file|
+        opts[:format] == "basecamp" ? Hash.from_xml(file.read) : ActiveSupport::JSON.decode(file.read)
+      end
+      TeamboxData.new.tap { |d| d.service = opts[:format]||"teambox"; d.data = data }.unserialize(user_map, opts)
+    end
+
+    def export_to_file(projects, organizations, name)
+      data = TeamboxData.new.serialize(organizations, projects)
+      File.open(name, "w") { |file| file.write data.to_json }
+    end
+  end
 
   def serialize(organizations, projects)
     users = []
@@ -106,17 +124,5 @@ class TeamboxData
 
   def import_log(object, remark = "")
     Rails.logger.warn "Imported #{object} (#{remark})"
-  end
-
-  def self.import_from_file(name, user_map, opts = {})
-    data = File.open(name, "r") do |file|
-      opts[:format] == "basecamp" ? Hash.from_xml(file.read) : ActiveSupport::JSON.decode(file.read)
-    end
-    TeamboxData.new.tap { |d| d.service = opts[:format]||"teambox"; d.data = data }.unserialize(user_map, opts)
-  end
-
-  def self.export_to_file(projects, organizations, name)
-    data = TeamboxData.new.serialize(organizations, projects)
-    File.open(name, "w") { |file| file.write data.to_json }
   end
 end

@@ -1,7 +1,11 @@
-class TeamboxData
-  validate :map_must_be_known
-  validate :must_be_admin_of_target_organization
-  validates_inclusion_of :service, in: %(teambox basecamp)
+module TeamboxData::Validations
+  extend ActiveSupport::Concern
+
+  included do
+    validate :map_must_be_known
+    validate :must_be_admin_of_target_organization
+    validates_inclusion_of :service, in: %(teambox basecamp)
+  end
 
   def must_be_admin_of_target_organization
     @errors.add("organization_id", "Should be an admin") if !user.admin_organizations.map(&:id).include?(organization_id) && status_name != :uploading && type_name == :import
