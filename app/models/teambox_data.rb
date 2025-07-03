@@ -5,6 +5,7 @@ class TeamboxData < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
   # concerned_with :serialization, :attributes, :teambox, :basecamp, :validations
+  extend TeamboxData::Attributes
 
   has_attached_file :processed_data,
     url: "/:data_type/:id/:basename.:extension",
