@@ -17,13 +17,13 @@ describe TaskListTemplate, type: :model do
     end
 
     it "should need an organization" do
-      template = FactoryBot.build(:task_list_template, :organization => nil)
+      template = FactoryBot.build(:task_list_template, organization: nil)
       template.should_not be_valid
     end
   end
 
   it "should return an empty array if empty" do
-    template = FactoryBot.create(:task_list_template, :tasks => nil)
+    template = FactoryBot.create(:task_list_template, tasks: nil)
     template.tasks.should == []
   end
 
@@ -42,23 +42,23 @@ describe TaskListTemplate, type: :model do
   describe "creating task lists" do
     before do
       @user = FactoryBot.create :user
-      @project = FactoryBot.create :project, :user => @user
+      @project = FactoryBot.create :project, user: @user
     end
 
     it "should create a task list from a template without comments" do
-      template = FactoryBot.create :task_list_template, :organization => @project.organization
+      template = FactoryBot.create :task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user)
-      list.tasks.collect { |t| [t.name] }.should == template.tasks
+      list.tasks.collect { |t| [ t.name ] }.should == template.tasks
     end
 
     it "should create a task list with comments from a complete template" do
-      template = FactoryBot.create :complete_task_list_template, :organization => @project.organization
+      template = FactoryBot.create :complete_task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user).reload
-      list.tasks.collect { |t| [t.name, t.comments.first.try(:body)] }.should == template.tasks
+      list.tasks.collect { |t| [ t.name, t.comments.first.try(:body) ] }.should == template.tasks
     end
 
     it "should set the correct user" do
-      template = FactoryBot.create :complete_task_list_template, :organization => @project.organization
+      template = FactoryBot.create :complete_task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user).reload
       list.user.should == @user
       list.tasks.each { |t| t.user.should == @user }
@@ -66,10 +66,9 @@ describe TaskListTemplate, type: :model do
     end
 
     it "should set the correct project" do
-      template = FactoryBot.create :complete_task_list_template, :organization => @project.organization
+      template = FactoryBot.create :complete_task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user).reload
       list.project.should == @project
     end
   end
 end
-
