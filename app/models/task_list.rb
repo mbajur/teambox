@@ -8,6 +8,8 @@ class TaskList < RoleRecord
   include TaskList::Callbacks
   # include TaskList::Conversions
 
+  attr_accessor :reference_task_objects
+
   before_save :ensure_date_order
 
   def self.from_pivotal_tracker(activity, version = :v2)

@@ -19,7 +19,7 @@ class Page < RoleRecord
   validates_length_of :name, minimum: 1
   validate :check_updating_user, on: :update
 
-  default_scope -> { order("position ASC, created_at DESC, id DESC") }
+  default_scope -> { order(position: :asc, created_at: :desc, id: :desc) }
 
   after_create :log_create, :update_user_stats, :set_private_ids
   after_update :log_update, :set_private_ids
