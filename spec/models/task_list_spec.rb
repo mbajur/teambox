@@ -21,8 +21,8 @@ describe TaskList, type: :model do
     it "should reference the correct tasks" do
       task_list = FactoryBot.create(:task_list)
       task_list.references[:task].should == nil
-      resolved_task = FactoryBot.create(:task, :name => "Go to RailsConf", :task_list => task_list, :status => Task::STATUSES[:resolved])
-      unresolved_task = FactoryBot.create(:task, :name => "Leave RailsConf", :task_list => task_list)
+      resolved_task = FactoryBot.create(:task, name: "Go to RailsConf", task_list: task_list, status: Task::STATUSES[:resolved])
+      unresolved_task = FactoryBot.create(:task, name: "Leave RailsConf", task_list: task_list)
       task_list.reload.tasks.length.should == 2
 
       task_list.reference_task_objects = :task_ids
@@ -36,8 +36,8 @@ describe TaskList, type: :model do
 
   describe "when deleted" do
     it "should delete its tasks" do
-      task_list = FactoryBot.create(:task_list, :name => "Be an excellent Rails dev.")
-      nice_task = FactoryBot.create(:task, :name => "Go to RailsConf", :task_list => task_list)
+      task_list = FactoryBot.create(:task_list, name: "Be an excellent Rails dev.")
+      nice_task = FactoryBot.create(:task, name: "Go to RailsConf", task_list: task_list)
       task_list.destroy
       lambda { Task.find(nice_task.id) }.should raise_error(ActiveRecord::RecordNotFound)
     end
