@@ -1,6 +1,6 @@
 class Activity < ApplicationRecord
   belongs_to :target, polymorphic: true
-  belongs_to :comment_target, polymorphic: true
+  belongs_to :comment_target, polymorphic: true, optional: true
   belongs_to :user
   belongs_to :project
 

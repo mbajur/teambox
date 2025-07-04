@@ -81,7 +81,7 @@ class Project < ApplicationRecord
 
   def add_user(user, params = {})
     unless has_member?(user)
-      person = Person.with_deleted.where(project_id: self.id, user_id: user.id).first
+      person = Person.where_with_deleted(project_id: self.id, user_id: user.id).first
       person ||= people.build
 
       person.user = user
