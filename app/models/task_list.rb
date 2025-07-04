@@ -1,6 +1,6 @@
 class TaskList < RoleRecord
-  # include Immortal
-  #
+  include Immortal
+
   include TaskList::Validation
   include TaskList::Initializers
   include TaskList::Scopes

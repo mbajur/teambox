@@ -1,5 +1,5 @@
 class Page < RoleRecord
-  # include Immortal
+  include Immortal
   include Watchable
   extend FriendlyId
 
