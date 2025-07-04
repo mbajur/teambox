@@ -149,3 +149,7 @@ def activities_for_thread(target, &block)
     end
   end
 end
+
+def upload_file(name, type)
+  Rack::Test::UploadedFile.new(name, type)
+end

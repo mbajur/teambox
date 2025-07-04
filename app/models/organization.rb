@@ -165,7 +165,7 @@ class Organization < ActiveRecord::Base
     end
 
     def prevent_if_projects
-      projects.empty?
+      throw(:abort) if projects.any?
     end
 end
 
