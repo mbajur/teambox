@@ -7,7 +7,7 @@ class TaskListTemplate < ActiveRecord::Base
 
   attr_accessor :titles, :descs
 
-  default_scope -> { order("position asc, id desc") }
+  default_scope -> { order(position: :asc, id: :desc) }
 
   def tasks=(data = [])
     write_attribute :raw_tasks, data.to_json

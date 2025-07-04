@@ -26,7 +26,7 @@ module Task::Callbacks
   end
 
   def clear_targets
-    Activity.destroy_all  target_id: self.id, target_type: self.class.to_s
-    Comment.destroy_all   target_id: self.id, target_type: self.class.to_s
+    Activity.where(target_id: self.id, target_type: self.class.to_s).destroy_all
+    Comment.where(target_id: self.id, target_type: self.class.to_s).destroy_all
   end
 end
