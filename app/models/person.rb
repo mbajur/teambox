@@ -79,6 +79,7 @@ class Person < ApplicationRecord
   def log_create
     # for a new project, we log create_project, not create_person
     project.log_activity(self, "create", user_id) unless project.user == user
+
     # promote the project owner to admin
     update_attribute :role, ROLES[:admin] if project.user == user
   end

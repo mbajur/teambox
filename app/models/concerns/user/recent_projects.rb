@@ -8,7 +8,7 @@ module User::RecentProjects
   def recent_projects
     if @recent_projects.nil?
       proj_ids = self.recent_projects_ids
-      @recent_projects = @projects.nil? ? Project.find(:all, conditions: [ "id IN (?)", proj_ids ]) :
+      @recent_projects = @projects.nil? ? Project.where("id IN (?)", proj_ids).to_a :
                                           @projects.select { |p| proj_ids.include? p.id }
       @recent_projects.sort! { |a, b| proj_ids.index(a.id) <=> proj_ids.index(b.id) }
     else
