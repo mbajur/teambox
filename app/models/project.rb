@@ -2,7 +2,8 @@
 # A Person model describes the relationship of a User that follows a Project.
 
 class Project < ApplicationRecord
-  # include Immortal
+  include Immortal
+  extend FriendlyId
 
   include Project::Validation
   include Project::Initializers
@@ -34,7 +35,9 @@ class Project < ApplicationRecord
   attr_accessor :is_importing
   attr_accessor :import_activities
 
-  before_validation :set_permalink
+  friendly_id :name, use: :slugged, slug_column: :permalink
+
+  before_validation :normalize_permalink
 
   def self.find_by_id_or_permalink(param)
     if param.to_s =~ /^\d+$/
@@ -145,6 +148,14 @@ class Project < ApplicationRecord
 
   def self.to_ical(projects, for_user, filter_user = nil, host = nil, port = 80)
     self.calendar_for_tasks(for_user, Task.where(project_id: projects.map(&:id)), projects, filter_user, host, port)
+  end
+
+  private
+
+  def normalize_permalink
+    if permalink.present? && permalink_changed?
+      self.permalink = permalink.parameterize
+    end
   end
 
   protected

@@ -1,5 +1,5 @@
 class Organization < ActiveRecord::Base
-  # include Immortal
+  include Immortal
   include Metadata
   extend Metadata::Defaults
   extend FriendlyId
@@ -26,6 +26,7 @@ class Organization < ActiveRecord::Base
 
   validate :ensure_unicity_for_community_version, on: :create, unless: :is_example
 
+  before_validation :normalize_permalink
   before_destroy :prevent_if_projects
 
   attr_accessor :is_example, :delete_logo
@@ -74,7 +75,7 @@ class Organization < ActiveRecord::Base
     if param.to_s =~ /^\d+$/
       find_by_id(param)
     else
-      find_by_permalink(param)
+      friendly.find_by_id(param)
     end
   end
 
@@ -150,6 +151,14 @@ class Organization < ActiveRecord::Base
     user.memberships.joins(:organization).
       select("organizations.id, organizations.name, organizations.permalink, memberships.role").where(organizations: { deleted: false }).
       collect(&:attributes).as_json
+  end
+
+  private
+
+  def normalize_permalink
+    if permalink.present? && permalink_changed?
+      self.permalink = permalink.parameterize
+    end
   end
 
   protected
