@@ -4,7 +4,7 @@ describe Card, type: :model do
   let(:card) { Card.new(user: create(:user)) }
 
   it "should destroy dependent phone numbers when destroyed" do
-    card.phone_numbers_attributes = {"0" => { :name => "93 123 45 67", :account_type => 0 }}
+    card.phone_numbers_attributes = { "0" => { name: "93 123 45 67", account_type: 0 } }
 
     lambda {
       card.save.should be true
@@ -21,7 +21,7 @@ describe Card, type: :model do
   end
 
   it "should destroy dependent email addresses when destroyed" do
-    card.email_addresses_attributes = {"0" => { :name => "jordi@teamboc.com", :account_type => 0 }}
+    card.email_addresses_attributes = { "0" => { name: "jordi@teamboc.com", account_type: 0 } }
 
     lambda {
       card.save!.should be true
@@ -38,7 +38,7 @@ describe Card, type: :model do
   end
 
   it "should destroy dependent addresses when destroyed" do
-    card.addresses_attributes = {"0" => { :street => "Gran via", :city => "Barcelona", :zip => '08082', :state => 'Barcelona', :country => 'Spain' }}
+    card.addresses_attributes = { "0" => { street: "Gran via", city: "Barcelona", zip: '08082', state: 'Barcelona', country: 'Spain' } }
 
     lambda {
       card.save.should be true
@@ -55,7 +55,7 @@ describe Card, type: :model do
   end
 
   it "should destroy dependent websites when destroyed" do
-    card.websites_attributes = {"0" => { :name => "teamboc.com", :account_type => 0 }}
+    card.websites_attributes = { "0" => { name: "teamboc.com", account_type: 0 } }
 
     lambda {
       card.save.should be true
@@ -72,7 +72,7 @@ describe Card, type: :model do
   end
 
   it "should destroy dependent im's when destroyed" do
-    card.ims_attributes = {"0" => { :name => "jordiromero", :account_type => 0, :account_im_type => 0 }}
+    card.ims_attributes = { "0" => { name: "jordiromero", account_type: 0, account_im_type: 0 } }
 
     lambda {
       card.save.should be true
@@ -89,7 +89,7 @@ describe Card, type: :model do
   end
 
   it "should destroy dependent social networks when destroyed" do
-    card.social_networks_attributes = {"0" => { :name => "jordiromero", :account_type => 0, :account_network_type => 0 }}
+    card.social_networks_attributes = { "0" => { name: "jordiromero", account_type: 0, account_network_type: 0 } }
 
     lambda {
       card.save!.should be true
@@ -105,4 +105,3 @@ describe Card, type: :model do
     }.should raise_error(ActiveRecord::RecordNotFound)
   end
 end
-

@@ -4,7 +4,7 @@ describe ClientApplication, type: :model do
   fixtures :oauth_tokens
 
   before(:each) do
-    @application = ClientApplication.create :name => "Agree2", :url => "http://agree2.com", :user => FactoryBot.create(:mislav)
+    @application = ClientApplication.create name: "Agree2", url: "http://agree2.com", user: FactoryBot.create(:mislav)
   end
 
   it "should be valid" do
@@ -26,6 +26,4 @@ describe ClientApplication, type: :model do
     @application.credentials.key.should == @application.key
     @application.credentials.secret.should == @application.secret
   end
-
 end
-

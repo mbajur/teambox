@@ -1,14 +1,13 @@
 require 'rails_helper'
 
 describe Comment, type: :model do
-
   it { should validate_presence_of :user }
 
   describe "factories" do
     it "should generate a valid comment" do
       @project = FactoryBot.create(:project)
       @user = @project.user
-      comment = FactoryBot.build(:comment, :project => @project, :user => @user, :target => @project)
+      comment = FactoryBot.build(:comment, project: @project, user: @user, target: @project)
       comment.save.should be true
       comment.user.should == @user
       @project.comments.last.should == comment
@@ -17,15 +16,15 @@ describe Comment, type: :model do
   end
 
   it "should not allow comment creation with a blank title" do
-    comment = FactoryBot.build(:comment, :body => nil)
+    comment = FactoryBot.build(:comment, body: nil)
     comment.should_not be_valid
   end
 
   describe "copying ownership" do
     before do
-      @target = FactoryBot.build(:simple_conversation, :body => nil)
-      @target.save(:validate => false)
-      @comment = FactoryBot.build(:comment, :target => @target, :user => nil, :project => nil)
+      @target = FactoryBot.build(:simple_conversation, body: nil)
+      @target.save(validate: false)
+      @comment = FactoryBot.build(:comment, target: @target, user: nil, project: nil)
     end
 
     it "inherits project and user from target" do
@@ -41,7 +40,7 @@ describe Comment, type: :model do
 
     it "doesn't happen when updating" do
       new_user = FactoryBot.create(:user)
-      new_project = FactoryBot.create(:project, :user => new_user)
+      new_project = FactoryBot.create(:project, user: new_user)
 
       @comment.save
       @comment.should_not be_new_record
@@ -64,7 +63,7 @@ describe Comment, type: :model do
 
     it "should update counter cache" do
       lambda {
-        FactoryBot.create(:comment, :project => @task.project, :user => @task.user, :target => @task)
+        FactoryBot.create(:comment, project: @task.project, user: @task.user, target: @task)
         @task.reload
       }.should change(@task, :comments_count).by(1)
     end
@@ -73,45 +72,45 @@ describe Comment, type: :model do
   describe "mentioning @user" do
     before do
       @project = FactoryBot.create(:project)
-      @user = FactoryBot.create(:confirmed_user, :login => 'existing')
+      @user = FactoryBot.create(:confirmed_user, login: 'existing')
     end
 
     it "should link to users page when mentioning @existing if they are in the project" do
       @project.add_user(@user)
       body = "@existing, hey, @existing"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
-      comment.body_html.should == %Q{<p><a class="mention" href="/users/existing">@existing</a>, hey, <a class="mention" href="/users/existing">@existing</a></p>}
-      comment.mentioned.to_a.should == [@user]
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
+      comment.body_html.should == %Q(<p><a class="mention" href="/users/existing">@existing</a>, hey, <a class="mention" href="/users/existing">@existing</a></p>)
+      comment.mentioned.to_a.should == [ @user ]
     end
 
     it "should not link a user if his username is part of an email address" do
       @project.add_user(@user)
       body = "@existing links, but not an@existing.com email"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
-      comment.body_html.should == %Q{<p><a class=\"mention\" href=\"/users/existing\">@existing</a> links, but not <a href=\"mailto:an@existing.com\">an@existing.com</a> email</p>}
-      comment.mentioned.to_a.should == [@user]
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
+      comment.body_html.should == %Q(<p><a class=\"mention\" href=\"/users/existing\">@existing</a> links, but not <a href=\"mailto:an@existing.com\">an@existing.com</a> email</p>)
+      comment.mentioned.to_a.should == [ @user ]
     end
 
     it "should link to all the mentioned users if they are in the project" do
-      pablo = FactoryBot.create(:confirmed_user, :login => "pablo")
-      james = FactoryBot.create(:confirmed_user, :login => "james")
+      pablo = FactoryBot.create(:confirmed_user, login: "pablo")
+      james = FactoryBot.create(:confirmed_user, login: "james")
       @project.add_user(pablo)
       @project.add_user(james)
       body = "@pablo @james Check this out!"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
-      comment.body_html.should == %Q{<p><a class="mention" href="/users/pablo">@pablo</a> <a class="mention" href="/users/james">@james</a> Check this out!</p>}
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
+      comment.body_html.should == %Q(<p><a class="mention" href="/users/pablo">@pablo</a> <a class="mention" href="/users/james">@james</a> Check this out!</p>)
       comment.mentioned.should include(pablo)
       comment.mentioned.should include(james)
     end
 
     it "should add everyone to watchers if @all is mentioned" do
-      pablo = FactoryBot.create(:confirmed_user, :login => "pablo")
-      james = FactoryBot.create(:confirmed_user, :login => "james")
+      pablo = FactoryBot.create(:confirmed_user, login: "pablo")
+      james = FactoryBot.create(:confirmed_user, login: "james")
       @project.add_user(pablo)
       @project.add_user(james)
       body = "@all hands on deck this Friday"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
-      comment.body_html.should == %Q{<p><span class="mention">@all</span> hands on deck this Friday</p>}
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
+      comment.body_html.should == %Q(<p><span class="mention">@all</span> hands on deck this Friday</p>)
       comment.mentioned.should include(pablo)
       comment.mentioned.should include(james)
       comment.mentioned.should_not include(@user)
@@ -125,16 +124,16 @@ describe Comment, type: :model do
       end
 
       it "on a conversation" do
-        conversation = FactoryBot.create(:conversation, :project => @project, :user => @project.user)
+        conversation = FactoryBot.create(:conversation, project: @project, user: @project.user)
         conversation.watcher_ids.should_not include(@pablo.id)
-        comment = FactoryBot.create(:comment, :project => @project, :user => @pablo, :target => conversation)
+        comment = FactoryBot.create(:comment, project: @project, user: @pablo, target: conversation)
         conversation.reload.watcher_ids.should include(@pablo.id)
       end
 
       it "on a task" do
-        @task = FactoryBot.create(:task, :project => @project, :user => @project.user)
+        @task = FactoryBot.create(:task, project: @project, user: @project.user)
         @task.watcher_ids.should_not include(@pablo.id)
-        comment = FactoryBot.create(:comment, :project => @project, :user => @pablo, :target => @task)
+        comment = FactoryBot.create(:comment, project: @project, user: @pablo, target: @task)
         @task.reload.watcher_ids.should include(@pablo.id)
       end
     end
@@ -145,38 +144,38 @@ describe Comment, type: :model do
       end
 
       it "should add him to conversation" do
-        @conversation = FactoryBot.create(:conversation, :project => @project, :user => @project.user)
+        @conversation = FactoryBot.create(:conversation, project: @project, user: @project.user)
         @conversation.watchers.should_not include(@user)
 
         body = "I would like to add @existing to this, but not @unexisting."
-        comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @conversation)
+        comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @conversation)
 
-        comment.mentioned.to_a.should == [@user]
+        comment.mentioned.to_a.should == [ @user ]
         @conversation.reload.watchers.should include(@user)
       end
 
       it "should add him to task" do
-        @task = FactoryBot.create(:task, :project => @project, :user => @project.user)
+        @task = FactoryBot.create(:task, project: @project, user: @project.user)
         @task.watchers.should_not include(@user)
 
         body = "I would like to add @existing to this, but not @unexisting."
-        comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @task)
+        comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @task)
 
-        comment.mentioned.to_a.should == [@user]
+        comment.mentioned.to_a.should == [ @user ]
         @task.reload.watchers.should include(@user)
       end
     end
 
     it "should not link to users page when mentioning @existing if they are not in the project" do
       body = "@existing is a cool guy, but he is not in this project"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
       comment.body_html.should == "<p>@existing is a cool guy, but he is not in this project</p>"
       comment.mentioned.should == nil
     end
 
     it "should not link to users page when typing @unexisting" do
       body = "Hey, @unexisting, take a look at this!"
-      comment = FactoryBot.create(:comment, :body => body, :project => @project, :user => @project.user, :target => @project)
+      comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
       comment.body_html.should == "<p>Hey, @unexisting, take a look at this!</p>"
       comment.mentioned.should == nil
     end
@@ -186,18 +185,18 @@ describe Comment, type: :model do
     before do
       @project = FactoryBot.create(:project)
       @user = @project.user
-      @comment = FactoryBot.create(:comment, :project => @project, :user => @user, :target => @project)
+      @comment = FactoryBot.create(:comment, project: @project, user: @user, target: @project)
     end
 
     it "should not allow posting a duplicate comment" do
-      comment = FactoryBot.build(:comment, :project => @project, :user => @user, :target => @project, :body => @comment.body)
+      comment = FactoryBot.build(:comment, project: @project, user: @user, target: @project, body: @comment.body)
       comment.valid?.should be false
     end
 
     it "should allow posting a comment with the same body to different targets" do
       @task = FactoryBot.create(:task)
       lambda {
-        FactoryBot.create(:comment, :project => @project, :user => @user, :target => @task, :body => @comment.body)
+        FactoryBot.create(:comment, project: @project, user: @user, target: @task, body: @comment.body)
       }.should change(Comment, :count).by(1)
     end
   end
@@ -209,19 +208,19 @@ describe Comment, type: :model do
     end
 
     it "on a conversation" do
-      conversation = FactoryBot.create(:conversation, :project => @project, :user => @project.user)
+      conversation = FactoryBot.create(:conversation, project: @project, user: @project.user)
       conversation.update_attribute :updated_at, 1.day.ago
       lambda {
-        FactoryBot.create(:comment, :project => @project, :user => @user, :target => conversation)
+        FactoryBot.create(:comment, project: @project, user: @user, target: conversation)
         conversation.reload
       }.should change(conversation, :updated_at)
     end
 
     it "on a task" do
-      task = FactoryBot.create(:task, :project => @project, :user => @project.user)
+      task = FactoryBot.create(:task, project: @project, user: @project.user)
       task.update_attribute :updated_at, 1.day.ago
       lambda {
-        FactoryBot.create(:comment, :project => @project, :user => @user, :target => task)
+        FactoryBot.create(:comment, project: @project, user: @user, target: task)
         task.reload
       }.should change(task, :updated_at)
     end
@@ -256,10 +255,10 @@ describe Comment, type: :model do
   describe "permissions" do
     before do
       @project = FactoryBot.create(:project)
-      @user = FactoryBot.create(:confirmed_user, :login => 'existing')
-      @other_user = FactoryBot.create(:confirmed_user, :login => 'existing2')
-      @another_user = FactoryBot.create(:confirmed_user, :login => 'existing3')
-      @comment = FactoryBot.create(:comment, :body => "Random comment.", :project => @project, :user => @other_user, :target => @project)
+      @user = FactoryBot.create(:confirmed_user, login: 'existing')
+      @other_user = FactoryBot.create(:confirmed_user, login: 'existing2')
+      @another_user = FactoryBot.create(:confirmed_user, login: 'existing3')
+      @comment = FactoryBot.create(:comment, body: "Random comment.", project: @project, user: @other_user, target: @project)
       @project.add_user(@user)
       @project.add_user(@other_user)
       @project.add_user(@another_user)
@@ -305,11 +304,11 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "should link existing upload" do
       upload = FactoryBot.create :upload
-      comment = FactoryBot.create :comment, :upload_ids => [upload.id.to_s],
-        :body => 'Here is that cat video I promised',
-        :project => upload.project, :user => upload.user
+      comment = FactoryBot.create :comment, upload_ids: [ upload.id.to_s ],
+        body: 'Here is that cat video I promised',
+        project: upload.project, user: upload.user
 
-      comment.uploads.should == [upload]
+      comment.uploads.should == [ upload ]
       upload.reload
       upload.comment.should == comment
       upload.description.should == 'Here is that cat video I promised'
@@ -317,9 +316,9 @@ describe Comment, type: :model do
 
     # @todo paperclip not compatible with Rails 8
     xit "should create nested upload" do
-      attributes = { :asset => File.open(File.expand_path('../../fixtures/tb-space.jpg', __FILE__)) }
-      comment = FactoryBot.create :comment, :uploads_attributes => [attributes],
-        :body => 'Here is that dog video I promised'
+      attributes = { asset: File.open(File.expand_path('../../fixtures/tb-space.jpg', __FILE__)) }
+      comment = FactoryBot.create :comment, uploads_attributes: [ attributes ],
+        body: 'Here is that dog video I promised'
 
       comment.should have(1).upload
       upload = comment.uploads.first
@@ -332,9 +331,9 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "should allow the creation of a comment with a file but no body" do
       upload = FactoryBot.create :upload
-      comment = FactoryBot.create :comment, :upload_ids => [upload.id.to_s],
-                                         :body => nil,
-                                         :project => upload.project
+      comment = FactoryBot.create :comment, upload_ids: [ upload.id.to_s ],
+                                         body: nil,
+                                         project: upload.project
 
       comment.should have(1).upload
       upload = comment.uploads.first
@@ -344,9 +343,9 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "should allow you to delete the upload and keep the comment if there is a body" do
       upload = FactoryBot.create :upload
-      comment = FactoryBot.create :comment, :upload_ids => [upload.id.to_s],
-                                         :body => 'test',
-                                         :project => upload.project
+      comment = FactoryBot.create :comment, upload_ids: [ upload.id.to_s ],
+                                         body: 'test',
+                                         project: upload.project
 
       comment.should have(1).upload
       comment.uploads.first.destroy
@@ -358,7 +357,7 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "should not set a deleted message on the comment if there is still a file remaining" do
       upload1, upload2 = FactoryBot.create(:upload), FactoryBot.create(:upload)
-      comment = FactoryBot.create :comment, :upload_ids => [upload1.id.to_s, upload2.id.to_s], :body => nil
+      comment = FactoryBot.create :comment, upload_ids: [ upload1.id.to_s, upload2.id.to_s ], body: nil
 
       comment.should have(2).uploads
 
@@ -372,7 +371,7 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "should allow you to delete the upload and keep the comment if there is no body" do
       upload = FactoryBot.create :upload
-      comment = FactoryBot.create :comment, :upload_ids => [upload.id.to_s], :body => nil, :project => upload.project
+      comment = FactoryBot.create :comment, upload_ids: [ upload.id.to_s ], body: nil, project: upload.project
 
       comment.should have(1).upload
 
@@ -387,9 +386,9 @@ describe Comment, type: :model do
     # @todo paperclip not compatible with Rails 8
     xit "touches comment on upload destroy" do
       upload = FactoryBot.create :upload
-      comment = FactoryBot.create :comment, :upload_ids => [upload.id.to_s],
-        :body => "Can't touch this"
-      Comment.update_all({:updated_at => 15.minutes.ago}, :id => comment.id)
+      comment = FactoryBot.create :comment, upload_ids: [ upload.id.to_s ],
+        body: "Can't touch this"
+      Comment.update_all({ updated_at: 15.minutes.ago }, id: comment.id)
 
       comment.reload.updated_at.should be_within(5).of(15.minutes.ago)
       upload.reload.destroy
@@ -399,7 +398,7 @@ describe Comment, type: :model do
 
   context "hours" do
     it "assigns human hours" do
-      comment = FactoryBot.build :comment, :human_hours => "2:30"
+      comment = FactoryBot.build :comment, human_hours: "2:30"
       comment.hours.should be_within(0.001).of(2.5)
       comment.human_hours = " "
       comment.hours.should be_nil
@@ -408,10 +407,10 @@ describe Comment, type: :model do
 
   context "deleting users" do
     before do
-      assigned = FactoryBot.create :user, :first_name => "Michael", :last_name => "Jackson"
+      assigned = FactoryBot.create :user, first_name: "Michael", last_name: "Jackson"
       project = FactoryBot.create :project
-      @person = FactoryBot.create :person, :user => assigned, :project => project
-      @comment = FactoryBot.create :comment, :target => FactoryBot.create(:task), :user => FactoryBot.create(:mislav), :assigned => @person, :project => project
+      @person = FactoryBot.create :person, user: assigned, project: project
+      @comment = FactoryBot.create :comment, target: FactoryBot.create(:task), user: FactoryBot.create(:mislav), assigned: @person, project: project
       @user = @comment.user
     end
 
@@ -432,7 +431,7 @@ describe Comment, type: :model do
     # it for now.
     # @todo find root cause it fails and fix it
     xit "should display information about the previous assigned user after this being deleted" do
-      comment = FactoryBot.create :comment, :target => @comment.target, :assigned => FactoryBot.create(:person, :project => @comment.target.project), :previous_assigned => @person
+      comment = FactoryBot.create :comment, target: @comment.target, assigned: FactoryBot.create(:person, project: @comment.target.project), previous_assigned: @person
       @person.destroy
       comment.reload.previous_assigned.user.name.should == "Michael Jackson"
     end

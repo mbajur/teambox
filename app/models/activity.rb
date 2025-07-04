@@ -52,15 +52,18 @@ class Activity < ApplicationRecord
       comment_target_type: comment_target_type,
       comment_target_id: comment_target_id,
       is_private: is_private)
+
     activity.created_at =
       case action
       when "create"
-          target.try(:created_at)
+        target.try(:created_at)
       when "edit"
-          target.try(:updated_at)
+        target.try(:updated_at)
       when "delete"
-          target.try(:deleted_at) || target.try(:updated_at)
-      end || target.try(:created_at) || Time.now
+        target.try(:deleted_at) || target.try(:updated_at)
+      else
+        target.try(:created_at) || Time.now
+      end
 
     activity.save
 
@@ -115,11 +118,12 @@ class Activity < ApplicationRecord
   end
 
   def thread
-    @thread ||= if target.is_a?(Comment)
-      comment_target
-                else
-      target
-    end || project
+    @thread ||=
+      if target.is_a?(Comment)
+        comment_target
+      else
+        target
+      end || project
   end
 
   def thread_id
