@@ -12,6 +12,7 @@ class Invitation < RoleRecord
   attr_reader :user_or_email
   attr_accessor :is_silent
   attr_accessor :user_or_email
+  attr_accessor :locale
 
   before_create :generate_token
   before_save :copy_user_email, if: :invited_user
