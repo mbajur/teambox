@@ -26,6 +26,6 @@ module Metadata
   def write_setting(key, value)
     data = settings.dup.deep_merge(key => value).to_json
     write_attribute :settings, data
-    self.class.update_all({ settings: data }, { id: id })
+    self.class.where(id: id).update_all(settings: data)
   end
 end
