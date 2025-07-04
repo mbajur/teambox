@@ -1,10 +1,10 @@
 class Folder < RoleRecord
-  # include Immortal
+  include Immortal
   include Tokenized
 
   belongs_to :user
   belongs_to :project
-  belongs_to :parent_folder, class_name: "Folder"
+  belongs_to :parent_folder, class_name: "Folder", optional: true
   has_many :folders, foreign_key: :parent_folder_id
   has_many :uploads, foreign_key: :parent_folder_id
 
