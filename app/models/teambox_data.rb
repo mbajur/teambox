@@ -32,7 +32,7 @@ class TeamboxData < ActiveRecord::Base
 
     FileUtils.mkdir_p target_dir unless File.exists? target_dir
 
-    open(URI.escape processed_data.url) do |data|
+    open(CGI.escape processed_data.url) do |data|
       File.open target_file, "w" do |file|
         file.write(data.read)
       end

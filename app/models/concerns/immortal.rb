@@ -3,7 +3,7 @@
 module Immortal
   extend ActiveSupport::Concern
 
-  COLUMN_NAME = 'deleted'.freeze
+  COLUMN_NAME = "deleted".freeze
 
   included do
     scope(:mortal, -> { where(COLUMN_NAME => false) })
@@ -120,6 +120,6 @@ module Immortal
   end
 
   def current_time_from_proper_timezone
-    Time.zone.name == 'UTC' ? Time.now.utc : Time.current
+    Time.zone.name == "UTC" ? Time.now.utc : Time.current
   end
 end
