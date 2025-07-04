@@ -1,6 +1,6 @@
 class Comment < ApplicationRecord
   extend HtmlFormatting
-  # include Immortal
+  include Immortal
 
   # extend ActiveSupport::Memoizable
 
