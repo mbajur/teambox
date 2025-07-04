@@ -121,3 +121,31 @@ def task_comment_rollback_example(project)
   @task.update comments_attributes: [ { body: 'Bring it forward' } ]
   @task.save!
 end
+
+def mock_uploader(file, type = 'image/png', data=nil)
+  file_path = data ? file : "%s/%s" % [ File.dirname(__FILE__), file ]
+  tempfile = Tempfile.new(file_path)
+  if data
+    tempfile << data
+  else
+    tempfile << File.read(file_path)
+  end
+  tempfile.seek(0)
+  ActionDispatch::Http::UploadedFile.new({ :type => type, :filename => file_path, :tempfile => tempfile })
+end
+
+def mock_file(user, page=nil)
+  @project.uploads.new(mock_file_params).tap do |page_upload|
+    page_upload.page = page
+    page_upload.user = user
+    page_upload.save!
+  end
+end
+
+def activities_for_thread(target, &block)
+  Activity.all.each do |activity|
+    if activity.comment_target == target or activity.target == target or (activity.target_type == 'Upload' && activity.comment.target == target)
+      yield activity
+    end
+  end
+end
