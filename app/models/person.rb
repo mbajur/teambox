@@ -72,7 +72,7 @@ class Person < ApplicationRecord
   def validate_presence_of_at_least_one_admin
     if project.admins.count == 1
       errors.add(:base, "A project needs at least one administrator")
-      false
+      throw(:abort)
     end
   end
 
@@ -85,8 +85,8 @@ class Person < ApplicationRecord
   end
 
   def self.users_from_projects(projects)
-    user_ids = Person.find(:all, conditions: { project_id: projects.map(&:id) }).map(&:user_id).uniq
-    User.find(:all, conditions: { id: user_ids }, select: "id, login, first_name, last_name").sort_by(&:name)
+    user_ids = Person.where(project_id: projects.map(&:id)).map(&:user_id).uniq
+    User.where(id: user_ids).select("id, login, first_name, last_name").sort_by(&:name)
   end
 
   # Returns a hash with all the user's projects and the people in that project

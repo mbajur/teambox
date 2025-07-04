@@ -156,8 +156,8 @@ end
 
 def project_with_invites
   FactoryBot.create(:project,
-    :invite_users => [@user1.id, @user2.id],
-    :invite_emails => "#{@user2.email} #{@user3.email} richard.roe@law.uni",
-    :invite_role => Person::ROLES[:admin]
+    invite_users: [ @user1.id, @user2.id ],
+    invite_emails: "#{@user2.email} #{@user3.email} richard.roe@law.uni",
+    invite_role: Person::ROLES[:admin]
   )
 end
