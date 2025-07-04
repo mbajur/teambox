@@ -29,7 +29,7 @@ module Watchable
                             watchable_id: self.id, watchable_type: self.class.to_s)
       watcher.save
     end
-    Watcher.where(watchable_id: self.id, watchable_type: self.class, user_id: watchers_to_remove).destroy_all
+    Watcher.where(watchable: self, user_id: watchers_to_remove).destroy_all
   end
 
   def add_watcher(user)

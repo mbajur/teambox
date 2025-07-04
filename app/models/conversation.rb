@@ -1,5 +1,5 @@
 class Conversation < RoleRecord
-  # include Immortal
+  include Immortal
 
   # needed for `truncate`
   include ActionView::Helpers::TextHelper
@@ -50,7 +50,7 @@ class Conversation < RoleRecord
   end
 
   def clear_targets
-    Activity.destroy_all target_id: self.id, target_type: self.class.to_s
+    Activity.where(target_id: self.id, target_type: self.class.to_s).destroy_all
   end
 
   def owner?(u)

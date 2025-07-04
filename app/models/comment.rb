@@ -36,7 +36,6 @@ class Comment < ApplicationRecord
         end
 
         task.comments.create_by_user author, { body: body, project_id: task.project_id }
-
       end
     end
   end
@@ -150,6 +149,11 @@ class Comment < ApplicationRecord
     refs
   end
 
+  def is_private=(value)
+    self[:is_private] = value
+    @is_private_set = true
+  end
+
   protected
 
   # don't allow two identical updates in a row
@@ -169,8 +173,8 @@ class Comment < ApplicationRecord
   end
 
   def copy_ownership_from_target # before_create
-    self.user_id ||= target.user_id
-    self.project_id ||= target.project_id if target.respond_to?(:project_id)
+    self.user ||= target.user
+    self.project ||= target.project if target.respond_to?(:project)
     # Private field inherits from target UNLESS it is set and its being changed by the owner
     can_change_private = self.user_id == target.user_id
     if target.respond_to?(:is_private)
@@ -206,11 +210,6 @@ class Comment < ApplicationRecord
       self.body = "#{task_is_private_html}\n\n#{body}"
     end
     true
-  end
-
-  def is_private=(value)
-    self[:is_private] = value
-    @is_private_set = true
   end
 
   def trigger_target_callbacks # after_create
