@@ -53,14 +53,15 @@ class Project < ApplicationRecord
   def log_later(target, action, creator_id)
     @import_activities ||= []
 
-    date = case action
-    when "create"
-      target.try(:created_at)
-    when "edit"
-      target.try(:updated_at)
-    when "delete"
-      target.try(:deleted_at) || target.try(:updated_at)
-    end || target.try(:created_at)
+    date =
+      case action
+      when "create"
+        target.try(:created_at)
+      when "edit"
+        target.try(:updated_at)
+      when "delete"
+        target.try(:deleted_at) || target.try(:updated_at)
+      end || target.try(:created_at)
 
     base = { date: date,
             project: self,

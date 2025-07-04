@@ -1,5 +1,5 @@
-require 'active_record'
-require 'immortal/singular_association'
+require "active_record"
+require "immortal/singular_association"
 
 module Immortal
   # Builds a +belongs_to+ association with +_with_deleted+ and +_only_deleted+
