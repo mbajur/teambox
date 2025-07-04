@@ -4,7 +4,6 @@ class Comment < ApplicationRecord
 
   # extend ActiveSupport::Memoizable
 
-  # concerned_with :tasks, :finders, :conversions
   include Comment::Tasks
   include Comment::Finders
   include Comment::Conversions

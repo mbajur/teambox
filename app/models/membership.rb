@@ -35,8 +35,7 @@ class Membership < ActiveRecord::Base
 
   def validate_presence_of_at_least_one_admin
     if organization.admins.count == 1
-      errors.add(:base, "An organization need at least one administrator")
-      false
+      throw(:abort)
     end
   end
 
