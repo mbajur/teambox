@@ -6,4 +6,8 @@ module Immortal
   def delete
     update(deleted: true)
   end
+
+  def destroy
+    update(deleted: true)
+  end
 end

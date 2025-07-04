@@ -170,7 +170,7 @@ class Comment < ApplicationRecord
 
   def copy_ownership_from_target # before_create
     self.user_id ||= target.user_id
-    self.project_id ||= target.project_id
+    self.project_id ||= target.project_id if target.respond_to?(:project_id)
     # Private field inherits from target UNLESS it is set and its being changed by the owner
     can_change_private = self.user_id == target.user_id
     if target.respond_to?(:is_private)
@@ -261,7 +261,7 @@ class Comment < ApplicationRecord
   end
 
   def cleanup_activities # after_destroy
-    Activity.destroy_all target_type: self.class.name, target_id: self.id
+    Activity.where(target_type: self.class.name, target_id: self.id).destroy_all
   end
 
   def cleanup_conversation

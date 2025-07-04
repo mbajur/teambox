@@ -8,11 +8,11 @@ class Card < ActiveRecord::Base
   has_many :social_networks, dependent: :destroy
 
   with_options allow_destroy: true, reject_if: proc { |a| a["name"].blank? } do |card|
-    card.accepts_nested_attributes_for :phone_numbers
-    card.accepts_nested_attributes_for :email_addresses
-    card.accepts_nested_attributes_for :websites
-    card.accepts_nested_attributes_for :ims
-    card.accepts_nested_attributes_for :social_networks
+    card.accepts_nested_attributes_for :phone_numbers, allow_destroy: true
+    card.accepts_nested_attributes_for :email_addresses, allow_destroy: true
+    card.accepts_nested_attributes_for :websites, allow_destroy: true
+    card.accepts_nested_attributes_for :ims, allow_destroy: true
+    card.accepts_nested_attributes_for :social_networks, allow_destroy: true
   end
 
   accepts_nested_attributes_for :addresses, allow_destroy: true, reject_if: proc { |address|

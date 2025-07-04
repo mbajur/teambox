@@ -46,6 +46,7 @@ class Upload < RoleRecord
   validates_format_of :asset_file_name, with: /\A[^\/]+\z/, allow_blank: false, message: "Invalid filename"
   validates_format_of :invited_user_email, with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, allow_nil: true
   validates_attachment_presence :asset, message: I18n.t("uploads.form.presence")
+  do_not_validate_attachment_file_type :asset
 
   validate :check_page
 

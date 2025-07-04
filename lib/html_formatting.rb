@@ -86,8 +86,7 @@ module HtmlFormatting
     end
 
     def format_links(text)
-      # auto_link(text) { |text| truncate(text, length: 80) }
-      text
+      auto_link(text) { |text| truncate(text, length: 80) }
     end
 
     # Github Flavoured Markdown, from http://github.github.com/github-flavored-markdown/

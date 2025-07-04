@@ -81,7 +81,7 @@ gem "sass", "3.7.4"
 
 gem "bcrypt", "~> 3.1"
 
-gem "rails_autolink", "~> 1.1", require: true
+gem "rails_autolink", "~> 1.1", require: 'rails_autolink/helpers'
 
 gem "country_select", "~> 11.0"
 

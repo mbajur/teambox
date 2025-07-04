@@ -5,9 +5,7 @@ class Person < ApplicationRecord
   ROLES = { observer: 0, commenter: 1, participant: 2, admin: 3 }
   PERMISSIONS = [ :view, :edit, :delete, :all ]
 
-  # include Immortal
-
-  # concerned_with :digest
+  include Immortal
   include Person::Digest
 
   belongs_to :user
