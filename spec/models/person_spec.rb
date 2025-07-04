@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Person, type: :model do
-
   it "clears the assigned user on tasks when destroyed" do
     task = FactoryBot.create :task
     person = task.project.people.first
