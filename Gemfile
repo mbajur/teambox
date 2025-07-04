@@ -63,6 +63,10 @@ group :development do
   gem "web-console"
 end
 
+group :test do
+  gem "timecop"
+end
+
 gem "paperclip", "~> 6.1"
 
 gem "permalink_fu", "~> 1.0"

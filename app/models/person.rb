@@ -183,7 +183,7 @@ class Person < ApplicationRecord
   end
 
   def log_delete
-    # project.log_activity(self, "delete")
+    project.log_activity(self, "delete")
   end
 
   def cleanup_after

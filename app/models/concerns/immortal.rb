@@ -8,6 +8,7 @@ module Immortal
   included do
     scope(:mortal, -> { where(COLUMN_NAME => false) })
     scope(:immortal, -> { where(COLUMN_NAME => true) })
+    scope :with_deleted, -> { unscoped.where(deleted: [ true, false ]) }
 
     default_scope -> { mortal } if arel_table[COLUMN_NAME]
 
@@ -16,6 +17,12 @@ module Immortal
   end
 
   class_methods do
+    def find_with_deleted(id)
+      without_default_scope do
+        find(id)
+      end
+    end
+
     # Add with/how_deleted singular association readers
     def belongs_to_mortal(name, scope = nil, options = {})
       reflection = Immortal::BelongsToBuilder.build(self, name, scope, options)

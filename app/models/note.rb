@@ -1,5 +1,5 @@
 class Note < RoleRecord
-  # include Immortal
+  include Immortal
   extend HtmlFormatting
 
   belongs_to :page

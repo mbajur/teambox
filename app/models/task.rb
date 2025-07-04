@@ -1,6 +1,5 @@
 class Task < RoleRecord
-  # include Immortal
-
+  include Immortal
   include Watchable
 
   STATUS_NAMES = [ :new, :open, :hold, :resolved, :rejected ]
