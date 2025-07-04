@@ -122,7 +122,7 @@ def task_comment_rollback_example(project)
   @task.save!
 end
 
-def mock_uploader(file, type = 'image/png', data=nil)
+def mock_uploader(file, type = 'image/png', data = nil)
   file_path = data ? file : "%s/%s" % [ File.dirname(__FILE__), file ]
   tempfile = Tempfile.new(file_path)
   if data
@@ -131,10 +131,10 @@ def mock_uploader(file, type = 'image/png', data=nil)
     tempfile << File.read(file_path)
   end
   tempfile.seek(0)
-  ActionDispatch::Http::UploadedFile.new({ :type => type, :filename => file_path, :tempfile => tempfile })
+  ActionDispatch::Http::UploadedFile.new({ type: type, filename: file_path, tempfile: tempfile })
 end
 
-def mock_file(user, page=nil)
+def mock_file(user, page = nil)
   @project.uploads.new(mock_file_params).tap do |page_upload|
     page_upload.page = page
     page_upload.user = user
