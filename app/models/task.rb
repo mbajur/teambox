@@ -9,7 +9,6 @@ class Task < RoleRecord
 
   ACTIVE_STATUS_CODES = [ :new, :open ].map { |name| STATUSES[name] }
 
-  # concerned_with :scopes, :callbacks, :conversions
   include Task::Scopes
   include Task::Callbacks
   include Task::Conversions
@@ -363,9 +362,9 @@ class Task < RoleRecord
     self.status_name = :open if self.status_name == :new
   end
 
-  def to_google_calendar_event
-    GoogleCalendar::Event.new(options_for_google_calendar_event)
-  end
+  # def to_google_calendar_event
+  #   GoogleCalendar::Event.new(options_for_google_calendar_event)
+  # end
 
   def options_for_google_calendar_event
     {

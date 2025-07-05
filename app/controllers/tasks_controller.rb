@@ -69,7 +69,7 @@ class TasksController < ApplicationController
   def update
     if can? :update, @task
       @task.updating_user = current_user
-      success = @task.update!(task_params)
+      success = @task.update(task_params)
     elsif can? :comment, @task
       @task.updating_user = current_user
       success = @task.update_attributes(comments_attributes: params["task"]["comments_attributes"])
