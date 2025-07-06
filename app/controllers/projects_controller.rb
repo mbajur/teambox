@@ -146,7 +146,7 @@ class ProjectsController < ApplicationController
       flash[:success] = t("projects.join.welcome")
       redirect_to project_path(@current_project)
     else
-      render text: "You're not authorized to join this project"
+      render plain: "You're not authorized to join this project"
     end
   end
 
