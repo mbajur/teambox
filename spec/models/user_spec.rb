@@ -28,8 +28,8 @@ describe User, type: :model do
     before do
       @project = FactoryBot.create(:project)
       @user = @project.user
-      @project.create_invitation(@user, :user_or_email => "invited@user.com")
-      @new_user = FactoryBot.create(:user, :email => "invited@user.com")
+      @project.create_invitation(@user, user_or_email: "invited@user.com")
+      @new_user = FactoryBot.create(:user, email: "invited@user.com")
       @user.reload
     end
 
@@ -51,7 +51,7 @@ describe User, type: :model do
       @login = 'dickdivers'
       @email = 'dick@divers.com'
       @password = 'nightingale'
-      @user = FactoryBot.create(:user, :login => @login, :email => @email, :password => @password, :password_confirmation => @password)
+      @user = FactoryBot.create(:user, login: @login, email: @email, password: @password, password_confirmation: @password)
     end
 
     xit "should return the user object for a valid login using his username" do
@@ -152,7 +152,7 @@ describe User, type: :model do
         @projects = []
         @invited = FactoryBot.create(:user)
         3.times do
-          project = FactoryBot.create(:project, :user => @user)
+          project = FactoryBot.create(:project, user: @user)
           project.add_user(@invited)
           @projects << project
           @user.add_recent_project(project)
@@ -161,7 +161,7 @@ describe User, type: :model do
       end
 
       it "should return all projects of the user" do
-        [@user, @invited].each do |user|
+        [ @user, @invited ].each do |user|
           user.recent_projects.should == @projects.reverse
         end
       end
@@ -188,13 +188,12 @@ describe User, type: :model do
         end
       end
     end
-
   end
 
   describe "validation" do
     before do
-      @user = FactoryBot.create(:user, :first_name => " holden ", :last_name => "  m.  caulfield   ",
-                                    :login => "Holden", :email => "HoldeN.Caulfield@pencey.edu")
+      @user = FactoryBot.create(:user, first_name: " holden ", last_name: "  m.  caulfield   ",
+                                    login: "Holden", email: "HoldeN.Caulfield@pencey.edu")
     end
 
     it "should strip excess whitespace in first and last names" do
@@ -208,16 +207,15 @@ describe User, type: :model do
     it "should convert login to downcase and strip spaces" do
       @user.login.should == "holden"
     end
-
   end
 
   describe "signup and activation" do
     it "should not accept duplicate logins or tildes" do
-      FactoryBot.build(:user, :login => '_j0aquIN').save.should be true
-      FactoryBot.build(:user, :login => '_j0aQUin').save.should be false
-      FactoryBot.build(:user, :login => '_j0a-QUin').save.should be false
-      FactoryBot.build(:user, :login => '_j0aquín').save.should be false
-      FactoryBot.build(:user, :login => '_j0aquin+').save.should be false
+      FactoryBot.build(:user, login: '_j0aquIN').save.should be true
+      FactoryBot.build(:user, login: '_j0aQUin').save.should be false
+      FactoryBot.build(:user, login: '_j0a-QUin').save.should be false
+      FactoryBot.build(:user, login: '_j0aquín').save.should be false
+      FactoryBot.build(:user, login: '_j0aquin+').save.should be false
     end
 
     xit "should send an activation email when signing up without an invitation" do
@@ -227,7 +225,7 @@ describe User, type: :model do
     end
 
     it "should not send an activation email if the user is active when created, for example, when invited" do
-      @user = FactoryBot.build(:user, :confirmed_user => true)
+      @user = FactoryBot.build(:user, confirmed_user: true)
       Emailer.should_not_receive(:send_with_language)
       @user.save
     end
@@ -249,15 +247,15 @@ describe User, type: :model do
   describe "when fetching assigned tasks" do
     before do
       @user = FactoryBot.create(:user)
-      @interesting_project = FactoryBot.create(:project, :user => FactoryBot.create(:user), :name => "DataMapper")
-      @boring_project = FactoryBot.create(:project, :user => FactoryBot.create(:user), :name => "Collecting stamps")
+      @interesting_project = FactoryBot.create(:project, user: FactoryBot.create(:user), name: "DataMapper")
+      @boring_project = FactoryBot.create(:project, user: FactoryBot.create(:user), name: "Collecting stamps")
       @interesting_project.add_user(@user)
       @boring_project.add_user(@user)
     end
 
     it "should return all the tasks assigned to a user when called with :all" do
-      interesting_task = FactoryBot.create(:task, :project => @interesting_project)
-      boring_task = FactoryBot.create(:task, :project => @boring_project)
+      interesting_task = FactoryBot.create(:task, project: @interesting_project)
+      boring_task = FactoryBot.create(:task, project: @boring_project)
       interesting_task.assign_to(@user)
       boring_task.assign_to(@user)
       user_tasks = @user.assigned_tasks.all
@@ -265,19 +263,19 @@ describe User, type: :model do
     end
 
     it "should not return a held task" do
-      held_task = FactoryBot.create(:held_task, :project => @interesting_project)
+      held_task = FactoryBot.create(:held_task, project: @interesting_project)
       held_task.assign_to(@user)
       @user.assigned_tasks.all.should_not include(held_task)
     end
 
     it "should not return a resolved task" do
-      resolved_task = FactoryBot.create(:resolved_task, :project => @interesting_project)
+      resolved_task = FactoryBot.create(:resolved_task, project: @interesting_project)
       resolved_task.assign_to(@user)
       @user.assigned_tasks.all.should_not include(resolved_task)
     end
 
     it "should not return a rejected task" do
-      rejected_task = FactoryBot.create(:rejected_task, :project => @interesting_project)
+      rejected_task = FactoryBot.create(:rejected_task, project: @interesting_project)
       rejected_task.assign_to(@user)
       @user.assigned_tasks.all.should_not include(rejected_task)
     end
@@ -287,7 +285,7 @@ describe User, type: :model do
     before do
       @user = FactoryBot.create(:user)
       @project = FactoryBot.create(:project)
-      @person = FactoryBot.create(:person, :project => @project, :user => @user)
+      @person = FactoryBot.create(:person, project: @project, user: @user)
       @project.reload
       @user.reload
     end
@@ -328,10 +326,10 @@ describe User, type: :model do
 
   describe "in time zone" do
     before do
-      @amsterdam_user = FactoryBot.create(:user, :time_zone => "Amsterdam")
-      @budapest_user = FactoryBot.create(:user, :time_zone => "Budapest")
-      @new_york_user = FactoryBot.create(:user, :time_zone => "Eastern Time (US & Canada)")
-      @users_in_tzs = User.in_time_zone(["Amsterdam", "Eastern Time (US & Canada)"])
+      @amsterdam_user = FactoryBot.create(:user, time_zone: "Amsterdam")
+      @budapest_user = FactoryBot.create(:user, time_zone: "Budapest")
+      @new_york_user = FactoryBot.create(:user, time_zone: "Eastern Time (US & Canada)")
+      @users_in_tzs = User.in_time_zone([ "Amsterdam", "Eastern Time (US & Canada)" ])
     end
     it "returns all users in one of the time zones" do
       @users_in_tzs.should include(@amsterdam_user)
@@ -344,7 +342,7 @@ describe User, type: :model do
 
   describe "deletion" do
     before do
-      @user = FactoryBot.create(:confirmed_user, :login => "simon", :email => "simon@sorcerer.net")
+      @user = FactoryBot.create(:confirmed_user, login: "simon", email: "simon@sorcerer.net")
       @user.destroy
     end
     it "renames the login so it can be reused by new signups" do
@@ -352,7 +350,7 @@ describe User, type: :model do
       @user.email.should == "deleted1__simon@sorcerer.net"
     end
     xit "renames the login adding number so it can be reused by new signups if regular modified login is already taken" do
-      @user2 = FactoryBot.create(:confirmed_user, :login => "simon", :email => "simon@sorcerer.net")
+      @user2 = FactoryBot.create(:confirmed_user, login: "simon", email: "simon@sorcerer.net")
       @user2.login.should == "simon"
       @user2.email.should == "simon@sorcerer.net"
       @user2.destroy
@@ -374,36 +372,36 @@ describe User, type: :model do
     end
 
     it "should propose a new one if it's taken" do
-      FactoryBot.create(:user, :login => "rabbit")
+      FactoryBot.create(:user, login: "rabbit")
       User.find_available_login("rabbit").should == "rabbit2"
     end
 
     it "should keep looking for a free one until it's possible" do
-      FactoryBot.create(:user, :login => "timetravel")
-      FactoryBot.create(:user, :login => "timetravel2")
-      FactoryBot.create(:user, :login => "timetravel3")
+      FactoryBot.create(:user, login: "timetravel")
+      FactoryBot.create(:user, login: "timetravel2")
+      FactoryBot.create(:user, login: "timetravel3")
       User.find_available_login("timetravel").should == "timetravel4"
     end
 
     it "should not take a deleted user's login" do
-      that_girl = FactoryBot.create(:user, :login => "the_girl_who_dies").destroy
+      that_girl = FactoryBot.create(:user, login: "the_girl_who_dies").destroy
       User.find_available_login(that_girl.login).should == "#{that_girl.login}2"
     end
   end
 
   describe "#locale" do
     it "should set a valid locale" do
-      user = FactoryBot.create(:user, :locale => 'es')
+      user = FactoryBot.create(:user, locale: 'es')
       user.locale.should == 'es'
     end
 
     it "should fall back to default locale when setting not in list of available locales" do
-      user = FactoryBot.create(:user, :locale => 'xy')
+      user = FactoryBot.create(:user, locale: 'xy')
       user.locale.should == 'en'
     end
 
     it "should allow special name formatting for foreign locales" do
-      user = FactoryBot.create :user, :first_name => '保', :last_name => '鎌田'
+      user = FactoryBot.create :user, first_name: '保', last_name: '鎌田'
       I18n.locale = 'ja' # where name is in the format 'last_name first_name さん'
       user.name.should == '鎌田 保 さん'
       I18n.locale = I18n.default_locale # where name is in the format 'first_name last_name'
@@ -413,7 +411,7 @@ describe User, type: :model do
 
   context 'attributes' do
     subject {
-      FactoryBot.create(:user, :card_attributes => { :phone_numbers_attributes => [{:name => '+123456789'}] })
+      FactoryBot.create(:user, card_attributes: { phone_numbers_attributes: [ { name: '+123456789' } ] })
     }
 
     it { should_not be_new_record }
@@ -436,13 +434,13 @@ describe User, type: :model do
     end
     it "should list active tasks for the user" do
       @task.assign_to @user
-      @user.pending_tasks.should == [@task]
+      @user.pending_tasks.should == [ @task ]
     end
     it "should not list tasks that are not active" do
-      [:resolved, :hold, :rejected].each do |status|
+      [ :resolved, :hold, :rejected ].each do |status|
         @task.assign_to @user
         @task.status_name = status
-        @task.save(:validate => false)
+        @task.save(validate: false)
         @user.pending_tasks.should be_empty
       end
     end
@@ -454,14 +452,14 @@ describe User, type: :model do
     it "should list active tasks sorted by (urgent, due_on ASC)" do
       @task.assign_to(@user)
       @task.update(due_on: 1.minute.from_now)
-      @task2 = FactoryBot.create(:task, :due_on => 2.days.from_now)
-      @task3 = FactoryBot.create(:task, :due_on => 10.minutes.from_now)
-      @task4 = FactoryBot.create(:task, :urgent => true)
-      [@task2, @task3, @task4].each do |task|
+      @task2 = FactoryBot.create(:task, due_on: 2.days.from_now)
+      @task3 = FactoryBot.create(:task, due_on: 10.minutes.from_now)
+      @task4 = FactoryBot.create(:task, urgent: true)
+      [ @task2, @task3, @task4 ].each do |task|
         task.project.add_user(@user)
         task.assign_to(@user)
       end
-      @user.pending_tasks.map(&:id).should == [@task4.id, @task.id, @task3.id, @task2.id]
+      @user.pending_tasks.map(&:id).should == [ @task4.id, @task.id, @task3.id, @task2.id ]
     end
   end
 
@@ -469,7 +467,7 @@ describe User, type: :model do
     before do
       @user = FactoryBot.create(:user)
       @participant = FactoryBot.create(:user)
-      @task = FactoryBot.create(:task, :status => 0)
+      @task = FactoryBot.create(:task, status: 0)
       @task.project.add_user @user
       @task.project.add_user @participant
     end
@@ -518,18 +516,18 @@ describe User, type: :model do
 
     it "should grant badges" do
       @user.grant_badge('shakespeare')
-      @user.badges.should == ['shakespeare']
+      @user.badges.should == [ 'shakespeare' ]
       @user.reload
-      @user.badges.should == ['shakespeare']
+      @user.badges.should == [ 'shakespeare' ]
     end
 
     it "should grant multiple badges" do
       @user.grant_badge('terminator')
       @user.grant_badge('robocop')
       @user.grant_badge('terminator')
-      @user.badges.should == %w(terminator robocop)
+      @user.badges.should == %w[terminator robocop]
       @user.reload
-      @user.badges.should == %w(terminator robocop)
+      @user.badges.should == %w[terminator robocop]
     end
   end
 
@@ -568,24 +566,24 @@ describe User, type: :model do
     before do
       @user = FactoryBot.create(:user)
       @project = FactoryBot.create(:project)
-      @person = @project.add_user(@user, :role => Person::ROLES[:admin])
+      @person = @project.add_user(@user, role: Person::ROLES[:admin])
     end
 
     it "should allow setting digest on person via nested attributes on user" do
-      #DIGEST = {:instant => 0, :daily => 1, :weekly => 2}
-      @user.people_attributes = [{:id => @person.id.to_s, :digest => Person::DIGEST[:instant] }]
+      # DIGEST = {:instant => 0, :daily => 1, :weekly => 2}
+      @user.people_attributes = [ { id: @person.id.to_s, digest: Person::DIGEST[:instant] } ]
       @user.save.should be true
       @user.people.first.digest.should == Person::DIGEST[:instant]
     end
 
     it "should allow setting watch_new_task on person via nested attributes on user" do
-      @user.people_attributes = [{:id => @person.id.to_s, :watch_new_task => true }]
+      @user.people_attributes = [ { id: @person.id.to_s, watch_new_task: true } ]
       @user.save.should be true
       @user.people.first.watch_new_task.should == true
     end
 
     it "should allow setting watch_new_conversation on person via nested attributes on user" do
-      @user.people_attributes = [{:id => @person.id.to_s, :watch_new_conversation => true }]
+      @user.people_attributes = [ { id: @person.id.to_s, watch_new_conversation: true } ]
       @user.save.should be true
       @user.people.first.watch_new_conversation.should == true
     end
