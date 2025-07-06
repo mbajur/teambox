@@ -65,13 +65,12 @@ end
 
 group :test do
   gem "timecop"
+  gem "rails-controller-testing"
 end
 
 gem "paperclip", "~> 6.1"
 
 gem "permalink_fu", "~> 1.0"
-
-gem "cancan", "~> 1.6"
 
 gem "haml-rails", "~> 2.1"
 
@@ -96,3 +95,5 @@ gem "email_validator", "~> 2.2"
 gem "rails-observers", "~> 0.1.5"
 
 gem "oa-oauth", "~> 0.0.1"
+
+gem "cancancan", "~> 3.6"
