@@ -140,9 +140,9 @@ class Task < RoleRecord
     name
   end
 
-  def user
-    @user ||= user_id ? User.with_deleted.find_by_id(user_id) : nil
-  end
+  # def user
+  #   @user ||= user_id ? User.with_deleted.find_by_id(user_id) : nil
+  # end
 
   def required_watcher_ids
     [ user_id, assigned.try(:user_id) ].compact

@@ -62,13 +62,13 @@ describe Conversation, type: :model do
     conversation.simple.should be false
   end
 
-  xit "allows watchers id on create" do
+  it "allows watchers id on create" do
     project = FactoryBot.create(:project)
     other_guy = FactoryBot.create(:confirmed_user)
     person = FactoryBot.create(:person, project: project, user: other_guy)
 
     conversation = FactoryBot.create(:conversation, project: project, user: project.user,
-      watcher_ids: [ other_guy.id ])
+      watcher_tags_attributes: [ { project: project, user_id: other_guy.id } ])
 
     conversation.watchers.should include(conversation.user)
     conversation.watchers.should include(person.user)

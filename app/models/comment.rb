@@ -149,7 +149,7 @@ class Comment < ApplicationRecord
   end
 
   def is_private=(value)
-    self[:is_private] = value
+    super
     @is_private_set = true
   end
 
