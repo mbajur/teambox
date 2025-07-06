@@ -177,3 +177,9 @@ def make_a_typical_project
   @project.add_user(@admin, role: Person::ROLES[:admin])
   @project
 end
+
+def route_matches(path, method, params)
+  it "is routable for params #{params.inspect} with #{method.to_s.upcase} and #{path.inspect}" do
+    { method.to_sym => path }.should route_to(params)
+  end
+end
