@@ -10,6 +10,8 @@ module Watchable
     # Make it obvious that autosave is acting here
     model.has_many :watchers, through: :watcher_tags, source: :user, autosave: true
     model.after_save :update_private
+
+    model.accepts_nested_attributes_for :watcher_tags, allow_destroy: true
   end
 
   def watchers_ids
@@ -33,7 +35,7 @@ module Watchable
   end
 
   def add_watcher(user)
-    unless has_watcher?(user) or !project.has_member?(user)
+    if !has_watcher?(user) && project.has_member?(user)
       watcher = Watcher.new(user_id: user[:id], project_id: self.project_id,
                             watchable_id: self.id, watchable_type: self.class.to_s)
       true if watcher.save
@@ -79,7 +81,7 @@ module Watchable
   protected
 
   def update_watchers
-    add_watcher(user) if user_id_changed?
+    add_watcher(user) if saved_change_to_user_id?
     if @watchers_ids
       add_watchers(project.users.where(id: @watchers_ids))
     end
@@ -87,10 +89,11 @@ module Watchable
   end
 
   def create_watchers
-    unless self.try(:is_private?) or (self.respond_to? :comments and comments.first.try(:is_private?))
-      users = project.people.where("watch_new_#{self.class.to_s.downcase}".to_sym => true).map(&:user)
-      add_watchers(users)
-    end
+    return true if self.try(:is_private?)
+    return true if self.respond_to?(:comments) && comments.first.try(:is_private?)
+
+    users = project.people.where("watch_new_#{self.class.to_s.downcase}".to_sym => true).map(&:user)
+    add_watchers(users)
     true
   end
 
