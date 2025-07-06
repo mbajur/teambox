@@ -2,12 +2,13 @@ module User::Validation
   extend ActiveSupport::Concern
 
   RESERVED_USERNAMES = [ "all" ]
+  LOGIN_REGEX = /\A[a-z0-9_]+\z/
 
   included do
     validates_presence_of :login
     validates_length_of       :login,       within: 3..40
     validates_uniqueness_of   :login,       case_sensitive: false
-    # validates_format_of       :login,       with: Authentication.login_regex, message: I18n.t("users.form.invalid_login")
+    validates_format_of       :login,       with: LOGIN_REGEX, message: I18n.t("users.form.invalid_login")
     validates_exclusion_of    :login,       in: RESERVED_USERNAMES
 
     # validates_format_of       :first_name,  with: Authentication.name_regex,  message: Authentication.bad_name_message, allow_nil: true

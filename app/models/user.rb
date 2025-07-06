@@ -108,10 +108,6 @@ class User < ApplicationRecord
   after_create :clear_invites
   before_save :update_token
 
-  def self.find_with_deleted(id)
-    self.with_deleted.find(id)
-  end
-
   def update_token
     self.recent_projects_ids ||= []
     # self.rss_token ||= generate_rss_token
@@ -255,8 +251,9 @@ class User < ApplicationRecord
 
   def rename_as_deleted
     tag = find_available_deleted_tag
-    update_attribute :login, "#{tag}#{login}" unless login =~ DELETED_REGEX
-    update_attribute :email, "#{tag}#{email}" unless email =~ DELETED_REGEX
+
+    update!(login: "#{tag}#{login}") unless login =~ DELETED_REGEX
+    update(email: "#{tag}#{email}") unless email =~ DELETED_REGEX
   end
 
   def rename_as_active
@@ -271,7 +268,7 @@ class User < ApplicationRecord
     begin
       counter += 1
       login = "#{proposed_login}#{counter == 1 ? nil : counter}"
-    end while User.find_with_deleted(:first, conditions: [ "login LIKE ?", login ])
+    end while User.where_with_deleted("login LIKE ?", login).first
     login
   end
 
@@ -280,11 +277,18 @@ class User < ApplicationRecord
   end
 
   def pending_tasks
-    Rails.cache.fetch("pending_tasks.#{id}") do
-      active_project_ids.empty? ? [] :
-        Task.where(status: Task::ACTIVE_STATUS_CODES).where(assigned_id: active_project_ids).order("ID desc").includes(:project).
-             sort { |a, b| [ a.urgent? ? 1 : 0, (a.due_on || 1.week.from_now.to_date) ] <=> [ b.urgent? ? 1 : 0, (b.due_on || 1.year.from_now.to_date) ] }
-    end
+    return Task.none if active_project_ids.empty?
+
+    Task
+      .where(status: Task::ACTIVE_STATUS_CODES)
+      .where(assigned_id: active_project_ids)
+      .includes(:project)
+      .unscope(:order)
+      .order(
+        Arel.sql("CASE WHEN tasks.urgent THEN 0 ELSE 1 END ASC"),  # urgent first
+        Arel.sql("COALESCE(tasks.due_on, '#{1.year.from_now.to_date}') ASC"),  # earlier due dates first
+        Arel.sql("tasks.id ASC")  # older tasks first
+      )
   end
 
   def nearest_pending_tasks

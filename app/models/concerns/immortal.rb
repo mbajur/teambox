@@ -23,6 +23,12 @@ module Immortal
       end
     end
 
+    def find_only_deleted(id)
+      without_default_scope do
+        find(id)
+      end
+    end
+
     # Add with/how_deleted singular association readers
     def belongs_to_mortal(name, scope = nil, options = {})
       reflection = Immortal::BelongsToBuilder.build(self, name, scope, options)
@@ -57,15 +63,15 @@ module Immortal
       end
     end
 
-    def where_with_deleted(conditions)
+    def where_with_deleted(*conditions)
       without_default_scope do
-        where(conditions)
+        where(*conditions)
       end
     end
 
-    def where_only_deleted(conditions)
+    def where_only_deleted(*conditions)
       without_default_scope do
-        immortal.where(conditions)
+        immortal.where(*conditions)
       end
     end
 
