@@ -161,3 +161,19 @@ def project_with_invites
     invite_role: Person::ROLES[:admin]
   )
 end
+
+def make_a_typical_project
+  @user = FactoryBot.create(:confirmed_user)
+  @project = FactoryBot.create(:project)
+  @organization = @project.organization
+  @organization.add_member(@user, Membership::ROLES[:participant])
+  @owner = @project.user
+  @project.add_user(@user)
+  @observer = FactoryBot.create(:confirmed_user)
+  @organization.add_member(@observer, Membership::ROLES[:participant])
+  @project.add_user(@observer, role: Person::ROLES[:observer])
+  @admin = FactoryBot.create(:confirmed_user)
+  @organization.add_member(@admin, Membership::ROLES[:admin])
+  @project.add_user(@admin, role: Person::ROLES[:admin])
+  @project
+end
