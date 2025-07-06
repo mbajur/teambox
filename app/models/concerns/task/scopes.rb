@@ -3,6 +3,7 @@ module Task::Scopes
 
   included do
     default_scope -> { order(position: :asc, created_at: :desc) }
+
     scope :archived,   -> { where("status >= ?", 3).includes(:project, :task_list, :assigned) }
     scope :unarchived, -> { where("status <  ?", 3).includes(:project, :task_list, :assigned) }
 

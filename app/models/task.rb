@@ -105,7 +105,7 @@ class Task < RoleRecord
   end
 
   def assign_to(user)
-    self.update_attribute :assigned, user.in_project(project)
+    self.update assigned: user.in_project(project)
   end
 
   def comment_created?
@@ -336,8 +336,8 @@ class Task < RoleRecord
   end
 
   def update_tasks_counts # after_save
-    if assigned_id_changed? or status_changed? or self.new_record?
-      [ self.assigned_id, self.assigned_id_was ].compact.each do |person_id|
+    if saved_change_to_assigned_id? or saved_change_to_status? or self.new_record?
+      [ self.assigned_id, self.assigned_id_was ].uniq.each do |person_id|
         if person = Person.find_by_id(person_id)
           person.user.tasks_counts_update
         end

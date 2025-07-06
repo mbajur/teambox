@@ -3,6 +3,7 @@ shared:
   allow_search: true
   daily_task_reminder_email_time: 8
   activities_per_page: 25
+  email_confirmation_require: true
 
   smtp_settings:
     domain: localhost

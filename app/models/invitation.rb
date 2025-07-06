@@ -42,7 +42,7 @@ class Invitation < RoleRecord
 
       # Notify the sender that the invitation has been accepted
       unless @autoaccepted
-        Emailer.send_with_language :accepted_project_invitation, self.user.locale, current_user.id, self.id
+        # Emailer.send_with_language :accepted_project_invitation, self.user.locale, current_user.id, self.id
       end
     elsif target.is_a? Organization
       target.add_member(current_user, membership)

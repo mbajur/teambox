@@ -41,5 +41,7 @@ module Teambox
 
     # config.teambox.amazon_s3 = false
     config.teambox = config_for(:teambox)
+
+    config.i18n.available_locales = %i[en jp ja es]
   end
 end
