@@ -67,8 +67,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    logout_keeping_session!
-    @user = User.new(params[:user])
+    # logout_keeping_session!
+    @user = User.new(user_params)
     if session[:app_link_id] and app_link = AppLink.find_by_id(session[:app_link_id])
       app_link_email = app_link.detect_custom_attribute { |k, v| k == "email" }
     end
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
       !Rails.configuration.teambox.email_confirmation_require)
 
     if @user && @user.save
-      self.current_user = @user
+      start_new_session_for(@user)
 
       if app_link
         app_link.user = @user
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
       end
     else
       respond_to do |f|
-        f.any(:html, :m) { render action: :new, layout: "sessions" }
+        f.any(:html, :m) { render action: :new, layout: "sessions", status: :unprocessable_entity }
       end
     end
   end
@@ -257,6 +257,8 @@ class UsersController < ApplicationController
                                    :old_password,
                                    :password,
                                    :password_confirmation,
+                                   :first_name,
+                                   :last_name,
                                    :first_day_of_week,
                                    :locale,
                                    :time_zone,
@@ -278,12 +280,12 @@ class UsersController < ApplicationController
                                    people_attributes: [ :id, :digest, :watch_new_task, :watch_new_conversation, :watch_new_page ],
                                    card_attributes: [
                                     :id,
-                                    phone_numbers_attributes: [ :id, :name, :account_type ],
-                                    email_addresses_attributes: [ :id, :name, :account_type ],
-                                    websites_attributes: [ :id, :name, :account_type ],
-                                    addresses_attributes: [ :id, :street, :city, :state, :zip, :country, :account_type ],
-                                    ims_attributes: [ :id, :name, :account_im_type, :account_type ],
-                                    social_networks_attributes: [ :id, :name, :account_network_type, :account_type ]
+                                    phone_numbers_attributes: [ :name, :account_type ],
+                                    email_addresses_attributes: [ :name, :account_type ],
+                                    websites_attributes: [ :name, :account_type ],
+                                    addresses_attributes: [ :street, :city, :state, :zip, :country, :account_type ],
+                                    ims_attributes: [ :name, :account_im_type, :account_type ],
+                                    social_networks_attributes: [ :name, :account_network_type, :account_type ]
                                    ])
     end
 

@@ -13,11 +13,11 @@ module ActivitiesHelper
   end
 
   def activity_section(activity)
-    haml_tag "div", class: "activity #{activity.action_type}" do
-      haml_concat micro_avatar(activity.user)
-      haml_tag "div", class: :activity_block do
-        haml_tag "div", posted_date(activity.created_at), class: :date unless rss?
-        yield activity_title(activity)
+    content_tag(:div, class: "activity #{activity.action_type}") do
+      micro_avatar(activity.user) +
+      content_tag(:div, class: "activity_block") do
+        (rss? ? "".html_safe : content_tag(:div, posted_date(activity.created_at), class: "date")) +
+        capture { yield activity_title(activity) }
       end
     end
   end
@@ -120,7 +120,7 @@ module ActivitiesHelper
     else
       raise ArgumentError, "unknown activity type #{type}"
     end
-    t("activities.#{type}.title", values).html_safe
+    t("activities.#{type}.title", **values).html_safe
   end
 
   def activity_target_url(activity)
