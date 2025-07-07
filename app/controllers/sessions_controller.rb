@@ -66,14 +66,14 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    logout_killing_session!
+    terminate_session
     redirect_back_or_to goodbye_path
   end
 
   # for cucumber testing only
   def backdoor
-    logout_killing_session!
-    self.current_user = User.find_by_login!(params[:username])
+    terminate_session
+    start_new_session_for(User.find_by_login!(params[:username]))
     head :ok
   end
 

@@ -54,11 +54,48 @@ jobs:
       - ruby/rspec-test
       - codecov/upload
 
+  test:
+    parallelism: 3
+    docker:
+      - image: cimg/ruby:3.3.5-node
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: teambox
+          POSTGRES_DB: teambox_test
+          POSTGRES_PASSWORD: ""
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: teambox
+      PGPASSWORD: ""
+      RAILS_ENV: test
+
+    steps:
+      - checkout
+      - ruby/install:
+          version: '3.3.5'
+      - ruby/install-deps
+      # - node/install-packages:
+      #     pkg-manager: yarn
+      #     cache-key: "yarn.lock"
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      # Run rspec in parallel
+      - ruby/cucumber-test
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
       - test:
+          requires:
+            - build
+      - cucumber:
           requires:
             - build

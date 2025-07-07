@@ -48,7 +48,7 @@ document.on('ajax:success', 'form, div.preview', function(e, form) {
 
 document.on('keyup', 'form textarea', function(e, area) {
   if (Preview.manualPreview) return
-  if (e.keyCode == Event.KEY_RETURN) {
+  // if (e.keyCode == Event.KEY_RETURN) {
     var form = area.up('form'),
         textarea = form.down('textarea'),
         box = form.down('div.preview'),
@@ -58,5 +58,5 @@ document.on('keyup', 'form textarea', function(e, area) {
     if (box.hasClassName('invisible')) {
       Preview.toggle(box, button)
     }
-  }
+  // }
 })

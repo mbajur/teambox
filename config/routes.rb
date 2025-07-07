@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   get "/logout" => "sessions#destroy", :as => :logout
   get "/login" => "sessions#new", :as => :login
-  get "/login/:username" => "sessions#backdoor", :as => :login_backdoor if Rails.env.cucumber?
+  get "/login/:username" => "sessions#backdoor", :as => :login_backdoor if Rails.env.test?
 
   get "/register" => "users#create", :as => :register
   get "/signup" => "users#new", :as => :signup

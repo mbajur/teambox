@@ -147,7 +147,7 @@ class ConversationsController < ApplicationController
   private
 
   def conversation_params
-    params.require(:conversation).permit(:name, :is_private, comments_attributes: [ :body ])
+    params.require(:conversation).permit(:name, :is_private, :simple, comments_attributes: [ :body ])
   end
 
   protected

@@ -66,6 +66,11 @@ end
 group :test do
   gem "timecop"
   gem "rails-controller-testing"
+  gem "cucumber-rails", require: false
+  gem "database_cleaner"
+  gem "pickle"
+  gem "cuprite"
+  gem "capybara-screenshot"
 end
 
 gem "paperclip", "~> 6.1"
@@ -97,3 +102,5 @@ gem "rails-observers", "~> 0.1.5"
 gem "oa-oauth", "~> 0.0.1"
 
 gem "cancancan", "~> 3.6"
+
+gem "redcarpet", "~> 3.6"

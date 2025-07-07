@@ -82,7 +82,9 @@ module HtmlFormatting
 
     def format_text(text)
       # RDiscount.new(text).to_html
-      simple_format(text)
+      # simple_format(text)
+      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+      markdown.render(text)
     end
 
     def format_links(text)
