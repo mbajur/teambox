@@ -86,7 +86,9 @@ jobs:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
       # Run rspec in parallel
-      - ruby/cucumber-test
+      - run:
+          name: Run Cucumber tests
+          command: bundle exec cucumber --tags "not @ignore" --format pretty --format progress --format html --out cucumber_report.html
 
 workflows:
   version: 2
