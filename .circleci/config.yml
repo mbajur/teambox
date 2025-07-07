@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.5.3
   codecov: codecov/codecov@3
-  browser-tools: circleci/browser-tools@1.1
+  browser-tools: circleci/browser-tools@2.1.2
   # node: circleci/node@2
 
 jobs:
@@ -73,7 +73,8 @@ jobs:
       RAILS_ENV: test
 
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install_chrome
+      - browser-tools/install_chromedriver
       - checkout
       - ruby/install:
           version: '3.3.5'
