@@ -54,7 +54,7 @@ jobs:
       - ruby/rspec-test
       - codecov/upload
 
-  test:
+  cucumber:
     parallelism: 3
     docker:
       - image: cimg/ruby:3.3.5-node
