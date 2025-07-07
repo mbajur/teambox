@@ -3,12 +3,13 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.5.3
   codecov: codecov/codecov@3
+  browser-tools: circleci/browser-tools@1.1
   # node: circleci/node@2
 
 jobs:
   build:
     docker:
-      - image: cimg/ruby:3.3.5-node-browsers
+      - image: cimg/ruby:3.3.5-browsers
     steps:
       - checkout
       - ruby/install:
@@ -72,6 +73,7 @@ jobs:
       RAILS_ENV: test
 
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - ruby/install:
           version: '3.3.5'
