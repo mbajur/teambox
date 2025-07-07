@@ -21,7 +21,7 @@ jobs:
       #     cache-key: "yarn.lock"
 
   test:
-    parallelism: 1
+    parallelism: 3
     docker:
       - image: cimg/ruby:3.3.5-node
       - image: circleci/postgres:9.5-alpine
@@ -53,19 +53,10 @@ jobs:
           command: bundle exec rails db:schema:load --trace
       # Run rspec in parallel
       - ruby/rspec-test
-      - run:
-          name: Move coverage to unique dir
-          command: |
-            mkdir coverage_artifacts
-            cp -r coverage coverage_artifacts/rspec
-      - persist_to_workspace:
-          root: .
-          paths:
-            - coverage_artifacts/rspec
-      # - codecov/upload
+      - codecov/upload
 
   cucumber:
-    parallelism: 1
+    parallelism: 3
     docker:
       - image: cimg/ruby:3.3.5-node
       - image: circleci/postgres:9.5-alpine
@@ -98,30 +89,11 @@ jobs:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
       # Run rspec in parallel
-      - run:
-          name: Run Cucumber tests
-          command: bundle exec cucumber --tags "not @ignore"
-      - run:
-          name: Move coverage to unique dir
-          command: |
-            mkdir coverage_artifacts
-            cp -r coverage coverage_artifacts/cucumber
-      - persist_to_workspace:
-          root: .
-          paths:
-            - coverage_artifacts/cucumber
-  merge-and-upload-coverage:
-    docker:
-      - image: cimg/ruby:3.3.5
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Combine coverage results
-          command: |
-            ls -la coverage_artifacts/cucumber
-            ls -la coverage_artifacts/rspec
+      # - run:
+      #     name: Run Cucumber tests
+      #     command: bundle exec cucumber --tags "not @ignore"
+      - ruby/cucumber-test
+
 workflows:
   version: 2
   build_and_test:
@@ -133,7 +105,3 @@ workflows:
       - cucumber:
           requires:
             - build
-      - merge-and-upload-coverage:
-          requires:
-            - test
-            - cucumber
