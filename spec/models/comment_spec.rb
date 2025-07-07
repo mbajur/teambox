@@ -79,7 +79,7 @@ describe Comment, type: :model do
       @project.add_user(@user)
       body = "@existing, hey, @existing"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == %Q(<p><a class="mention" href="/users/existing">@existing</a>, hey, <a class="mention" href="/users/existing">@existing</a></p>)
+      comment.body_html.should == %Q(<p><a class="mention" href="/users/existing">@existing</a>, hey, <a class="mention" href="/users/existing">@existing</a></p>\n)
       comment.mentioned.to_a.should == [ @user ]
     end
 
@@ -87,7 +87,7 @@ describe Comment, type: :model do
       @project.add_user(@user)
       body = "@existing links, but not an@existing.com email"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == %Q(<p><a class=\"mention\" href=\"/users/existing\">@existing</a> links, but not <a href=\"mailto:an@existing.com\">an@existing.com</a> email</p>)
+      comment.body_html.should == %Q(<p><a class=\"mention\" href=\"/users/existing\">@existing</a> links, but not <a href=\"mailto:an@existing.com\">an@existing.com</a> email</p>\n)
       comment.mentioned.to_a.should == [ @user ]
     end
 
@@ -98,7 +98,7 @@ describe Comment, type: :model do
       @project.add_user(james)
       body = "@pablo @james Check this out!"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == %Q(<p><a class="mention" href="/users/pablo">@pablo</a> <a class="mention" href="/users/james">@james</a> Check this out!</p>)
+      comment.body_html.should == %Q(<p><a class="mention" href="/users/pablo">@pablo</a> <a class="mention" href="/users/james">@james</a> Check this out!</p>\n)
       comment.mentioned.should include(pablo)
       comment.mentioned.should include(james)
     end
@@ -110,7 +110,7 @@ describe Comment, type: :model do
       @project.add_user(james)
       body = "@all hands on deck this Friday"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == %Q(<p><span class="mention">@all</span> hands on deck this Friday</p>)
+      comment.body_html.should == %Q(<p><span class="mention">@all</span> hands on deck this Friday</p>\n)
       comment.mentioned.should include(pablo)
       comment.mentioned.should include(james)
       comment.mentioned.should_not include(@user)
@@ -169,14 +169,14 @@ describe Comment, type: :model do
     it "should not link to users page when mentioning @existing if they are not in the project" do
       body = "@existing is a cool guy, but he is not in this project"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == "<p>@existing is a cool guy, but he is not in this project</p>"
+      comment.body_html.should == "<p>@existing is a cool guy, but he is not in this project</p>\n"
       comment.mentioned.should == nil
     end
 
     it "should not link to users page when typing @unexisting" do
       body = "Hey, @unexisting, take a look at this!"
       comment = FactoryBot.create(:comment, body: body, project: @project, user: @project.user, target: @project)
-      comment.body_html.should == "<p>Hey, @unexisting, take a look at this!</p>"
+      comment.body_html.should == "<p>Hey, @unexisting, take a look at this!</p>\n"
       comment.mentioned.should == nil
     end
   end
