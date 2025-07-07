@@ -21,7 +21,7 @@ jobs:
       #     cache-key: "yarn.lock"
 
   test:
-    parallelism: 3
+    parallelism: 1
     docker:
       - image: cimg/ruby:3.3.5-node
       - image: circleci/postgres:9.5-alpine
