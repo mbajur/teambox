@@ -56,8 +56,8 @@ jobs:
       - run:
           name: Move coverage to unique dir
           command: |
-            mkdir -p coverage_artifacts/rspec
-            rsync -a coverage/ coverage_artifacts/rspec/
+            mkdir coverage_artifacts
+            cp coverage coverage_artifacts/rspec
       - persist_to_workspace:
           root: .
           paths:
@@ -104,8 +104,8 @@ jobs:
       - run:
           name: Move coverage to unique dir
           command: |
-            mkdir -p coverage_artifacts/cucumber
-            rsync -a coverage/ coverage_artifacts/cucumber/
+            mkdir coverage_artifacts
+            cp coverage coverage_artifacts/cucumber
       - persist_to_workspace:
           root: .
           paths:
