@@ -1,7 +1,5 @@
 require "simplecov"
-SimpleCov.start 'rails' do
-  add_filer '/features/'
-end
+SimpleCov.start 'rails'
 
 require 'simplecov-cobertura'
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
