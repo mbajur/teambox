@@ -54,9 +54,9 @@ jobs:
       # Run rspec in parallel
       - ruby/rspec-test
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
-            - coverage/*
+            - coverage
       # - codecov/upload
 
   cucumber:
@@ -97,14 +97,16 @@ jobs:
           name: Run Cucumber tests
           command: bundle exec cucumber --tags "not @ignore"
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
-            - coverage/*
+            - coverage
   merge-and-upload-coverage:
     docker:
       - image: cimg/ruby:3.3.5
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Combine coverage results
           command: |
