@@ -120,7 +120,8 @@ jobs:
       - run:
           name: Combine coverage results
           command: |
-            ls -la coverage_artifacts
+            ls -la coverage_artifacts/cucumber
+            ls -la coverage_artifacts/rspec
 workflows:
   version: 2
   build_and_test:
