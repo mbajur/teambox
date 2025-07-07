@@ -8,7 +8,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:3.3.5-node
+      - image: cimg/ruby:3.3.5-browsers
     steps:
       - checkout
       - ruby/install:
