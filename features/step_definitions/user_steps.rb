@@ -82,7 +82,7 @@ Given /^(@.+) (?:has|have) (?:his|her|their) locale set to (.+)$/ do |users, nam
   end
 
   each_user(users) do |user|
-    user.update_attribute :locale, locale
+    user.update!(locale: locale)
   end
 end
 

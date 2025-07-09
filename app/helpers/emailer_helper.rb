@@ -67,11 +67,11 @@ module EmailerHelper
   end
 
   def emailer_answer_to_this_email
-    content_tag(:p, I18n.t("emailer.notify.reply")) if Teambox.config.allow_incoming_email
+    content_tag(:p, I18n.t("emailer.notify.reply")) if Rails.configuration.teambox.allow_incoming_email
   end
 
   def emailer_commands_for_tasks(user)
-    if Teambox.config.allow_incoming_email
+    if Rails.configuration.teambox.allow_incoming_email
       content_tag(:p, I18n.t("emailer.notify.task_commands", username: user.login))
     end
   end

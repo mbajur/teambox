@@ -15,7 +15,7 @@ module Task::Scopes
 
     scope :urgent, -> { where(urgent: true).includes(:project, :task_list, :assigned) }
     scope :due_sooner_than_two_weeks, lambda {
-      { conditions: [ "tasks.due_on < ?", 2.weeks.from_now ] }
+      where("tasks.due_on < ?", 2.weeks.from_now)
     }
 
     scope :due_today, -> {

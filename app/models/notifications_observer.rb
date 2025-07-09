@@ -1,7 +1,6 @@
 class NotificationsObserver < ActiveRecord::Observer
   observe :comment, :activity
 
-
   method_name = %w[cucumber test].any? { |env| Rails.env == env } ? :after_create : :after_commit
 
   define_method(method_name) do |obj|
@@ -32,7 +31,7 @@ class NotificationsObserver < ActiveRecord::Observer
           notification = person.notifications.new(target: activity, user: user)
 
           if person.digest_type == :instant
-            # Emailer.send_with_language(:notify_activity, user.locale, user.id, activity.project_id, activity.id)
+            Emailer.send_with_language(:notify_activity, user.locale, user.id, activity.project_id, activity.id)
             notification.sent = true
           elsif person.digest_type != :none
             person.update_next_delivery_time!
@@ -72,6 +71,6 @@ class NotificationsObserver < ActiveRecord::Observer
     end
 
     def instant_delivery(target, comment, user)
-      # Emailer.send_with_language("notify_#{target.class.to_s.downcase}".to_sym, user.locale, user.id, comment.project.id, target.id)
+      Emailer.send_with_language("notify_#{target.class.to_s.downcase}".to_sym, user.locale, user.id, comment.project.id, target.id)
     end
 end

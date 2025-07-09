@@ -1,10 +1,10 @@
 Given /^there is a task called "([^\"]*)"$/ do |name|
-  Task.find_by_name(name) || Factory(:task, name: name)
+  Task.find_by_name(name) || FactoryBot.create(:task, name: name)
 end
 
 Given /^I have a task called "([^\"]*)"$/ do |name|
-  task_list = @task_list || Factory(:task_list)
-  project = @current_project || Factory(:project)
+  task_list = @task_list || FactoryBot.create(:task_list)
+  project = @current_project || FactoryBot.create(:project)
   @task = project.create_task(@current_user, task_list, { name: name })
 end
 
@@ -14,7 +14,7 @@ Given /^I have a task called "([^"]*)" with a comment including upload "([^"]*)"
 
   path = File.join(Rails.root, "spec/fixtures/#{file_name}")
   if File.exists?(path)
-    @upload = Factory.create(:upload, {
+    @upload = FactoryBot.create(:upload, {
       asset: open(path),
       asset_file_name: file_name,
       asset_file_size: nil,
@@ -24,7 +24,7 @@ Given /^I have a task called "([^"]*)" with a comment including upload "([^"]*)"
      })
 
   else
-    Factory.create(:upload, asset_file_name: file_name, project: @current_project, comment: @comment)
+    FactoryBot.create(:upload, asset_file_name: file_name, project: @current_project, comment: @comment)
   end
 end
 
@@ -32,7 +32,7 @@ end
 
 Given /^the following tasks? with associations exists?:?$/ do |table|
   table.hashes.each do |hash|
-    Factory(:task,
+    FactoryBot.create(:task,
       name: hash[:name],
       task_list: TaskList.find_by_name(hash[:task_list]),
       project: Project.find_by_name(hash[:project])
@@ -42,7 +42,7 @@ end
 
 Given /^the following tasks? with hours exists?:?$/ do |table|
   table.hashes.each do |hash|
-    Factory(:task,
+    FactoryBot.create(:task,
       name: hash[:name],
       task_list: TaskList.find_by_name(hash[:task_list]),
       project: Project.find_by_name(hash[:project]),
@@ -66,7 +66,7 @@ Given /^(@.+) created a (p[a-z]+ )?task named "([^\"]+)" in the task list called
   user = User.find_by_login(user_name.gsub('@', ''))
   task_list = TaskList.find_by_name(task_list_name)
   task_list ||= @current_project.task_lists.create(name: task_list_name, user: user)
-  Factory(:task, user: user, is_private: is_private, name: task_name, task_list: task_list, project: task_list.project)
+  FactoryBot.create(:task, user: user, is_private: is_private, name: task_name, task_list: task_list, project: task_list.project)
 end
 
 

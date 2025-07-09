@@ -29,7 +29,7 @@ module User::TaskReminders
 
   # never contains tasks without a due date
   def tasks_for_daily_reminder_email
-    tasks = assigned_tasks.due_sooner_than_two_weeks.all(order: "tasks.due_on")
+    tasks = assigned_tasks.due_sooner_than_two_weeks.order("tasks.due_on")
     tasks_by_dueness = Hash.new { |h, k| h[k] = Array.new }
 
     tasks_with_date = tasks.each_with_object(tasks_by_dueness) do |task, all|
