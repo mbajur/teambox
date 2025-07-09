@@ -1,4 +1,4 @@
-- if @pending_projects.any?
+- if @pending_projects&.any?
   .invitations
     = list_pending_invites(@pending_projects)
 

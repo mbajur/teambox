@@ -11,6 +11,8 @@
     - current_user.projects.each do |project|
       = content_tag :div, class: 'el' do
         = link_to project.name, project_path(project), class: 'more'
+    - if can?(:create_project, current_user) && (!Rails.configuration.teambox.community || (@community_organization && !@community_role.nil?))
+      .el= link_to t('shared.navigation.new_project'), new_project_path, class: 'more'
 
   -# My Tasks
   - near_tasks = current_user.nearest_pending_tasks

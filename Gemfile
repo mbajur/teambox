@@ -71,6 +71,7 @@ group :test do
   gem "pickle"
   gem "cuprite"
   gem "capybara-screenshot"
+  gem "email_spec"
 end
 
 gem "paperclip", "~> 6.1"
@@ -85,6 +86,7 @@ gem "haml-rails", "~> 2.1"
 # To compile sass styles, run:
 # $ sass app/styles/application.sass app/assets/stylesheets/application.css
 # $ sass app/styles/sessions.sass app/assets/stylesheets/sessions.css
+# $ sass app/styles/sites.sass app/assets/stylesheets/sites.css
 gem "sass", "3.7.4"
 
 gem "bcrypt", "~> 3.1"

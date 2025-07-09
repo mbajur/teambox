@@ -15,8 +15,8 @@ Given /^(@\w+) exists?$/ do |username|
 end
 
 Given /^@(\w+) exists and is logged in$/ do |username|
-  Given %(@#{username} exists)
-    And %(I'm logged in as @#{username})
+  step %(@#{username} exists)
+  step %(I'm logged in as @#{username})
 end
 
 Given /^I am logged in as ([^@][^\"]*)$/ do |login|
@@ -29,7 +29,7 @@ Given /^I am logged in as ([^@][^\"]*)$/ do |login|
 end
 
 Given /^I log out$/ do
-  visit(logout_path)
+  click_link("Logout")
 end
 
 Given /I have confirmed my email/ do

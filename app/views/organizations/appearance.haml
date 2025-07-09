@@ -2,10 +2,13 @@
 
 - if can?(:admin, @organization)
   = form_for @organization, :url => update_appearance_organization_path(@organization), :html => { :multipart => true } do |f|
-    = f.error_messages
+    = f.object.errors.full_messages
     = render 'organizations/appearance_fields', :f => f
     .submit
       = f.submit t('.submit')
 
 - else
   %p= t('organizations.you_are_not_admin')
+
+- content_for :column do
+  = render 'shared/organization_navigation'
