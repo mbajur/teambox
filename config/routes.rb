@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       get :external_view
       get :delete
       get :appearance
-      put :update_appearance
+      patch :update_appearance
     end
     resources :memberships do
       member do

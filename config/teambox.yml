@@ -4,6 +4,7 @@ shared:
   daily_task_reminder_email_time: 8
   activities_per_page: 25
   email_confirmation_require: true
+  app_domain: localhost:3000
 
   smtp_settings:
     domain: localhost

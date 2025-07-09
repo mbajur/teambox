@@ -158,6 +158,10 @@ GEM
     dotenv (3.1.8)
     drb (2.2.3)
     ed25519 (1.4.0)
+    email_spec (2.3.0)
+      htmlentities (~> 4.3.3)
+      launchy (>= 2.1, < 4.0)
+      mail (~> 2.7)
     email_validator (2.2.4)
       activemodel
     erb (5.0.1)
@@ -206,6 +210,7 @@ GEM
       haml (>= 4.0.6)
       railties (>= 5.1)
     hashie (5.0.0)
+    htmlentities (4.3.4)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -576,6 +581,7 @@ DEPENDENCIES
   cuprite
   database_cleaner
   debug
+  email_spec
   email_validator (~> 2.2)
   factory_bot_rails
   friendly_id (~> 5.5)

@@ -55,10 +55,12 @@ class OrganizationsController < ApplicationController
   end
 
   def update_appearance
-    if @organization.update_attributes(params[:organization])
+    if @organization.update(organization_params)
       flash[:success] = t("organizations.edit.saved")
+      redirect_to appearance_organization_path(@organization)
+    else
+      render action: :appearance
     end
-    render action: :appearance
   end
 
   def external_view
@@ -89,7 +91,7 @@ class OrganizationsController < ApplicationController
   protected
 
     def organization_params
-      params.require(:organization).permit(:name, :permalink)
+      params.require(:organization).permit(:name, :permalink, :description)
     end
 
     def load_organization

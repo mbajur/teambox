@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
         end
       end
       f.m     { redirect_to activities_path if request.path == "/" }
-      f.rss   { render layout: false }
+      # f.rss   { render layout: false }
       f.ics   { render text: Project.to_ical(@projects, current_user, params[:filter] == "mine" ? current_user : nil, request.host, request.port) }
       f.print { render layout: "print" }
     end
@@ -175,7 +175,7 @@ class ProjectsController < ApplicationController
     # For community (single organization) version, disallow creating more than one organization
     def disallow_for_community
       if @community_organization && @community_role.nil?
-        render text: "You're not authorized to create projects on this organization."
+        render plain: "You're not authorized to create projects on this organization."
       end
     end
 end

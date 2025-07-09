@@ -2,8 +2,8 @@
   %label= t('.logo_html')
   .option
     = f.file_field :logo
-  %img.logo_square{ :src => @organization.logo.url(:square) }
-  %img.logo_top{ :src => @organization.logo.url(:top) }
+  %img.logo_square{ :src => URI::DEFAULT_PARSER.unescape(@organization.logo.url(:square)) }
+  %img.logo_top{ :src => URI::DEFAULT_PARSER.unescape(@organization.logo.url(:top)) }
   - if @organization.logo.file?
     .option
       = f.check_box :delete_logo

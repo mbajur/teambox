@@ -67,14 +67,15 @@ class SessionsController < ApplicationController
 
   def destroy
     terminate_session
-    redirect_back_or_to goodbye_path
+    # redirect_back_or_to goodbye_path
+    redirect_back fallback_location: goodbye_path
   end
 
   # for cucumber testing only
   def backdoor
     terminate_session
     start_new_session_for(User.find_by_login!(params[:username]))
-    head :ok
+    redirect_back fallback_location: root_path
   end
 
   # This puts a parameter on your session to force mobile or web version
@@ -100,8 +101,8 @@ protected
     if Rails.configuration.teambox.community
       if User.count == 0
         respond_to do |f|
-          f.html { render "configure_your_deployment.haml" }
-          f.m { render "configure_your_deployment.haml" }
+          f.html { render :configure_your_deployment }
+          f.m { render :configure_your_deployment }
         end
       elsif @organization = Organization.first
         respond_to do |f|

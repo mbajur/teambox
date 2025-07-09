@@ -17,13 +17,13 @@ class UsersController < ApplicationController
 
   def new
     # Trying to accept a new account invitation, but you're already logged in
-    if @invitation and logged_in?
+    if @invitation and user_signed_in?
       @invitation.invited_user = current_user
       @invitation.save
       flash[:success] = t("users.new.you_are_logged_in")
       return redirect_to projects_url(invitation: @invitation.token)
     # Trying to create a user, but you're already logged in
-    elsif logged_in?
+    elsif user_signed_in?
       flash[:success] = t("users.new.you_are_logged_in")
       return redirect_to projects_path
     else

@@ -242,7 +242,7 @@ class ApplicationController < ActionController::Base
       @community_organization = Organization.first
       @community_role = if @community_organization
         role_id = @community_organization.memberships.find_by_user_id(current_user.id).try(:role)
-        Membership::ROLES.index(role_id)
+        Membership::ROLES.key(role_id)
       end
     end
   end

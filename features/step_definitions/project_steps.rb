@@ -49,7 +49,7 @@ end
 
 Given /I am currently in the project (.*)$/ do |project_type|
   @current_project ||= FactoryBot.create(project_type.to_sym)
-  visit(projects_path(@current_project))
+  visit(project_path(@current_project))
 end
 
 Given /(@.+) is currently in the project (.*)$/ do |usernames, project_type|
@@ -77,7 +77,7 @@ Given /I am a commenter in the project called "([^\"]*)"$/ do |name|
 end
 
 Given /^"([^\"]*)" is an administrator in the project(?: called "([^\"]*)")?$/ do |user, name|
-  Given %(there is a project called "#{name}") unless name.nil?
+  step %(there is a project called "#{name}") unless name.nil?
   project = name ? Project.find_by_name(name) : @current_project
   user = User.find_by_login(user)
   project.remove_user(user)

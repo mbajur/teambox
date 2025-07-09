@@ -1437,6 +1437,8 @@ en:
       copy7_html: "Your business matters! <a href='%{link}'>Get the best support</a> for Teambox with our premium plans."
 
   shared:
+    organization_navigation:
+      general_settings: General settings
     confirm_email:
       go_to_your_email_to_confirm: Go to %{email} to confirm your account.
       resend_email: Resend the instructions

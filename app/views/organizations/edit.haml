@@ -17,3 +17,6 @@
 
 - else
   %p= t('organizations.you_are_not_admin')
+
+- content_for :column do
+  = render 'shared/organization_navigation'

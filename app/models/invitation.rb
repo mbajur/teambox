@@ -80,21 +80,21 @@ class Invitation < RoleRecord
   end
 
   def send_email
-    # return if @is_silent
+    return if @is_silent
 
-    # if invited_user
-    #   # Existing users
-    #   if @autoaccepted
-    #     # This notifies the user that he's now in a new project
-    #     Emailer.send_with_language :project_membership_notification, invited_user.locale, self.id
-    #   else
-    #     # We ask the user to go to Teambox to accept the invite
-    #     Emailer.send_with_language :project_invitation, invited_user.locale, self.id
-    #   end
-    # else
-    #   # Users who don't have an account yet
-    #   Emailer.send_with_language :signup_invitation, (self.locale || user.locale), self.id
-    # end
+    if invited_user
+      # Existing users
+      if @autoaccepted
+        # This notifies the user that he's now in a new project
+        Emailer.send_with_language :project_membership_notification, invited_user.locale, self.id
+      else
+        # We ask the user to go to Teambox to accept the invite
+        Emailer.send_with_language :project_invitation, invited_user.locale, self.id
+      end
+    else
+      # Users who don't have an account yet
+      Emailer.send_with_language :signup_invitation, (self.locale || user.locale), self.id
+    end
   end
 
   if Rails.env.production? and respond_to? :handle_asynchronously
