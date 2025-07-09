@@ -68,6 +68,12 @@ Then /^(?:I|they|"([^"]*?)") should receive an email with the following body:$/ 
   open_email(address, with_text: expected_body)
 end
 
+Then /^(@.+) should receive (an|no|\d+) emails?( with subject .+)?$/ do |users, amount, with_subject|
+  each_user(users) do |user|
+    step %("#{user.email}" should receive #{amount} emails#{with_subject})
+  end
+end
+
 #
 # Accessing emails
 #
@@ -93,6 +99,12 @@ When /^(?:I|they|"([^"]*?)") opens? the email with text \/([^"]*?)\/$/ do |addre
   open_email(address, with_text: Regexp.new(text))
 end
 
+When /^(@\w+) opens? the email( with subject .+)?$/ do |users, with_subject_or_text|
+  each_user(users) do |user|
+    step %("#{user.email}" opens the email#{with_subject_or_text})
+  end
+end
+
 #
 # Inspect the Email Contents
 #
@@ -113,9 +125,9 @@ Then /^(?:I|they) should not see \/([^"]*?)\/ in the email subject$/ do |text|
   expect(current_email).not_to have_subject(Regexp.new(text))
 end
 
-Then /^(?:I|they) should see "([^"]*?)" in the email body$/ do |text|
-  expect(current_email.default_part_body.to_s).to include(text)
-end
+# Then /^(?:I|they) should see "([^"]*?)" in the email body$/ do |text|
+#   expect(current_email.default_part_body.to_s).to include(text)
+# end
 
 Then /^(?:I|they) should not see "([^"]*?)" in the email body$/ do |text|
   expect(current_email.default_part_body.to_s).not_to include(text)
@@ -155,6 +167,15 @@ end
 
 Then /^(?:I|they) should see "([^"]*?)" in the email text part body$/ do |text|
     expect(current_email.text_part.body.to_s).to include(text)
+end
+
+Then /^(?:I|they|he|she) should see "([^"]*?)" in the email body$/ do |text|
+  if current_email.multipart?
+    step %(I should see "#{text}" in the email html part body)
+    step %(I should see "#{text}" in the email text part body)
+  else
+    current_email.body.should =~ Regexp.new(text)
+  end
 end
 
 #

@@ -106,7 +106,7 @@ describe Watcher, type: :model do
 
     it "should never duplicate watchers" do
       conversation = nil
-      @person1.update_attribute(:watch_new_conversation, true)
+      @person1.update(watch_new_conversation: true)
       @person1.watch_new_conversation.should be true
 
       lambda {
@@ -120,7 +120,7 @@ describe Watcher, type: :model do
         conversation.save.should be true
       }.should change(Watcher, :count).by(1)
 
-      conversation.watchers.size.should == 3
+      conversation.watchers.count.should == 3
     end
 
     it "should allow assigning watchers id via mass assignment" do

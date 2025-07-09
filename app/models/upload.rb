@@ -1,15 +1,15 @@
 class Upload < RoleRecord
-  # include Immortal
+  include Immortal
   include PrivateElementMethods
   include Tokenized
 
   ICONS = %w[aac ai aiff avi bmp c cpp css dat dmg doc docx dotx dwg dxf eps exe flv gif h hpp html ics iso java jpg key mid mp3 mp4 mpg odf ods odt otp ots ott pdf php png ppt pptx psd py qt rar rb rtf sql tga tgz tiff txt wav xls xlsx xml yml zip]
 
   belongs_to :user
-  belongs_to :comment, touch: true, counter_cache: true
-  belongs_to :project
-  belongs_to :page
-  belongs_to :parent_folder, class_name: "Folder"
+  belongs_to :comment, touch: true, counter_cache: true, optional: true
+  belongs_to :project, optional: true
+  belongs_to :page, optional: true
+  belongs_to :parent_folder, class_name: "Folder", optional: true
 
   has_one        :page_slot, as: :rel_object
   before_destroy :clear_slot

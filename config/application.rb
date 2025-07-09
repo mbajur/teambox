@@ -42,6 +42,15 @@ module Teambox
     # config.teambox.amazon_s3 = false
     config.teambox = config_for(:teambox)
 
-    config.i18n.available_locales = %i[en jp ja es]
+    config.i18n.available_locales = %i[en jp ja es it ca]
+
+    config.action_mailer.preview_paths << "#{Rails.root}/spec/mailers/previews"
+
+    config.active_record.observers = [
+      :notifications_observer,
+      :cached_fragments_observers,
+      :pending_tasks_observer,
+      :threads_observer
+    ]
   end
 end

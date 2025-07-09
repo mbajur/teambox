@@ -1,5 +1,5 @@
 %p{ :style => email_text(:small) }
-  - if Teambox.config.allow_incoming_email
+  - if Rails.configuration.teambox.allow_incoming_email
     %span{ :style => 'color: white' }= email_answer_line
     %br
     = t('emailer.common.answer_above_this_line')
