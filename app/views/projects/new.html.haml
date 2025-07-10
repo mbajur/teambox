@@ -7,7 +7,7 @@
 %p=t '.explain1_html'
 %p=t '.explain2_html'
 
-= form_for @project do |f|
+= form_for @project, data: { turbo: false } do |f|
   = f.object.errors.full_messages
   = project_fields(f,@project)
   .submit
