@@ -1,4 +1,4 @@
-class ApiV1::UsersController < ApiV1::APIController
+class ApiV1::UsersController < ApiV1::ApiController
   no_login_required only: [ :create ]
 
   skip_before_action :confirmed_user?, only: [ :create ]
