@@ -1,6 +1,6 @@
 class ApiV1::NotesController < ApiV1::APIController
-  before_filter :load_page
-  before_filter :load_note, except: [ :index, :create ]
+  before_action :load_page
+  before_action :load_note, except: [ :index, :create ]
 
   def index
     authorize! :show, target||current_user

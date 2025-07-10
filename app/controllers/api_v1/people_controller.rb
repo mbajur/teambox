@@ -1,5 +1,5 @@
 class ApiV1::PeopleController < ApiV1::APIController
-  before_filter :load_person, except: [ :index ]
+  before_action :load_person, except: [ :index ]
 
   def index
     authorize! :show, @current_project

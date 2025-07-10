@@ -1,5 +1,5 @@
 class ApiV1::SearchController < ApiV1::APIController
-  before_filter :permission_to_search, only: :index
+  before_action :permission_to_search, only: :index
 
   def index
     authorize! :show, current_user

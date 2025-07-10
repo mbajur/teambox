@@ -1,7 +1,7 @@
 class ApiV1::TasksController < ApiV1::APIController
-  before_filter :load_task_list, only: [ :index, :show, :reorder ]
-  before_filter :load_or_create_task_list, only: [ :create ]
-  before_filter :load_task, except: [ :index, :create, :reorder ]
+  before_action :load_task_list, only: [ :index, :show, :reorder ]
+  before_action :load_or_create_task_list, only: [ :create ]
+  before_action :load_task, except: [ :index, :create, :reorder ]
 
   def index
     authorize! :show, @task_list||@current_project||current_user

@@ -1,10 +1,10 @@
 class ApiV1::UsersController < ApiV1::APIController
   no_login_required only: [ :create ]
 
-  skip_before_filter :confirmed_user?, only: [ :create ]
-  before_filter :find_user, only: [ :show, :update ]
-  before_filter :load_invitation, only: [ :create ]
-  skip_before_filter :load_project
+  skip_before_action :confirmed_user?, only: [ :create ]
+  before_action :find_user, only: [ :show, :update ]
+  before_action :load_invitation, only: [ :create ]
+  skip_before_action :load_project
 
   def index
     authorize! :show, current_user

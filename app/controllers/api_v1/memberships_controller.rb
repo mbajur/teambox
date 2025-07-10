@@ -1,7 +1,7 @@
 class ApiV1::MembershipsController < ApiV1::APIController
-  skip_before_filter :load_project
-  before_filter :load_organization
-  before_filter :load_membership, except: [ :index ]
+  skip_before_action :load_project
+  before_action :load_organization
+  before_action :load_membership, except: [ :index ]
 
   def index
     authorize! :show, @organization

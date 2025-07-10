@@ -13,7 +13,7 @@ module Oauth
           filter_options = {}
           filter_options[:only]   = options.delete(:only) if options[:only]
           filter_options[:except] = options.delete(:except) if options[:except]
-          before_filter Filter.new(options), filter_options
+          before_action Filter.new(options), filter_options
         end
       end
 

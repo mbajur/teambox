@@ -1,5 +1,5 @@
 class ApiV1::AppLinksController < ApiV1::APIController
-  before_filter :load_app_link, except: [ :index, :create ]
+  before_action :load_app_link, except: [ :index, :create ]
 
   def index
     authorize! :show, current_user

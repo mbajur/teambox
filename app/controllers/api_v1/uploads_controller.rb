@@ -1,6 +1,6 @@
 class ApiV1::UploadsController < ApiV1::APIController
-  before_filter :load_page
-  before_filter :load_upload, only: [ :update, :show, :destroy ]
+  before_action :load_page
+  before_action :load_upload, only: [ :update, :show, :destroy ]
 
   def index
     authorize! :show, target||current_user

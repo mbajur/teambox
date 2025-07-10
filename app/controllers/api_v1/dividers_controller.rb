@@ -1,6 +1,6 @@
 class ApiV1::DividersController < ApiV1::APIController
-  before_filter :load_page
-  before_filter :load_divider, except: [ :index, :create ]
+  before_action :load_page
+  before_action :load_divider, except: [ :index, :create ]
 
   def index
     authorize! :show, target||current_user

@@ -1,6 +1,6 @@
 class ApiV1::ActivitiesController < ApiV1::ApiController
-  skip_before_filter :touch_user
-  before_filter :get_target, only: [ :index ]
+  skip_before_action :touch_user
+  before_action :get_target, only: [ :index ]
 
   def index
     authorize! :show, @current_project||current_user

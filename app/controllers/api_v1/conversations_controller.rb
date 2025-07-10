@@ -1,5 +1,5 @@
 class ApiV1::ConversationsController < ApiV1::APIController
-  before_filter :load_conversation, except: [ :index, :create ]
+  before_action :load_conversation, except: [ :index, :create ]
 
   def index
     authorize! :show, @current_project||current_user

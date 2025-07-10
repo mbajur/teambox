@@ -1,5 +1,5 @@
 class ApiV1::ProjectsController < ApiV1::APIController
-  before_filter :load_organization
+  before_action :load_organization
 
   def index
     authorize! :show, current_user

@@ -1,6 +1,6 @@
 class ApiV1::InvitationsController < ApiV1::APIController
-  before_filter :load_target
-  before_filter :load_invite, except: [ :index, :create ]
+  before_action :load_target
+  before_action :load_invite, except: [ :index, :create ]
 
   def index
     authorize! :show, @target

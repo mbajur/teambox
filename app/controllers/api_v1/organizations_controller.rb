@@ -1,6 +1,6 @@
 class ApiV1::OrganizationsController < ApiV1::APIController
-  skip_before_filter :load_project
-  before_filter :load_organization, except: [ :create, :index ]
+  skip_before_action :load_project
+  before_action :load_organization, except: [ :create, :index ]
 
   def index
     authorize! :show, current_user

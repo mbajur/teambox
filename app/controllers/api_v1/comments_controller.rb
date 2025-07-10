@@ -1,6 +1,6 @@
 class ApiV1::CommentsController < ApiV1::APIController
-  before_filter :load_target
-  before_filter :load_comment, only: [ :update, :convert, :show, :destroy ]
+  before_action :load_target
+  before_action :load_comment, only: [ :update, :convert, :show, :destroy ]
 
   def index
     authorize! :show, @target||current_user
