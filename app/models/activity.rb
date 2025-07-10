@@ -19,8 +19,8 @@ class Activity < ApplicationRecord
   # Before we relied on COALESCE for this, now we materialize it
   after_create :auto_populate_last_activity_id
 
-  # scope :threads, -> { where("target_type != 'Comment'") }
-  scope :threads, -> { all }
+  scope :threads, -> { where("target_type != 'Comment'") }
+  # scope :threads, -> { all }
   scope :before, lambda { |previous| where("activities.id < ? AND (last_activity_id IS NULL OR last_activity_id < ?)", previous.last_id, previous.last_id) }
   scope :after, lambda { |activity_id| where("activities.id > ?", activity_id) }
   scope :from_user, lambda { |user| where(user_id: user.id) }

@@ -1,8 +1,8 @@
 Given /^I am currently "([^\"]*)"$/ do |login|
   @current_user = User.find_by_login(login) ||
                     (login == "mislav" ?
-                      Factory(:mislav) : # Mislav has a first and last name, is not a generic user
-                      Factory(:confirmed_user, login: login, email: "#{login}@example.com"))
+                      FactoryBot.create(:mislav) : # Mislav has a first and last name, is not a generic user
+                      FactoryBot.create(:confirmed_user, login: login, email: "#{login}@example.com"))
 end
 
 Given /^(?:I am|I'm) logged in as @(\w+)$/ do |username|
@@ -20,12 +20,12 @@ Given /^@(\w+) exists and is logged in$/ do |username|
 end
 
 Given /^I am logged in as ([^@][^\"]*)$/ do |login|
-  Given %(I am currently "#{login}")
-    And %(I have confirmed my email)
-    And "I go to the login page"
-    And "I fill in \"Email or Username\" with \"#{login}\""
-    And "I fill in \"Password\" with \"dragons\""
-    And "I press \"Log in\""
+  step %(I am currently "#{login}")
+  step %(I have confirmed my email)
+  step "I go to the login page"
+  step "I fill in \"Email or Username\" with \"#{login}\""
+  step "I fill in \"Password\" with \"dragons\""
+  step "I press \"Log in\""
 end
 
 Given /^I log out$/ do
@@ -46,7 +46,7 @@ Given /^(?:My|His|Her) password is "([^\"]*)"$/ do |password|
 end
 
 Given /^there is a user called "([^\"]*)"$/ do |login|
-  Factory(:user, login: login, email: "#{login}@example.com")
+  FactoryBot.create(:user, login: login, email: "#{login}@example.com")
 end
 
 Given /^the user called "([^\"]*)" is confirmed$/ do |login|
@@ -54,13 +54,13 @@ Given /^the user called "([^\"]*)" is confirmed$/ do |login|
 end
 
 Then /^the user called "([^\"]*)" should administrate the project called "([^\"]*)"/ do |login, name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   project.admin?(User.find_by_login(login))
 end
 
 Then /^the user called "([^\"]*)" should not administrate the project called "([^\"]*)"/ do |login, name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   !project.admin?(User.find_by_login(login))
 end
@@ -99,7 +99,7 @@ Given /^(@.+) wants to watch new conversations$/ do |users|
 end
 
 Given /I am the user (.*)$/ do |login|
-  @current_user ||= Factory(login.to_sym)
+  @current_user ||= FactoryBot.create(login.to_sym)
 end
 
 Then /^I should not see missing avatar image within "([^\"]*)"$/ do |selector|

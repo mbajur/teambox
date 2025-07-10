@@ -1,6 +1,6 @@
 Given /^the following conversation? with associations exists?:?$/ do |table|
   table.hashes.each do |hash|
-    Factory(:conversation,
+    FactoryBot.create(:conversation,
       name: hash[:name],
       user: User.find_by_login(hash[:user]),
       project: Project.find_by_name(hash[:project])
@@ -10,20 +10,20 @@ end
 
 Given /^I started a (p[a-z]+ )?conversation named "([^\"]+)"(?: in the "([^\"]*)" project)?$/ do |priv_type, name, project_name|
   is_private = (priv_type||'').strip == 'private'
-  Factory(:conversation, user: @current_user, is_private: is_private, project: (project_name ? Project.find_by_name(project_name) : @current_project), name: name)
+  FactoryBot.create(:conversation, user: @current_user, is_private: is_private, project: (project_name ? Project.find_by_name(project_name) : @current_project), name: name)
 end
 
 Given /^I started a simple conversation(?: in the "([^\"]*)" project)?$/ do |project_name|
-  Factory(:conversation, user: @current_user, project: (project_name ? Project.find_by_name(project_name) : @current_project), name: nil, simple: true)
+  FactoryBot.create(:conversation, user: @current_user, project: (project_name ? Project.find_by_name(project_name) : @current_project), name: nil, simple: true)
 end
 
 Given /^(@.+) started a (p[a-z]+ )?conversation named "([^\"]+)"(?: in the "([^\"]*)" project)?(?: with an attached (file))?$/ do |user_name, priv_type, conversation_name, project_name, file|
   is_private = (priv_type||'').strip == 'private'
   project = (project_name ? Project.find_by_name(project_name): @current_project)
   user = User.find_by_login(user_name.gsub('@', ''))
-  conversation = Factory(:conversation, user: user, is_private: is_private, project: project, name: conversation_name)
+  conversation = FactoryBot.create(:conversation, user: user, is_private: is_private, project: project, name: conversation_name)
   if file
-    upload = Factory :upload, user: user, project: project, asset_file_name: "#{is_private ? "Private" : "Normal"} document at #{conversation_name}.png"
+    upload = FactoryBot.create :upload, user: user, project: project, asset_file_name: "#{is_private ? "Private" : "Normal"} document at #{conversation_name}.png"
     comment = conversation.comments.last
     comment.uploads << upload
     comment.save!
@@ -101,25 +101,19 @@ end
 
 Then /^I should see the error "([^\"]*)"(?: within "([^\"]*)")?$/ do |msg, selector|
   with_scope(selector) do
-    comment = all("span.error").last.text
+    comment = all("span.error").last&.text
     comment.should match(/#{msg}/)
   end
 end
 
 Then /^I should see "([^\"]+)" in the thread title$/ do |msg|
-  link = false
-  wait_until do
-    link = find("p.thread_title a")
-  end
+  link = find("p.thread_title a")
   comment = link.text
   comment.should match(/#{msg}/)
 end
 
 Then /^I should see "([^\"]+)" in the page title$/ do |msg|
-  header = false
-  wait_until do
-    header = find("h2")
-  end
+  header = find(".task_header h2")
   title = header.text
   title.should match(/#{msg}/)
 end
@@ -131,5 +125,5 @@ end
 
 When /^I add a comment to the last conversation in the "([^"]*)" project$/ do |project_name|
   project = Project.find_by_name(project_name)
-  Factory :comment, target: project.conversations.last, user: @current_user
+  FactoryBot.create :comment, target: project.conversations.last, user: @current_user
 end

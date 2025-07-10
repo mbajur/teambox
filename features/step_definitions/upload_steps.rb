@@ -16,7 +16,7 @@ Given /^"([^\"]*)" has been uploaded to the "([^\"]*)" project(?: into the "([^\
   path = File.join(Rails.root, "spec/fixtures/#{file_name}")
   folder = folder_name ? project.folders.find_by_name!(folder_name) : nil
   if File.exists?(path)
-    Factory.create(:upload, {
+    FactoryBot.create(:upload, {
       asset: open(path),
       asset_file_name: file_name,
       asset_file_size: nil,
@@ -25,7 +25,7 @@ Given /^"([^\"]*)" has been uploaded to the "([^\"]*)" project(?: into the "([^\
       parent_folder: folder
      })
   else
-    Factory.create(:upload, asset_file_name: file_name, project: project, parent_folder: folder)
+    FactoryBot.create(:upload, asset_file_name: file_name, project: project, parent_folder: folder)
   end
 end
 

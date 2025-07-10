@@ -59,7 +59,7 @@ class ConversationsController < ApplicationController
   def show
     authorize! :show, @conversation
     @conversations = @current_project.conversations.not_simple.
-      where([ "is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
+      where("is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id).
       joins("LEFT JOIN watchers ON (conversations.id = watchers.watchable_id AND watchers.watchable_type = 'Conversation') AND watchers.user_id = #{current_user.id}")
 
 
@@ -113,9 +113,9 @@ class ConversationsController < ApplicationController
   def convert_to_task
     authorize! :update, @conversation
 
-    @conversation.attributes = params[:conversation]
+    @conversation.attributes = conversation_params
     @conversation.updating_user = current_user
-    @conversation.comments_attributes = { "0" => params[:comment] } if params[:comment]
+    @conversation.comments_attributes = { "0" => comment_params }
 
     success = @conversation.save
     if success
@@ -126,20 +126,18 @@ class ConversationsController < ApplicationController
     if success
       if request.xhr? or iframe?
         if request.referer.ends_with?(project_conversation_path(@current_project, @conversation))
-          render text: project_task_path(@current_project, @task)
+          render plain: project_task_path(@current_project, @task)
         else
           render partial: "activities/thread", locals: { thread: @task }
         end
       else
-        redirect_to current_conversation
+        # redirect_to current_conversation
+        redirect_to project_task_path(@current_project, @task)
       end
     else
-      if request.xhr? or iframe?
-        output_errors_json(@conversation)
-      else
-        # TODO: display inline instead of flash
-        flash.now[:error] = @conversation.errors.to_a.first
-        render action: :new
+      respond_to do |f|
+        f.turbo_stream
+        f.html
       end
     end
   end
@@ -147,13 +145,17 @@ class ConversationsController < ApplicationController
   private
 
   def conversation_params
-    params.require(:conversation).permit(:name, :is_private, :simple, comments_attributes: [ :body ])
+    params.require(:conversation).permit(:name, :is_private, :simple, :due_on, :urgent, :status, :assigned_id, :task_list_id, comments_attributes: [ :body ])
+  end
+
+  def comment_params
+    params[:comment]&.permit(:body) || {}
   end
 
   protected
 
     def load_conversation
-      @conversation = @current_project.conversations.with_deleted.find params[:id]
+      @conversation = @current_project.conversations.unscoped.find_with_deleted params[:id]
       redirect_to project_task_path(@current_project.id, @conversation.converted_to) if @conversation.deleted && @conversation.converted_to
       raise ActiveRecord::RecordNotFound if @conversation.deleted && @conversation.converted_to.nil?
     end

@@ -1,6 +1,6 @@
 
 Given /^I have an OAuth access token(?: for "([^"]*)")?$/ do |client_name|
-  client = ClientApplication.find_by_name(client_name || 'Cucumber.ly') || Factory.create(:cucumber_ly)
+  client = ClientApplication.find_by_name(client_name || 'Cucumber.ly') || FactoryBot.create(:cucumber_ly)
   token = Oauth2Token.create!(scope: [ :offline_access ], client_application: client, user: @current_user)
 end
 

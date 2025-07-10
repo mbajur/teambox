@@ -12,7 +12,7 @@ When /^(?:|I )fill in the form name with "([^\"]*)"$/ do |value|
 end
 
 Given /^there is a folder called "([^\"]*)" in a current project$/ do |name|
-  @current_project.folders.find_by_name(name) || Factory(:folder, name: name, project: @current_project)
+  @current_project.folders.find_by_name(name) || FactoryBot.create(:folder, name: name, project: @current_project)
 end
 
 Given /^a current project has nested folders$/ do |folders_table|
@@ -20,7 +20,7 @@ Given /^a current project has nested folders$/ do |folders_table|
   folders_table.hashes.each do |folder_params|
     folder_params.merge!({ project_id: @current_project.id, user_id: @current_user.id })
     folder_params[:parent_folder_id] = folder.id unless folder.nil?
-    folder = Factory.create(:folder, folder_params)
+    folder = FactoryBot.create(:folder, folder_params)
   end
 end
 

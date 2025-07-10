@@ -6,7 +6,7 @@ class TaskList < RoleRecord
   include TaskList::Scopes
   include TaskList::Associations
   include TaskList::Callbacks
-  # include TaskList::Conversions
+  include TaskList::Conversions
 
   attr_accessor :reference_task_objects
 

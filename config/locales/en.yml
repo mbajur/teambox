@@ -843,6 +843,7 @@ en:
       name: "Name this task"
       task_list: "Create task in"
       status: "Status"
+      due_on: "Due on"
     link:
       edit: Edit
     fields:

@@ -11,8 +11,8 @@ module User::Conversations
       time_zone: time_zone,
       utc_offset: utc_offset,
       biography: biography,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       micro_avatar_url: avatar_or_gravatar_url(:micro),
       avatar_url: avatar_or_gravatar_url(:thumb)
     }

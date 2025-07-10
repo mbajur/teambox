@@ -188,7 +188,6 @@ class ApplicationController < ActionController::Base
 
   def output_errors_json(record)
     if request.xhr?
-      response.content_type = Mime::JSON
       render json: record.errors.as_json, status: 400
     elsif iframe?
       response.content_type = Mime::HTML

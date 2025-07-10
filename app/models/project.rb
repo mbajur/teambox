@@ -12,6 +12,7 @@ class Project < ApplicationRecord
   include Project::Callbacks
   include Project::Archival
   include Project::Invitations
+  include Project::Conversions
 
   # concerned_with :validation,
   #                :initializers,
