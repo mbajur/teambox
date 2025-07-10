@@ -4,6 +4,7 @@ class ApiV1::ApiController < ApplicationController
 
   skip_before_action :touch_user, :verify_authenticity_token, :add_chrome_frame_header
   before_action      :api_throttle
+  before_action      :confirmed_user?
 
   if Rails.env.test?
     API_LIMIT = 10
