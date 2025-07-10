@@ -1,4 +1,4 @@
-class ApiV1::MembershipsController < ApiV1::APIController
+class ApiV1::MembershipsController < ApiV1::ApiController
   skip_before_action :load_project
   before_action :load_organization
   before_action :load_membership, except: [ :index ]

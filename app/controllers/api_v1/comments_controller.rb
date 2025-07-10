@@ -1,4 +1,4 @@
-class ApiV1::CommentsController < ApiV1::APIController
+class ApiV1::CommentsController < ApiV1::ApiController
   before_action :load_target
   before_action :load_comment, only: [ :update, :convert, :show, :destroy ]
 

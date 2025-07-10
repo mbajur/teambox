@@ -1,4 +1,4 @@
-class ApiV1::DividersController < ApiV1::APIController
+class ApiV1::DividersController < ApiV1::ApiController
   before_action :load_page
   before_action :load_divider, except: [ :index, :create ]
 

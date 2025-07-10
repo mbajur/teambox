@@ -1,4 +1,4 @@
-class ApiV1::ProjectsController < ApiV1::APIController
+class ApiV1::ProjectsController < ApiV1::ApiController
   before_action :load_organization
 
   def index

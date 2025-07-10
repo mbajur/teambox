@@ -1,4 +1,4 @@
-class ApiV1::AppLinksController < ApiV1::APIController
+class ApiV1::AppLinksController < ApiV1::ApiController
   before_action :load_app_link, except: [ :index, :create ]
 
   def index

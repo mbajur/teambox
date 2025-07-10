@@ -1,4 +1,4 @@
-class ApiV1::InvitationsController < ApiV1::APIController
+class ApiV1::InvitationsController < ApiV1::ApiController
   before_action :load_target
   before_action :load_invite, except: [ :index, :create ]
 

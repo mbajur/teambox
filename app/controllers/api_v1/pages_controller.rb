@@ -1,4 +1,4 @@
-class ApiV1::PagesController < ApiV1::APIController
+class ApiV1::PagesController < ApiV1::ApiController
   before_action :load_page, only: [ :show, :update, :reorder, :watch, :unwatch, :destroy ]
 
   def index

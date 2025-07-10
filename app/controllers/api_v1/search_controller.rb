@@ -1,4 +1,4 @@
-class ApiV1::SearchController < ApiV1::APIController
+class ApiV1::SearchController < ApiV1::ApiController
   before_action :permission_to_search, only: :index
 
   def index

@@ -1,4 +1,4 @@
-class ApiV1::ConversationsController < ApiV1::APIController
+class ApiV1::ConversationsController < ApiV1::ApiController
   before_action :load_conversation, except: [ :index, :create ]
 
   def index
