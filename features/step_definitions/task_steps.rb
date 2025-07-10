@@ -152,7 +152,7 @@ Then /^I fill the task comment box with "([^\"]*)"$/ do |text|
 end
 
 Then /^I click on the date selector$/ do
-  find('.actions .localized_date').click
+  find('.actions .date_picker').click
 end
 
 Then /^I select the month of "([^\"]*)" with the date picker$/ do |month|
@@ -221,10 +221,7 @@ Then /^(?:|I )should see "([^\"]*)" status change?$/ do |text|
 end
 
 Then /^I should see "([^\"]+)" in the task thread title$/ do |msg|
-  link = false
-  wait_until do
-    link = find(".thread[data-class=task] .thread_title a")
-  end
+  link = find(".thread[data-class=task] .thread_title")
   comment = link.text
   comment.should match(/#{msg}/)
 end

@@ -1,6 +1,5 @@
 # This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
-  # no_login_required except: :destroy
   skip_before_action :require_authentication, except: :destroy
 
   # skip_before_action :confirmed_user?

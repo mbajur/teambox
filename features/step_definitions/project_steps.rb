@@ -64,13 +64,13 @@ Given /I have recently managed the project "([^\"]*)"$/ do |name|
 end
 
 Given /I am in the project called "([^\"]*)"$/ do |name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   @current_project = Project.find_by_name(name)
   @current_project.add_user(@current_user)
 end
 
 Given /I am a commenter in the project called "([^\"]*)"$/ do |name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   project.remove_user(@current_user)
   project.add_user(@current_user, role: Person::ROLES[:commenter])
@@ -85,19 +85,19 @@ Given /^"([^\"]*)" is an administrator in the project(?: called "([^\"]*)")?$/ d
 end
 
 Given /^"([^\"]*)" is in the project called "([^\"]*)"$/ do |username, name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   project.add_user User.find_by_login(username)
 end
 
 Given /^"([^\"]*)" is not in the project called "([^\"]*)"$/ do |username, name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   project.remove_user User.find_by_login(username)
 end
 
 Given /^all the users are in the project with name: "([^\"]*)"$/ do |name|
-  Given %(there is a project called "#{name}")
+  step %(there is a project called "#{name}")
   project = Project.find_by_name(name)
   User.all.each { |user| project.add_user(user) }
 end

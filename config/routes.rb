@@ -97,7 +97,7 @@ Rails.application.routes.draw do
   get "/account/delete" => "users#edit", :as => :account_delete, :sub_action => "delete"
   get "/account/destroy" => "users#destroy", :as => :destroy_user
   get "/account/activity_feed_mode/collapsed" => "users#change_activities_mode", :as => :collapse_activities, :collapsed => true
-  get "/account/activity_feed_mode/expanded" => "users#change_activities_mode", :as => :expand_activities, :collapsed => false
+  post "/account/activity_feed_mode/expanded" => "users#change_activities_mode", :as => :expand_activities, :collapsed => false
   get "/account/watch_list" => "watchers#index", :as => :watch_list
   post  "/account/watch_list/unwatch/:watch_id" => "watchers#unwatch", :as => :unwatch
   post  "/account/stats/:stat/inc" => "users#increment_stat"
@@ -226,7 +226,7 @@ Rails.application.routes.draw do
 
     resources :conversations do
       member do
-        put :convert_to_task
+        patch :convert_to_task
         put :watch
         put :unwatch
       end

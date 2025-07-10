@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  class UnconfirmedUserError < StandardError; end
+
   # include AuthenticatedSystem
   include Authentication
 
@@ -16,6 +18,10 @@ class ApplicationController < ActionController::Base
                 :add_chrome_frame_header
 
   private
+
+  def confirmed_user?
+    raise UnconfirmedUserError if !current_user&.confirmed_user?
+  end
 
   def check_permissions
     unless @current_project.editable?(current_user)
@@ -188,7 +194,6 @@ class ApplicationController < ActionController::Base
 
   def output_errors_json(record)
     if request.xhr?
-      response.content_type = Mime::JSON
       render json: record.errors.as_json, status: 400
     elsif iframe?
       response.content_type = Mime::HTML

@@ -1,4 +1,3 @@
-@javascript
 Feature: Notifications of comment mentions
   In order to not miss any of the discussions important to me
   As a Teambox user

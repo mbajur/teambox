@@ -228,9 +228,9 @@ class UsersController < ApplicationController
   end
 
   def change_activities_mode
-    @current_user.settings = { collapse_activities: params[:collapsed] }
-    @current_user.save!
-    render text: "activities are now #{params[:collapsed] ? 'collapsed' : 'expanded'}"
+    current_user.settings = { collapse_activities: params[:collapsed] }
+    current_user.save!
+    render plain: "activities are now #{params[:collapsed] ? 'collapsed' : 'expanded'}"
   end
 
   def increment_stat
