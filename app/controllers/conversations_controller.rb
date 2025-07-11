@@ -145,7 +145,19 @@ class ConversationsController < ApplicationController
   private
 
   def conversation_params
-    params.require(:conversation).permit(:name, :is_private, :simple, :due_on, :urgent, :status, :assigned_id, :task_list_id, comments_attributes: [ :body ])
+    params.require(:conversation).permit(:name,
+                                         :is_private,
+                                         :simple,
+                                         :due_on,
+                                         :urgent,
+                                         :status,
+                                         :assigned_id,
+                                         :task_list_id,
+                                         comments_attributes: [
+                                           :is_private,
+                                           :body,
+                                           private_ids: []
+                                         ])
   end
 
   def comment_params
