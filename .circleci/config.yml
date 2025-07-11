@@ -92,7 +92,10 @@ jobs:
           name: Run Cucumber tests
           command: |
             TESTFILES=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber --tags "not @ignore" $TESTFILES
+            bundle exec cucumber --tags "not @ignore" --format junit --out ~/cucumber/junit.xml $TESTFILES
+
+      - store_test_results:
+          path: ~/cucumber
 
       - store_artifacts:
           path: /home/circleci/project/tmp/capybara
