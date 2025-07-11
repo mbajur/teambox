@@ -66,7 +66,7 @@ Then /^(?:|I )should not see any conversations$/ do
   text = "This project doesn't have any conversations yet"
 
   if Capybara.current_driver == Capybara.javascript_driver
-    assert page.has_xpath?(XPath::HTML.content(text), visible: true)
+    assert page.has_text?(text)
   elsif page.respond_to? :should
     page.should have_content(text)
   else
