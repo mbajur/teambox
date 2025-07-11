@@ -1,4 +1,4 @@
-// Any form elements with class 'required' will be client-side validated 
+// Any form elements with class 'required' will be client-side validated
 // if the form itself also has the class 'required'
 // Displays an inline span with the error message (taken from the element's error_message attribute)
 //
@@ -24,14 +24,3 @@ document.on('click', 'a.closeThis', function(e, link) {
   e.preventDefault()
   $(link.parentNode).hide()
 })
-
-//Some forms get cached and thus their hidden auth token field's value is often
-//stale. Ensure we use a fresh authenticity token value when submitting forms.
-document.on('submit', 'form', function(e, form) {
-  var metaTagAuthToken = $$('meta[name=csrf-token]')[0].getAttribute('content'),
-      authTokenInput = form.down('input[name=authenticity_token]');
-
-  if (metaTagAuthToken && !metaTagAuthToken.blank() && authTokenInput) {
-    authTokenInput.value = metaTagAuthToken;
-  }
-});

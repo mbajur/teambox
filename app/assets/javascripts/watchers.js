@@ -2,7 +2,7 @@
 Watchers = {
   toggleBox: function(form, project_id) {
     this.redrawBox(form, project_id);
-    form.down(".add_watchers_box").toggle(); 
+    form.down(".add_watchers_box").toggle();
   },
   redrawBox: function(form, project_id) {
     form.select(".watcher").invoke("remove");
@@ -57,7 +57,7 @@ document.on("keyup", "form.new_conversation textarea", function(e,el) {
   if (Watchers.notify_people_span) { return; }
   Watchers.notify_people_span = true;
 
-  var note = el.up("form").down("span.new");
+  var note = el.up("form").down(".watchers");
   note.show();
   var e1 = new Effect.Move(note, { x: 50, transition: Effect.Transitions.linear, duration: 0 });
   var e2 = new Effect.Move(note, { x: -50, transition: Effect.Transitions.spring, duration: 1.0 });

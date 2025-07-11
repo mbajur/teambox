@@ -153,6 +153,7 @@ class ConversationsController < ApplicationController
                                          :status,
                                          :assigned_id,
                                          :task_list_id,
+                                         watcher_ids: [],
                                          comments_attributes: [
                                            :is_private,
                                            :body,

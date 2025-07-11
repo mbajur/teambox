@@ -118,7 +118,7 @@ end
 
 Given /^I set my preference to collapsed threads$/ do
   visit collapse_activities_path
-  @current_user.reload.settings["collapse_activities"].should be_true
+  @current_user.reload.settings["collapse_activities"].should be true
 end
 
 Given /^I set my preference to expanded threads$/ do
@@ -128,12 +128,12 @@ end
 
 Given /^I have badges enabled$/ do
   @current_user.write_setting 'show_badges', true
-  @current_user.reload.settings["show_badges"].should be_true
+  @current_user.reload.settings["show_badges"].should be true
 end
 
 Given /^I have first steps enabled$/ do
   @current_user.write_setting 'show_first_steps', true
-  @current_user.reload.settings["show_first_steps"].should be_true
+  @current_user.reload.settings["show_first_steps"].should be true
 end
 
 When /^I check the (.+) column for the first project setting$/ do |setting|
@@ -141,5 +141,5 @@ When /^I check the (.+) column for the first project setting$/ do |setting|
 end
 
 Then /^the checkbox on the (.+) column for the first project setting should be checked$/ do |setting|
-  find_field("user_people_attributes_0_watch_new_#{setting}")['checked'].should be_true
+  find_field("user_people_attributes_0_watch_new_#{setting}")['checked'].should be true
 end
