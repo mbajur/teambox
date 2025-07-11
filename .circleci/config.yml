@@ -94,6 +94,9 @@ jobs:
             TESTFILES=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
             bundle exec cucumber --tags "not @ignore" $TESTFILES
 
+      - store_artifacts:
+          path: /home/circleci/project/tmp/capybara
+
 workflows:
   version: 2
   build_and_test:
