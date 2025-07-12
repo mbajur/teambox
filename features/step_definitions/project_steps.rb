@@ -33,6 +33,15 @@ Given(/^a project with users? (.+)$/) do |users|
   end
 end
 
+Given(/^a project called "([^\"]*)" with users? (.+)$/) do |name, users|
+  @current_project = FactoryBot.create(:project, name: name)
+
+  each_user(users, true) do |user|
+    person = FactoryBot.create(:person, user: user, project: @current_project)
+    person.user.update_attribute :splash_screen, false
+  end
+end
+
 Given(/^(@.+) left the project$/) do |users|
   each_user(users) do |user|
     @current_project.remove_user user
