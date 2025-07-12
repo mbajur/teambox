@@ -30,6 +30,7 @@ Feature: Watchers for conversations
     And I fill in the comment box with "We need to discuss!"
     And I uncheck "James Urquhart"
     And I press "Create"
+    And I wait for 3 seconds
     Then @enric and @pablo should be watching the conversation "Talk!"
     And @james should not be watching the conversation "Talk!"
     When I fill in the comment box with "Rockets!"
