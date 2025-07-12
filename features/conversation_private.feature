@@ -88,7 +88,6 @@ Feature: Creating a private conversation
     And I follow "Privacy"
     Then I should see "This element is only visible to you"
 
-  @current
   Scenario: Making a private conversation public
     Given @mislav started a private conversation named "Roflcopter"
     And the conversation "Roflcopter" is watched by @jordi
