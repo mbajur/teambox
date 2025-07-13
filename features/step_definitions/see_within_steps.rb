@@ -6,9 +6,13 @@
 }.
 each do |within, selector|
   Then /^(?:|I )should( not)? see "([^\"]*)" #{within}$/ do |negate, text|
-    with_scope(selector) do
-      if content = page.html
-        assert negate ? !content.include?(text) : content.include?(text)
+    within(selector) do
+      if page.html
+        if negate
+          expect(page).to_not have_content(text)
+        else
+          expect(page).to have_content(text)
+        end
       else
         Then %(I should#{negate} see "#{text}")
       end

@@ -370,3 +370,7 @@ When /^(.*) confirming with OK$/ do |main_task|
     page.evaluate_script("window.confirm = window.old_confirm")
   end
 end
+
+And /^(.*) take a screenshot$/ do |main_task|
+  screenshot_and_save_page
+end
