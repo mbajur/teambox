@@ -29,8 +29,9 @@ Feature: Watchers for conversations
     And I fill in "Title" with "Talk!"
     And I fill in the comment box with "We need to discuss!"
     And I uncheck "James Urquhart"
-    And I press "Create"
     And I wait for 3 seconds
+    And I press "Create"
+    And I wait for 1 second
     Then @enric and @pablo should be watching the conversation "Talk!"
     And @james should not be watching the conversation "Talk!"
     When I fill in the comment box with "Rockets!"
@@ -51,7 +52,6 @@ Feature: Watchers for conversations
     And I fill in the comment box with "We need to discuss!"
     And I uncheck "James Urquhart"
     And I press "Create"
-    And I wait for 3 seconds
     Then @enric and @pablo should be watching the conversation "Talk!"
     And @james should not be watching the conversation "Talk!"
     When I go to the new conversation page

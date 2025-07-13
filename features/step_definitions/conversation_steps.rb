@@ -51,14 +51,8 @@ Given /^(@.+) stops? watching the conversation "([^\"]*)"$/ do |users, name|
 end
 
 Then /^(@.+) should( not)? be watching the conversation "([^\"]*)"$/ do |users, negate, name|
-  conversation = Conversation.find_by_name(name)
-
   each_user(users) do |user|
-    if negate.blank?
-      user.should be_watching(conversation)
-    else
-      user.should_not be_watching(conversation)
-    end
+    step %(I should#{negate} see "#{user.first_name} #{user.last_name}" in the watchers list)
   end
 end
 
