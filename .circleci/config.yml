@@ -91,7 +91,7 @@ jobs:
       - run:
           name: Run Cucumber tests
           command: |
-            circleci tests glob "features/**/*.feature" | circleci tests run --command="xargs bundle exec cucumber --tags "not @ignore" --retry 2 --retry-total 10 --format junit --out ~/cucumber/junit.xml" --verbose --split-by=timings
+            circleci tests glob "features/**/*.feature" | circleci tests run --command="xargs bundle exec cucumber --tags 'not @ignore' --retry 2 --retry-total 10 --format junit --out ~/cucumber/junit.xml" --verbose --split-by=timings
 
       - store_test_results:
           path: ~/cucumber
