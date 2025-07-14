@@ -15,7 +15,7 @@ Given /^"([^\"]*)" has been uploaded to the "([^\"]*)" project(?: into the "([^\
   project = Project.find_by_name!(project_name)
   path = File.join(Rails.root, "spec/fixtures/#{file_name}")
   folder = folder_name ? project.folders.find_by_name!(folder_name) : nil
-  if File.exists?(path)
+  if File.exist?(path)
     FactoryBot.create(:upload, {
       asset: open(path),
       asset_file_name: file_name,

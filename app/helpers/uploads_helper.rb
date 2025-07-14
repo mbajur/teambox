@@ -1,4 +1,13 @@
 module UploadsHelper
+  def localized_downloadable_type(downloadable = nil)
+    t "downloadable.type.#{downloadable_type(downloadable)}"
+  end
+
+  def downloadable_type(downloadable = nil)
+    downloadable = @upload || @folder if downloadable.nil?
+    downloadable.class.name.tableize.singularize
+  end
+
   def upload_primer(project)
     render "uploads/primer", project: project
   end
@@ -28,7 +37,7 @@ module UploadsHelper
   end
 
   def file_icon_image(upload, size = "48px")
-    extension = File.extname(upload.file_name)
+    extension = File.extname(upload.asset_blob&.filename.to_s)
     if extension.length > 0
       extension = extension[1, 10]
     end
@@ -41,7 +50,8 @@ module UploadsHelper
   end
 
   def file_icon_path(upload, size = "48px")
-    icon_name = Upload::ICONS.include?(upload.file_type) ? upload.file_type : "_blank"
+    file_type = upload.asset_blob.content_type&.split("/")&.last
+    icon_name = Upload::ICONS.include?(file_type) ? file_type : "_blank"
     "/images/file_icons/#{size}/#{icon_name}.png"
   end
 

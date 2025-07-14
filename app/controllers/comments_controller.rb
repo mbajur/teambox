@@ -66,7 +66,7 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:body, :is_private, private_ids: [])
+    params.require(:comment).permit(:body, :is_private, private_ids: [], uploads_attributes: [ :asset ])
   end
 
   protected

@@ -10,7 +10,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.create_by_user(user, attributes = {})
-    create(attributes) { |obj| obj.user = user; yield(obj) if block_given? }
+    create!(attributes) { |obj| obj.user = user; yield(obj) if block_given? }
   end
 
   # Needed for backward compatibility with NotificationsObserver
