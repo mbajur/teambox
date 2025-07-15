@@ -157,7 +157,7 @@ class ProjectsController < ApplicationController
   protected
 
     def project_params
-      params.require(:project).permit(:name, :description, :public, :organization_id)
+      params.require(:project).permit(:name, :description, :public, :organization_id, organization_attributes: [ :name ])
     end
 
     def load_task_lists
