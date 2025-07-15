@@ -156,7 +156,9 @@ class Organization < ActiveRecord::Base
   private
 
   def normalize_permalink
-    if permalink.present? && permalink_changed?
+    if permalink.blank? && name.present?
+      self.permalink = name.parameterize
+    elsif permalink.present? && permalink_changed?
       self.permalink = permalink.parameterize
     end
   end
