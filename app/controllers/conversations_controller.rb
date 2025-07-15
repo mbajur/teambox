@@ -137,7 +137,7 @@ class ConversationsController < ApplicationController
     else
       respond_to do |f|
         f.turbo_stream
-        f.html
+        f.html { render :edit }
       end
     end
   end

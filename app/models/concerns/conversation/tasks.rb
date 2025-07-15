@@ -30,7 +30,7 @@ module Conversation::Tasks
     task.validate
     task.errors.each { |error| errors.add(error.attribute, error.options[:message]) }
 
-    if task
+    if task.valid?
       # destroy newly created activities
       Activity.for_tasks.in_targets(task).each(&:destroy)
 
@@ -57,7 +57,7 @@ module Conversation::Tasks
         end
       end
 
-      task.save
+      task.save!
 
       # Ensure correct order when rendering comments
       task.comments

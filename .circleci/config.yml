@@ -15,6 +15,9 @@ jobs:
       - ruby/install:
           version: '3.3.5'
       - ruby/install-deps
+      - run:
+          name: Install system deps
+          command: apt-get install -y libvips libvips-dev
       # Store bundle cache
       # - node/install-packages:
       #     pkg-manager: yarn
