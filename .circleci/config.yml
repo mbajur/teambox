@@ -15,9 +15,6 @@ jobs:
       - ruby/install:
           version: '3.3.5'
       - ruby/install-deps
-      - run:
-          name: Install system deps
-          command: sudo apt-get update && sudo apt-get install -y libvips libvips-dev
       # Store bundle cache
       # - node/install-packages:
       #     pkg-manager: yarn
@@ -78,6 +75,9 @@ jobs:
     steps:
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
+      - run:
+          name: Install system deps
+          command: sudo apt-get update && sudo apt-get install -y libvips libvips-dev
       - checkout
       - ruby/install:
           version: '3.3.5'
