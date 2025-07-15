@@ -4,9 +4,9 @@ class Activity < ApplicationRecord
   belongs_to :user
   belongs_to :project
 
-  scope :for_task_lists, -> { where("target_type = 'TaskList' || target_type = 'Task' || comment_target_type = 'TaskList' || comment_target_type = 'Task'") }
-  scope :for_conversations, -> { where("target_type = 'Conversation' || comment_target_type = 'Conversation'") }
-  scope :for_tasks, -> { where("target_type = 'Task' || comment_target_type = 'Task'") }
+  scope :for_task_lists, -> { where(target_type: [ "TaskList", "Task" ]).or(where(comment_target_type: [ "TaskList", "Task" ])) }
+  scope :for_conversations, -> { where(target_type: "Conversation").or(where(comment_target_type: "Conversation")) }
+  scope :for_tasks, -> { where(target_type: "Task").or(where(comment_target_type: "Task")) }
   scope :in_targets, lambda { |targets| where("target_id IN (?) OR comment_target_id IN (?)", *(Array(targets).collect(&:id) * 2)) }
 
   scope :latest, -> { order("id DESC").limit(Rails.configuration.teambox.activities_per_page) }
