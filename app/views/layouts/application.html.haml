@@ -94,7 +94,8 @@
     = configure_this_organization
     #container.container
       .wrapper
-        - show_flash
+        %turbo-frame{ id: :flash }
+          = show_flash
         .content_wrap
           .content#content= yield
         .column_wrap

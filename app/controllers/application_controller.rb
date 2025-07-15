@@ -30,11 +30,15 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_cancan_error(exception)
-    if request.xhr?
-      head :forbidden
-    else
-      flash[:error] = exception.message
-      redirect_to root_url
+    respond_to do |format|
+      format.js { head :forbidden }
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update(:flash, partial: "shared/flash", locals: { flash: { error: exception.message } })
+      end
+      format.any(:html, :turbo_stream) do
+        flash[:error] = exception.message
+        redirect_to root_path
+      end
     end
   end
 
