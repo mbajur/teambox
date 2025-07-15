@@ -4,7 +4,7 @@
     .date= posted_date upload.created_at
     = activity_title(activity, false, true)
     = activity_project_link(activity.project)
-    %p 
+    %p
       = link_to_upload(upload, upload.file_name)
-      = number_to_human_size(upload.size)
+      = number_to_human_size(upload.asset_blob.byte_size)
   .clear

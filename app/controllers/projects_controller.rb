@@ -117,7 +117,7 @@ class ProjectsController < ApplicationController
 
   # POST action for invite_people
   def send_invites
-    # authorize! :admin, @current_project
+    authorize! :admin, @current_project
     @current_project.invite_users = params[:project][:invite_users]
     @current_project.invite_emails = params[:project][:invite_emails]
     @current_project.invitations_locale = params[:invitations_locale]

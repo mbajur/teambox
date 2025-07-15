@@ -137,7 +137,7 @@ class ConversationsController < ApplicationController
     else
       respond_to do |f|
         f.turbo_stream
-        f.html
+        f.html { render :edit }
       end
     end
   end
@@ -157,7 +157,8 @@ class ConversationsController < ApplicationController
                                          comments_attributes: [
                                            :is_private,
                                            :body,
-                                           private_ids: []
+                                           private_ids: [],
+                                           uploads_attributes: [ :asset ]
                                          ])
   end
 

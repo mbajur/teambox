@@ -1,6 +1,6 @@
 %h2=t '.title', :project => @current_project
 
-= form_for @current_project, :url => project_send_invites_path(@current_project), :html => { :id => :invite_contacts, :method => :post } do |f|
+= form_for @current_project, :url => project_send_invites_path(@current_project), :html => { :id => :invite_contacts, :method => :post, data: { turbo: false, local: true } } do |f|
 
   %p=t '.explain_invitations'
 

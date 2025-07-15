@@ -5,7 +5,7 @@ class Upload < RoleRecord
 
   ICONS = %w[aac ai aiff avi bmp c cpp css dat dmg doc docx dotx dwg dxf eps exe flv gif h hpp html ics iso java jpg key mid mp3 mp4 mpg odf ods odt otp ots ott pdf php png ppt pptx psd py qt rar rb rtf sql tga tgz tiff txt wav xls xlsx xml yml zip]
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :comment, touch: true, counter_cache: true, optional: true
   belongs_to :project, optional: true
   belongs_to :page, optional: true
@@ -16,6 +16,7 @@ class Upload < RoleRecord
   before_destroy :update_comment_to_show_delete
   after_destroy  :cleanup_activities
 
+  before_validation :copy_project_from_parent
   before_create :copy_ownership_from_comment
   after_create  :log_create
   before_save   :inherit_privacy
@@ -27,28 +28,39 @@ class Upload < RoleRecord
 
   DOWNLOADS_URL = "/downloads/:id/:style/:basename.:extension"
 
-  has_attached_file :asset,
-    styles: { thumb: "150x150>", small: "250x250>" },
-    url: DOWNLOADS_URL,
-    path: Rails.configuration.teambox.amazon_s3 ?
-      "assets/:id/:style/:filename" :
-      ":rails_root/assets/:id/:style/:filename",
-    s3_permissions: "private",
-    s3_headers: { "Cache-Control" => "max-age=157680000" }
+  has_one_attached :asset
 
-  before_post_process :image?
+  # has_attached_file :asset,
+  #   styles: { thumb: "150x150>", small: "250x250>" },
+  #   url: DOWNLOADS_URL,
+  #   path: Rails.configuration.teambox.amazon_s3 ?
+  #     "assets/:id/:style/:filename" :
+  #     ":rails_root/assets/:id/:style/:filename",
+  #   s3_permissions: "private",
+  #   s3_headers: { "Cache-Control" => "max-age=157680000" }
 
-  validates_attachment_size :asset,
-                            less_than: Rails.configuration.teambox.asset_max_file_size.to_i.megabytes,
-                            message: I18n.t("uploads.form.max_size",
-                                               mb: Rails.configuration.teambox.asset_max_file_size.to_i)
+  # before_post_process :image?
 
-  validates_format_of :asset_file_name, with: /\A[^\/]+\z/, allow_blank: false, message: "Invalid filename"
+  # validates_attachment_size :asset,
+  #                           less_than: Rails.configuration.teambox.asset_max_file_size.to_i.megabytes,
+  #                           message: I18n.t("uploads.form.max_size",
+  #                                              mb: Rails.configuration.teambox.asset_max_file_size.to_i)
+
+  # validates_format_of :asset_file_name, with: /\A[^\/]+\z/, allow_blank: false, message: "Invalid filename"
   validates_format_of :invited_user_email, with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, allow_nil: true
-  validates_attachment_presence :asset, message: I18n.t("uploads.form.presence")
-  do_not_validate_attachment_file_type :asset
+  # validates_attachment_presence :asset, message: I18n.t("uploads.form.presence")
+  # do_not_validate_attachment_file_type :asset
 
   validate :check_page
+
+  def copy_project_from_parent
+    self.project ||=
+      if page.present?
+        page.project
+      elsif comment.present?
+        comment.project
+      end
+  end
 
   def check_page
     if page && (page.project_id != project_id)
@@ -57,13 +69,16 @@ class Upload < RoleRecord
   end
 
   def image?
-    !(asset_content_type =~ /^image(?!.*photoshop.*)/).nil?
+    # !(asset_content_type =~ /^image(?!.*photoshop.*)/).nil?
+    asset.image?
   end
 
   def url(style_name = nil, use_timestamp = false)
-    url = asset.original_filename.nil? ? Paperclip::Interpolations.interpolate(@default_url, asset, style_name) : Paperclip::Interpolations.interpolate(DOWNLOADS_URL, asset, style_name)
-    url = CGI.escape(url)
-    use_timestamp && asset.updated_at ? [ url, asset.updated_at ].compact.join(url.include?("?") ? "&" : "?") : url
+    # url = asset.original_filename.nil? ? Paperclip::Interpolations.interpolate(@default_url, asset, style_name) : Paperclip::Interpolations.interpolate(DOWNLOADS_URL, asset, style_name)
+    # url = CGI.escape(url)
+    # use_timestamp && asset.updated_at ? [ url, asset.updated_at ].compact.join(url.include?("?") ? "&" : "?") : url
+    # style = { thumb: "150x150>", small: "250x250>" }[style_name&.to_sym]
+    # asset.variant(resize: style).processed.url if asset.attached?
   end
 
   def s3_url(style_name = nil)
@@ -143,7 +158,7 @@ class Upload < RoleRecord
   end
 
   def file_type
-    ext = File.extname(file_name).sub(".", "")
+    ext = File.extname(asset_blob.filename).sub(".", "")
     ext = "..." if ext == ""
     ext
   end

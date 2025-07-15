@@ -39,13 +39,14 @@ end
 
 When /^(?:|I )press the last "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    all(:xpath, XPath::HTML.button(button)).last.click
+    all(:button, button).last.click
   end
 end
 
 
 When /^(?:|I )follow "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
+    expect(page).to have_link(link)
     click_link(link)
   end
 end

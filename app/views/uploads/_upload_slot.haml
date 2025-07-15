@@ -18,5 +18,5 @@
           .description
             = upload.description
         .reference
-          = number_to_human_size(upload.size)
+          = number_to_human_size(upload.asset_blob.byte_size)
   .clear

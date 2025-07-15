@@ -1,0 +1,4 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <%= tag.p(message.html_safe, class: "flash flash-#{type}") %>
+<% end %>

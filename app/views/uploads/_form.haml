@@ -1,19 +1,9 @@
-- is_valid = upload.asset.errors.empty? && upload.errors.empty?
-
 = form_for [project, upload], upload_form_html_options(page,upload) do |f|
   = f.hidden_field :parent_folder_id, :value => @current_folder.id if @current_folder
   %h2= t('.title')
   .file
     %p= t('.max_upload_size', :mb => Rails.configuration.teambox.asset_max_file_size)
     = f.file_field :asset, :size => 20
-    - unless is_valid
-      %p
-        - if upload.asset.errors.has_key?(:presence)
-          %span= t('.presence')
-        - if upload.asset.errors.has_key?(:size)
-          %span= t('.max_size', :mb => Rails.configuration.teambox.asset_max_file_size.to_i)
-        - upload.errors.each do |attr, message|
-          %span= message
   .submit
     - if page
       = page_slot_fields

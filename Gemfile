@@ -107,3 +107,5 @@ gem "oa-oauth", "~> 0.0.1"
 gem "cancancan", "~> 3.6"
 
 gem "redcarpet", "~> 3.6"
+
+gem "image_processing", "~> 1.14"
