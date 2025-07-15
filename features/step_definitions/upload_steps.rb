@@ -18,14 +18,11 @@ Given /^"([^\"]*)" has been uploaded to the "([^\"]*)" project(?: into the "([^\
   if File.exist?(path)
     FactoryBot.create(:upload, {
       asset: open(path),
-      asset_file_name: file_name,
-      asset_file_size: nil,
-      asset_content_type: nil,
       project: project,
       parent_folder: folder
      })
   else
-    FactoryBot.create(:upload, asset_file_name: file_name, project: project, parent_folder: folder)
+    FactoryBot.create(:upload, project: project, parent_folder: folder)
   end
 end
 

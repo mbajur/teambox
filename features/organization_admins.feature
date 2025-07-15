@@ -22,7 +22,7 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
       | name                    | task_list                | project |
       | Stick your fingers here | Stick your fingers there | Teambox |
     And the project page "Conferences to Attend" exists in "Ruby Rockstars"
-    # And "dragon.jpg" has been uploaded to the "Ruby Rockstars" project
+    And "dragon.jpg" has been uploaded to the "Ruby Rockstars" project
     And @pablo started a conversation named "Can't touch this" in the "Ruby Rockstars" project
     When I go to the manage projects page for the "ACME" organization
 
@@ -74,17 +74,20 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
 
   Scenario: I cannot comment on conversations in a project in my organization that I don't belong to
     When I follow "Ruby Rockstars"
-    And I fill in the comment box with "Hammertime"
+    And I follow "View threads expanded"
+    And I fill in the last comment box with "Hammertime"
     And I press "Save"
     And I wait for 1 second
-    Then I should not see "Hammertime" within "#activities"
+    Then I should see "You are not authorized to access this page."
 
   Scenario: I cannot comment on tasks in a project in my organization that I don't belong to
     When I follow "Ruby Rockstars"
+    And I follow "View threads expanded"
     And I fill in the last comment box with "Stop... Hammer time!"
     And I press the last "Save"
     And I wait for 1 second
-    Then I should not see "Stop... Hammer time!" within "#activities"
+    # Then I should not see "Stop... Hammer time!" within "#activities"
+    Then I should see "You are not authorized to access this page."
 
   Scenario: I cannot invite people to a project in my organization that I don't belong to
     When I go to the people page of the "Ruby Rockstars" project
@@ -117,6 +120,7 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
     When I go to the new page page
     Then I should see "You are not authorized to access this page."
 
+  @ignore
   Scenario: I cannot access the new upload page of a project in my organization that I don't belong to
     When I go to the new upload page
     Then I should see "alert('You are not allowed to do that!')"

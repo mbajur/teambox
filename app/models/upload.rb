@@ -69,13 +69,16 @@ class Upload < RoleRecord
   end
 
   def image?
-    !(asset_content_type =~ /^image(?!.*photoshop.*)/).nil?
+    # !(asset_content_type =~ /^image(?!.*photoshop.*)/).nil?
+    asset.image?
   end
 
   def url(style_name = nil, use_timestamp = false)
-    url = asset.original_filename.nil? ? Paperclip::Interpolations.interpolate(@default_url, asset, style_name) : Paperclip::Interpolations.interpolate(DOWNLOADS_URL, asset, style_name)
-    url = CGI.escape(url)
-    use_timestamp && asset.updated_at ? [ url, asset.updated_at ].compact.join(url.include?("?") ? "&" : "?") : url
+    # url = asset.original_filename.nil? ? Paperclip::Interpolations.interpolate(@default_url, asset, style_name) : Paperclip::Interpolations.interpolate(DOWNLOADS_URL, asset, style_name)
+    # url = CGI.escape(url)
+    # use_timestamp && asset.updated_at ? [ url, asset.updated_at ].compact.join(url.include?("?") ? "&" : "?") : url
+    # style = { thumb: "150x150>", small: "250x250>" }[style_name&.to_sym]
+    # asset.variant(resize: style).processed.url if asset.attached?
   end
 
   def s3_url(style_name = nil)

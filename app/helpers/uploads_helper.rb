@@ -17,9 +17,11 @@ module UploadsHelper
   end
 
   def upload_link_with_thumbnail(upload, size = :thumb)
-    link_to image_tag(upload.url(size)),
-      upload.url,
-      class: "link_to_upload", rel: "facebox"
+    sizes = { thumb: [ 150, 150 ], small: [ 250, 250 ] }
+    size = sizes[size]
+
+    url = size ? upload.asset.variant(resize_to_fit: size) : upload.asset.url
+    link_to image_tag(url), upload.asset
   end
 
   def page_upload_actions_link(page, upload)
