@@ -21,7 +21,7 @@ class SitesController < ApplicationController
     if user = User.authenticate_by(params.permit(:login, :password))
       start_new_session_for user
       flash[:error] = nil
-      redirect_back fallback_location: root_url
+      redirect_to organizations_path
     else
       note_failed_signin
       @login       = params[:login]
