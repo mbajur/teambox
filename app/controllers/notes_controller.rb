@@ -28,10 +28,12 @@ class NotesController < ApplicationController
         f.html { reload_page }
         f.m    { reload_edit_page(edit_part: "page") }
         f.js   { render layout: false }
+        f.turbo_stream
       else
         f.js   { render layout: false }
         f.html { reload_page }
         f.m    { reload_edit_page(edit_part: "page") }
+        f.turbo_stream { reload_page }
       end
     end
   end

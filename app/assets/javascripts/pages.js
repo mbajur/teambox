@@ -29,21 +29,21 @@ var Page = {
     if (this.READONLY)
       return;
 
-    Sortable.create('slots', {handle: 'slot_handle', tag: 'div', only: 'page_slot',
+    Sortable.create(document.getElementById('slots'), {handle: 'slot_handle', tag: 'div', only: 'page_slot',
       onUpdate: function() {
         var csrf_param = $$('meta[name=csrf-param]').first(),
             csrf_token = $$('meta[name=csrf-token]').first(),
             serialized = Sortable.serialize('slots', {name: 'slots'});
-        
+
         if (csrf_param) {
           var param = csrf_param.readAttribute('content'),
               token = csrf_token.readAttribute('content')
-          
+
           serialized += '&' + param + '=' + token
         }
 
         new Ajax.Request(Page.url + '/reorder', { parameters: serialized });
-      } 
+      }
     });
   },
 
@@ -100,7 +100,7 @@ var InsertionBar = {
 
     InsertHere.enabled = true;
   },
-    
+
   // Widget form
   setWidgetForm: function(form) {
     this.clearWidgetForm();
@@ -195,7 +195,7 @@ var InsertHere = {
 
   set: function(element, insert_before) {
     var el = element == null ? $(Element.getElementsBySelector($('slots'), '.page_slot')[0]) : element;
-    
+
     this.updateSlot(false);
     Page.insert_element = el;
     Page.next_element = this.nextSlot();
@@ -223,12 +223,12 @@ var InsertHereFunc = function(evt){
   var slot = el.hasClassName('page_slot') ? el : el.up('div.page_slot');
   if (!slot)
     return;
-  
+
   var pt = evt.pointer(),
       offset = slot.cumulativeOffset(),
       delta = pt.x - offset.left,
       w = slot.getDimensions().width;
-  
+
   if (delta < (w-32)) {
     // Show bar here *if* we are within the slot
     var h = slot.getHeight(),
@@ -257,14 +257,14 @@ document.on('dom:loaded', function() {
 
 document.on('click', 'a.note_button, a.divider_button, a.upload_button', function(e, button) {
   e.preventDefault();
-  
+
   if (!button.up('.pageSlots')) {
     InsertHere.set(null, true);
     InsertionBar.place();
   }
-  
+
   var type = button.className.match(/\b(note|divider|upload)_/)[1];
-  
+
   var form = $('new_' + type);
   InsertionBar.setWidgetFormLoading(form, false);
   Form.reset(form);
@@ -281,34 +281,34 @@ document.on('click', '#page_reorder', function(e) {
   e.stop();
   $('page_reorder').hide();
   $('page_reorder_done').show();
-  
-  Sortable.create('column_pages', {handle: 'drag', tag: 'div', only: 'page',
+
+  Sortable.create(document.getElementById('column_pages'), {handle: 'drag', tag: 'div', only: 'page',
     onUpdate: function() {
       var csrf_param = $$('meta[name=csrf-param]').first(),
           csrf_token = $$('meta[name=csrf-token]').first(),
           serialized = Sortable.serialize('column_pages', {name: 'pages'});
-      
+
       if (csrf_param) {
         var param = csrf_param.readAttribute('content'),
             token = csrf_token.readAttribute('content')
-        
+
         serialized += '&' + param + '=' + token
       }
 
       new Ajax.Request($('column_pages').readAttribute('reorder_url'), { parameters: serialized });
-    } 
+    }
   });
-  
+
   $('column_pages').addClassName('reordering');
 });
 
 document.on('click', '#page_reorder_done', function(e) {
   e.stop();
-  
+
   $('column_pages').removeClassName('reordering');
   $('page_reorder').show();
   $('page_reorder_done').hide();
-  
+
   Sortable.destroy('column_pages');
 });
 
