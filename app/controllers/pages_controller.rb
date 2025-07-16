@@ -72,7 +72,7 @@ class PagesController < ApplicationController
     authorize! :update, @page
     @page.updating_user = current_user
     respond_to do |f|
-      if @page.update_attributes(params[:page])
+      if @page.update(page_params)
         f.any(:html, :m)  { redirect_to project_page_path(@current_project, @page) }
       else
         f.any(:html, :m)  { render :edit }
@@ -157,7 +157,7 @@ class PagesController < ApplicationController
 
   private
     def page_params
-      params.require(:page).permit(:name, :description)
+      params.require(:page).permit(:name, :description, :is_private, private_ids: [])
     end
 
     def load_page
