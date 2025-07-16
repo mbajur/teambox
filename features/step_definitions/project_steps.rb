@@ -115,7 +115,7 @@ Then /^(?:|I )should see the unconfirmed email message$/ do
   text = "An email was sent to this user, but they still haven't confirmed"
 
   if Capybara.current_driver == Capybara.javascript_driver
-    assert page.has_xpath?(XPath::HTML.content(text), visible: true)
+    expect(page).to have_content(text)
   elsif page.respond_to? :should
     page.should have_content(text)
   else
@@ -127,7 +127,7 @@ Then /^(?:|I )should see the unauthorized private project message/ do
   text = "This is a private project and you're not authorized to access it."
 
   if Capybara.current_driver == Capybara.javascript_driver
-    assert page.has_xpath?(XPath::HTML.content(text), visible: true)
+    expect(page).to have_content(text)
   elsif page.respond_to? :should
     page.should have_content(text)
   else

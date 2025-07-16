@@ -19,7 +19,7 @@
   - else
     - @admins = @people.map(&:user).select { |user| @current_project.admin?(user) }
     %h2= t('people.column.inviting')
-    %p= t('people.column.only_admins_can_invite') 
+    %p= t('people.column.only_admins_can_invite')
     %p= t('people.column.contact_admins',
           :admins => @admins.collect { |user| link_to(h(user), user) }.to_sentence,
           :count => @admins.size).html_safe
