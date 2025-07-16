@@ -51,6 +51,12 @@ When /^(?:|I )follow "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   end
 end
 
+When /^(?:|I )follow last "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
+  with_scope(selector) do
+    all(:link, link).last.click
+  end
+end
+
 When /^(?:|I )fill in "([^\"]*)" with "([^\"]*)"(?: within "([^\"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     fill_in(field, with: value)
@@ -357,19 +363,21 @@ When /^(?:|I )confirm alert message/ do
 end
 
 When /^(.*) confirming with OK$/ do |main_task|
-  if Capybara.current_driver == Capybara.javascript_driver
-    page.evaluate_script("window.old_alert = window.alert")
-    page.evaluate_script("window.old_confirm = window.confirm")
-    page.evaluate_script("window.alert = function(msg) { return true; }")
-    page.evaluate_script("window.confirm = function(msg) { return true; }")
+  # if Capybara.current_driver == Capybara.javascript_driver
+  #   page.evaluate_script("window.old_alert = window.alert")
+  #   page.evaluate_script("window.old_confirm = window.confirm")
+  #   page.evaluate_script("window.alert = function(msg) { return true; }")
+  #   page.evaluate_script("window.confirm = function(msg) { return true; }")
+  # end
+
+  accept_confirm do
+    step main_task
   end
 
-  When main_task
-
-  if Capybara.current_driver == Capybara.javascript_driver
-    page.evaluate_script("window.alert = window.old_alert")
-    page.evaluate_script("window.confirm = window.old_confirm")
-  end
+  # if Capybara.current_driver == Capybara.javascript_driver
+  #   page.evaluate_script("window.alert = window.old_alert")
+  #   page.evaluate_script("window.confirm = window.old_confirm")
+  # end
 end
 
 And /^(.*) take a screenshot$/ do |main_task|

@@ -48,7 +48,7 @@ class OrganizationsController < ApplicationController
   end
 
   def update
-    if @organization.update_attributes(params[:organization])
+    if @organization.update(organization_params)
       flash[:success] = t("organizations.edit.saved")
     end
     render action: :edit
@@ -97,7 +97,7 @@ class OrganizationsController < ApplicationController
     def load_organization
       unless @organization = current_user.organizations.find_by_permalink(params[:id])
         if organization = Organization.find_by_permalink(params[:id])
-          redirect_to external_view_organization_path(@organization)
+          redirect_to external_view_organization_path(organization)
         else
           flash[:error] = t("organizations.edit.invalid")
           redirect_to root_path

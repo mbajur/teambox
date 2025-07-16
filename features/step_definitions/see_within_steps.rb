@@ -14,7 +14,7 @@ each do |within, selector|
           expect(page).to have_content(text)
         end
       else
-        Then %(I should#{negate} see "#{text}")
+        step %(I should#{negate} see "#{text}")
       end
     end
   end
@@ -22,12 +22,12 @@ end
 
 Then /^I should see an error message: "([^\"]*)"$/ do |text|
   with_scope('.flash-error') do
-    Then %(I should see "#{text}")
+    step %(I should see "#{text}")
   end
 end
 
 Then /^I should see a notice: "([^\"]*)"$/ do |text|
   with_scope('.flash-notice') do
-    Then %(I should see "#{text}")
+    step %(I should see "#{text}")
   end
 end

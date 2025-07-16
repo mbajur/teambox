@@ -5,4 +5,4 @@
 - else
   .danger
     %p= t('.clarification')
-    = link_to t('.delete'), organization_path(@organization), :method => :delete, :class => 'button', :confirm => t('.confirm')
+    = button_to t('.delete'), organization_path(@organization), :method => :delete, :class => 'button', data: { turbo: false, confirm: t('.confirm') }

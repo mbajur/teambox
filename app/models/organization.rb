@@ -6,8 +6,8 @@ class Organization < ActiveRecord::Base
 
   friendly_id :name, use: :slugged, slug_column: :permalink
 
-  has_many :projects # , :dependent => :destroy
-  has_many :memberships, dependent: :destroy
+  has_many :projects, dependent: :destroy
+  has_many :memberships, dependent: :destroy, autosave: true
 
   has_many :users, through: :memberships
   has_many :admins, -> { where("memberships.role" => Membership::ROLES[:admin]) }, through: :memberships, source: :user

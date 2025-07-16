@@ -93,6 +93,7 @@ module Immortal
   end
 
   def immortal_destroy
+    mark_for_destruction
     with_transaction_returning_status do
       run_callbacks :destroy do
         destroy_without_callbacks
