@@ -11,5 +11,4 @@
   - if request.format != :m and can?(:update, person)
     .actions
       = link_to t('people.link.edit'), '#edit'
-      = link_to t('people.header.remove'), project_person_path(project, person, :anchor => 'destroy'),
-        'data-confirm' => t('people.header.confirm_delete'), 'data-method' => 'delete', 'data-remote' => true
+      = button_to t('people.header.remove'), project_person_path(project, person), method: :delete, data: { confirm: t('people.header.confirm_delete'), remote: false, turbo: false }

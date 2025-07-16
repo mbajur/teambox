@@ -204,7 +204,7 @@ end
 Then /^(?:|I )should not see "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, selector|
   if Capybara.current_driver == Capybara.javascript_driver
     with_css_scope(selector) do |scope|
-      assert scope.has_no_xpath?("//*[contains(text(), '#{text}')]", visible: true)
+      assert scope.has_no_xpath?(".//*[contains(text(), '#{text}')]", visible: true)
     end
   elsif page.respond_to? :should
     with_scope(selector) do

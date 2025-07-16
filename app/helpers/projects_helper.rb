@@ -107,9 +107,11 @@ module ProjectsHelper
   def leave_project_link(project)
     person = current_user.people.detect { |p| p.project_id == project.id }
     unless !person
-      link_to t("people.column.leave_project"),
+      button_to t("people.column.leave_project"),
         project_person_path(project, person),
-        method: :delete, confirm: t("people.column.confirm_delete"), class: :leave_link
+        method: :delete,
+        data: { confirm: t("people.column.confirm_delete"), turbo: false },
+        class: :leave_link
     end
   end
 
