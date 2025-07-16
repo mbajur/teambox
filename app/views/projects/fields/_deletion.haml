@@ -7,4 +7,5 @@
   %p= t('projects.fields.delete_project.body_html')
 
 = f.hidden_field :archived
-= link_to content_tag(:span,t('projects.fields.forever')), project_path(project), :class => 'button delete_project'
+
+= button_to t('projects.fields.forever'), project_path(project), :method => :delete, :class => 'button', :data => { :confirm => "#{t('projects.fields.delete_project.title', :project => project.name)} #{t('projects.fields.delete_project.body_html')}" }

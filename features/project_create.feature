@@ -1,4 +1,3 @@
-@javascript
 Feature: Creating a project
 
   Background:

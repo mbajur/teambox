@@ -28,10 +28,10 @@
         - if can?(:update, project)
           .el= link_to t('.settings'), project_settings_path(project), :class => 'settings'
           .contained
-            .el= link_to t('shared.project_settings_navigation.general'), project_settings_path(project.permalink), :class => 'general_settings ajax'
-            .el= link_to t('shared.project_settings_navigation.deletion'), project_deletion_path(project.permalink, :sub_action => 'deletion'), :class => 'deletion ajax'
+            .el= link_to t('shared.project_settings_navigation.general'), project_settings_path(project.permalink), :class => 'general_settings'
+            .el= link_to t('shared.project_settings_navigation.deletion'), project_deletion_path(project.permalink, :sub_action => 'deletion'), :class => 'deletion'
             - if project.owner?(current_user)
-              .el= link_to t('shared.project_settings_navigation.ownership'), project_ownership_path(project.permalink, :sub_action => 'ownership'), :class => 'ownership ajax'
+              .el= link_to t('shared.project_settings_navigation.ownership'), project_ownership_path(project.permalink, :sub_action => 'ownership'), :class => 'ownership'
         .el= link_to t('.people'), project_people_path(project), :class => 'people'
     - if projects_archived > 0
       .el= link_to t('.show_all_projects'), all_projects_path, :class => 'more'
@@ -69,4 +69,4 @@
 
   -# More options
   .el#show_more= link_to t('.show_more'), "#", :class => 'show_more'
-  .el.extra{ :style => 'display: none' }= link_to t('.time'), time_path, :class => 'ajax time'
+  .el.extra{ :style => 'display: none' }= link_to t('.time'), time_path, :class => 'time'
