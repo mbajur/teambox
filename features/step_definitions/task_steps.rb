@@ -53,8 +53,8 @@ end
 
 Given /^the (p[a-z]+ )?task called "([^\"]*)" belongs to the task list called "([^\"]*)"$/ do |priv_type, task_name, task_list_name|
   priv_type = (priv_type||'').strip == 'private'
-  Given %(there is a task called "#{task_name}")
-  Given %(there is a task list called "#{task_list_name}")
+  step %(there is a task called "#{task_name}")
+  step %(there is a task list called "#{task_list_name}")
   task_list = TaskList.find_by_name(task_list_name)
   task = Task.find_by_name(task_name)
   task.update_attribute(:task_list, task_list)
@@ -71,46 +71,46 @@ end
 
 
 Given /^the task called "([^\"]*)" belongs to the project called "([^\"]*)"$/ do |task_name, project_name|
-  Given %(there is a task called "#{task_name}")
-  Given %(there is a project called "#{project_name}")
+  step %(there is a task called "#{task_name}")
+  step %(there is a project called "#{project_name}")
   project = Project.find_by_name(project_name)
   Task.find_by_name(task_name).update_attribute(:project, project)
 end
 
 Given /^the task called "([^\"]*)" is due today$/ do |name|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   Task.find_by_name(name).update_attribute(:due_on, Date.today)
 end
 
 Given /^the task called "([^\"]*)" was due (\d+) days ago$/ do |name, days_ago|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   Task.find_by_name(name).update_attribute(:due_on, Date.today - days_ago.to_i)
 end
 
 Given /^the task called "([^\"]*)" is due tomorrow$/ do |name|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   Task.find_by_name(name).update_attribute(:due_on, Date.today + 1)
 end
 
 Given /^the task called "([^\"]*)" is due in (\d+) days?$/ do |name, in_days|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   Task.find_by_name(name).update_attribute(:due_on, Date.today + in_days.to_i)
 end
 
 Given /^the task called "([^\"]*)" does not have a due date$/ do |name|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   Task.find_by_name(name).update_attribute(:due_on, nil)
 end
 
 Given /^the task called "([^\"]*)" is assigned to me$/ do |name|
-  Given %(there is a task called "#{name}")
+  step %(there is a task called "#{name}")
   task = Task.find_by_name(name)
   task.project.add_user(@current_user)
   task.assign_to(@current_user)
 end
 
 Given /^the task called "([^\"]*)" is assigned to "([^\"]*)"$/ do |task_name, login|
-  Given %(there is a task called "#{task_name}")
+  step %(there is a task called "#{task_name}")
   task = Task.find_by_name(task_name)
   user = User.find_by_login(login)
   task.project.add_user(user)
@@ -128,18 +128,18 @@ end
 Then /^I should( not)? see the task called "([^\"]*)" in the "([^\"]*)" task list$/ do |negative, task_name, task_list_name|
   task_list = TaskList.find_by_name!(task_list_name)
   project = task_list.project
-  Then %(I should#{negative} see "#{task_name}" within "#project_#{project.id}_task_list_#{task_list.id}_the_main_tasks")
+  step %(I should#{negative} see "#{task_name}" within "#project_#{project.id}_task_list_#{task_list.id}_the_main_tasks")
 end
 
 Then /^I should see the following tasks:$/ do |table|
   table.hashes.each do |hash|
-    Then %(I should see the task called "#{hash['task_name']}" in the "#{hash['task_list_name']}" task list)
+    step %(I should see the task called "#{hash['task_name']}" in the "#{hash['task_list_name']}" task list)
   end
 end
 
 Then /^I should not see the following tasks:$/ do |table|
   table.hashes.each do |hash|
-    Then %(I should not see the task called "#{hash['task_name']}" in the "#{hash['task_list_name']}" task list)
+    step %(I should not see the task called "#{hash['task_name']}" in the "#{hash['task_list_name']}" task list)
   end
 end
 
@@ -148,7 +148,7 @@ Then /^I should see the task "([^\"]*)" before "([^\"]*)"$/ do |task1, task2|
 end
 
 Then /^I fill the task comment box with "([^\"]*)"$/ do |text|
-  Then %(I fill in "task[comments_attributes][0][body]" with "#{text}")
+  step %(I fill in "task[comments_attributes][0][body]" with "#{text}")
 end
 
 Then /^I click on the date selector$/ do
@@ -189,15 +189,15 @@ Then /^I should see "([^\"]*)"(?: and "([^\"]*)")? within the last comment body$
 end
 
 Then /^I fill the name field with "([^"]*)"$/ do |name|
-  Then %(I fill in "task_name" with "#{name}")
+  step %(I fill in "task_name" with "#{name}")
 end
 
 Then /^I should see "([^"]*)" within the task header$/ do |text|
-  Then %(I should see "#{text}" within ".task_header h2")
+  step %(I should see "#{text}" within ".task_header h2")
 end
 
 Then /^I should see "([^"]*)" within the task actions$/ do |text|
-  Then %(I should see "#{text}" within ".task .actions")
+  step %(I should see "#{text}" within ".task .actions")
 end
 
 When /^(?:|I )select "([^\"]*)" in the "([^\"]*)" calendar?$/ do |number, calendar|
