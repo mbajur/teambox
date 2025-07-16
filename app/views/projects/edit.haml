@@ -1,6 +1,6 @@
 %h2= t(".title_#{@sub_action}", :project => @current_project)
 
-= form_for @current_project, :url => nil do |f|
+= form_for @current_project, :url => nil, data: { remote: false, turbo: false } do |f|
   = project_fields(f,@current_project,@sub_action)
   - unless @sub_action == 'deletion'
     = f.submit t('.submit')
