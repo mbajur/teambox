@@ -3,10 +3,11 @@
 - thread_id = "#{thread_class}_#{thread.id}"
 - comments = thread.comments
 - last_comment = comments.first
+- is_expanded = local_assigns[:expanded] == true
 
-.thread{ :'data-id' => thread.id, :'data-class' => thread_class, :id => "thread_#{thread_id}", :'data-project-id' => thread.project.id, :'data-creator-user-id' => thread.try(:user_id), :'data-watcher-ids' => (thread.try(:watcher_ids)||[]).join(','), :class => thread.is_private ? 'private' : nil, :'data-assigned-id' => thread.try(:assigned_id) }
+%div{ class: class_names('thread', 'collapsed': !is_expanded, 'private': thread.is_private), :'data-id' => thread.id, :'data-class' => thread_class, :id => "thread_#{thread_id}", :'data-project-id' => thread.project.id, :'data-creator-user-id' => thread.try(:user_id), :'data-watcher-ids' => (thread.try(:watcher_ids)||[]).join(','), :'data-assigned-id' => thread.try(:assigned_id), 'data-controller' => 'thread' }
   -# Title of the element
-  .comment.comment_header
+  .comment.comment_header{ 'data-action' => 'click->thread#toggleSelect threads-collapse-toggle-btn:collapsed@window->thread#deselect threads-collapse-toggle-btn:expanded@window->thread#select' }
     %span.time= posted_date(comments.first ? comments.first.created_at : thread.created_at)
     .info
       - icon = { "Conversation" => "comment", "Task" => "tick" }[thread.class.to_s]
@@ -50,11 +51,11 @@
     = render 'activities/thread_comments', :comments => comments, :thread => thread
 
   - if thread.is_a? Task
-    = form_for [thread.project, thread], :html => {:multipart => true, :id => nil, :class => 'new_comment edit_task', :'data-project-id' => thread.project_id, :'data-remote' => false, :'data-mine' => (thread.open? and thread.assigned_to?(current_user))} do |form|
+    = form_for [thread.project, thread], :html => { :id => nil, :class => 'new_comment edit_task', :'data-project-id' => thread.project_id, :'data-mine' => (thread.open? and thread.assigned_to?(current_user)), 'data-controller' => 'comment', 'data-turbo' => false } do |form|
       = form.fields_for :comments, thread.comments.build do |comment_fields|
         = render 'comments/fields', :f => comment_fields, :task_form => form, :placeholder => t("comments.new.#{thread_class}")
   - else
     - action = url_for([thread.project, thread, thread.comments.build])
-    = form_for [thread.project, thread], :url => action, :html => {:multipart => true, :id => nil, :class => 'new_comment edit_conversation', :'data-project-id' => thread.project_id, 'data-local' => true} do |form|
+    = form_with model: [thread.project, thread], :url => action, method: :post, multipart: true, :id => nil, :class => 'new_comment edit_conversation', data: { :'project-id' => thread.project_id, 'controller' => 'comment', 'turbo' => false } do |form|
       = fields_for :comment, thread.comments.build do |comment_fields|
         = render 'comments/fields', :f => comment_fields, :conversation_form => form, :placeholder => t("comments.new.#{thread_class}"), :project => thread.project

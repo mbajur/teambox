@@ -185,7 +185,7 @@ Rails.application.routes.draw do
 
     resources :tasks do
       member do
-        put :reorder
+        patch :reorder
         put :watch
         put :unwatch
       end

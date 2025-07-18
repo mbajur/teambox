@@ -110,3 +110,9 @@ gem "cancancan", "~> 3.6"
 gem "redcarpet", "~> 3.6"
 
 gem "image_processing", "~> 1.14"
+
+gem "i18n-js", "~> 4.2"
+
+gem "positioning", "~> 0.4.6"
+
+gem "search_object", "~> 1.2"

@@ -3,26 +3,50 @@ module TaskListsHelper
     render "task_lists/filter", project: project
   end
 
+  def filter_assigned_options(project: nil, selected: "all")
+    base_opts = [
+      [ t("task_lists.filter.anybody"),     "all" ],
+      [ t("task_lists.filter.my_tasks"),    "mine" ],
+      [ t("task_lists.filter.unassigned"),  "unassigned" ]
+    ]
+
+    people = Person.user_names_from_projects([ project ]).map do |project_id, login, first_name, last_name, person_id, user_id|
+      [ "#{first_name} #{last_name}", person_id, user_id ]
+    end
+
+    people.reject! { |_, _, user_id| user_id == current_user.id }
+
+    if project && people.any?
+      base_opts << [ "--------", "divider" ]
+      base_opts += people.map do |name, person_id, user_id|
+        [ name, user_id ]
+      end
+    end
+
+    options_for_select(base_opts, selected)
+  end
+
   def filter_assigned_dropdown(project = nil)
-    options = [ t("task_lists.filter.anybody"),     "all" ],
-              [ t("task_lists.filter.my_tasks"),    "mine" ],
-              [ t("task_lists.filter.unassigned"),  "unassigned" ]
-    select(:filter, :assigned, options, disabled: "divider", selected: "all", 'data-project-id': project.try(:id))
+    select(:filter, :assigned, filter_assigned_options(project: project), disabled: "divider", selected: "all", 'data-project-id': project.try(:id))
+  end
+
+  def filter_due_date_options(selected = "all")
+    options_for_select([
+      [ t("task_lists.filter.anytime"),           "all" ],
+      [ t("task_lists.filter.late_tasks"),        "overdue" ],
+      [ t("task_lists.filter.no_date_assigned"),  "unassigned_date" ],
+      [ "--------",          "divider" ],
+      [ t("task_lists.filter.today"),             "due_today" ],
+      [ t("task_lists.filter.tomorrow"),          "due_tomorrow" ],
+      [ t("task_lists.filter.week"),              "due_week" ],
+      [ t("task_lists.filter.2weeks"),            "due_2weeks" ],
+      [ t("task_lists.filter.3weeks"),            "due_3weeks" ],
+      [ t("task_lists.filter.month"),             "due_month" ]
+    ], selected)
   end
 
   def filter_due_date_dropdown(project = nil)
-    options = [ t("task_lists.filter.anytime"),           "all" ],
-              [ t("task_lists.filter.late_tasks"),        "overdue" ],
-              [ t("task_lists.filter.no_date_assigned"),  "unassigned_date" ],
-              [ "--------",          "divider" ],
-              [ t("task_lists.filter.today"),             "due_today" ],
-              [ t("task_lists.filter.tomorrow"),          "due_tomorrow" ],
-              [ t("task_lists.filter.week"),              "due_week" ],
-              [ t("task_lists.filter.2weeks"),            "due_2weeks" ],
-              [ t("task_lists.filter.3weeks"),            "due_3weeks" ],
-              [ t("task_lists.filter.month"),             "due_month" ]
-
-    select(:filter, :due_date, options, disabled: "divider")
+    select(:filter, :due_date, filter_due_date_options, disabled: "divider")
   end
 
   def task_list_id(element, project, task_list = nil)

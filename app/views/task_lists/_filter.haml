@@ -1,6 +1,6 @@
-.filters
+= form_with class: 'filters', method: :get, scope: :f, data: { controller: 'auto-submit', 'turbo-frame' => 'task_lists' } do |f|
   %strong= t('.filter_tasks') + ": "
-  %input#filter_tasks_by_name{ :type => 'search', :placeholder => t('.by_name') }
-  = filter_assigned_dropdown(@current_project)
-  = filter_due_date_dropdown(@current_project)
+  = f.search_field :name, id: :filter_tasks_by_name, value: params.dig(:f, :name), placeholder: t('.by_name'), data: { action: 'auto-submit#submit'}
+  = f.select :assigned_to, filter_assigned_options(project: @current_project, selected: params.dig(:f, :assigned_to)), { disabled: "divider" }, data: { 'project-id': @current_project.try(:id), action: 'auto-submit#submit' }
+  = f.select :due_date, filter_due_date_options(params.dig(:f, :due_date)), { disabled: "divider" }, data: { 'project-id': @current_project.try(:id), action: 'auto-submit#submit' }
   =# link_to t('.hide'), "", :class => 'closeThis'

@@ -20,6 +20,7 @@ class TaskListsController < ApplicationController
 
   def index
     @on_index = true
+    @filter = TaskFilter.new(scope: Task.none, filters: params[:f])
     respond_to do |f|
       f.any(:html, :m)
       f.rss {

@@ -74,7 +74,7 @@ module ApplicationHelper
   def posted_date(datetime)
     datetime = datetime.in_time_zone(current_user.time_zone) if current_user
 
-    content_tag :time, localize(datetime, format: :long), class: "timeago",
+    content_tag :time, localize(datetime, format: :long), class: "timeago", 'data-controller': "timeago",
       datetime: datetime.xmlschema, pubdate: true, 'data-msec': datetime_ms(datetime)
   end
 

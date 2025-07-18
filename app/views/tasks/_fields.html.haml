@@ -5,7 +5,7 @@
 .name.text_field
   = f.label :name, t('.name_html')
   = f.text_field :name, :autofocus => %w[new edit].include?(action_name) || nil
-  
+
 - if f.object.new_record?
   %p.optional= t('.optional')
 
@@ -33,7 +33,7 @@
 
   .assigned_to.text_field
     = f.label :assigned_id, t('comments.new.assigned_to')
-    = f.select :assigned_id, []
+    = f.select :assigned_id, options_for_projects_people(@current_project), { include_blank: true }
 
   .pick_date
     = f.label :due_on, t('.due_on_html')

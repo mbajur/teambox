@@ -69,10 +69,10 @@ class TasksController < ApplicationController
   def update
     if can? :update, @task
       @task.updating_user = current_user
-      success = @task.update(task_params)
+      success = @task.update!(task_params)
     elsif can? :comment, @task
       @task.updating_user = current_user
-      success = @task.update_attributes(comments_attributes: params["task"]["comments_attributes"])
+      success = @task.update!(comments_attributes: params["task"]["comments_attributes"])
     else
       authorize! :comment, @task
     end
@@ -87,13 +87,13 @@ class TasksController < ApplicationController
             render partial: "comments/comment",
               locals: { comment: comment }
           else
-            render nothing: true
+            render nothing: true, status: :unprocessable_entity
           end
         else
           if success
             redirect_to_task
           else
-            render :edit
+            render :edit, status: :unprocessable_entity
           end
         end
       }
@@ -120,17 +120,12 @@ class TasksController < ApplicationController
 
   def reorder
     authorize! :reorder_objects, @current_project
-    target_task_list = @current_project.task_lists.find params[:task_list_id]
-    if @task.task_list != target_task_list
-      @task.task_list = target_task_list
-      @task.save
-    end
 
-    task_ids = params[:task_ids].split(",").collect { |t| t.to_i }
-    target_task_list.tasks.each do |t|
-      next unless task_ids.include?(t.id)
-      Task.thin_model.find(t.id).update_attribute :position, task_ids.index(t.id)
-    end
+    task_params = params.require(:task).permit(:task_list_id, :position, position: [ :before, :after ])
+
+    @task.position = task_params[:position].try(:to_h)
+    @task.task_list = @current_project.task_lists.find(task_params[:task_list_id])
+    @task.save!
 
     head :ok
   end

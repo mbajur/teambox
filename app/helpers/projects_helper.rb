@@ -146,6 +146,22 @@ module ProjectsHelper
     Person.people_data_for_user(current_user).to_json
   end
 
+  def options_for_projects_people(project)
+    data = Person.user_names_from_projects([ project ]).map do |project_id, login, first_name, last_name, person_id, user_id|
+      [ "#{first_name} #{last_name}", person_id, user_id ]
+    end
+
+    # Put current user first
+    if data.size > 1
+      item = data.delete_at(data.index { |i| i[2] == current_user.id })
+      data.unshift(item)
+    end
+
+    data.map do |full_name, person_id, user_id|
+      [ full_name, person_id ]
+    end
+  end
+
   def project_link_with_overlay(project)
     content_tag :div, class: :project_overlay do
       link_to project, project, 'data-project-id': project.id

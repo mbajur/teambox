@@ -5,7 +5,7 @@
     = list_pending_invites(@pending_projects)
 
 - if can?(:converse, @current_project) and not @current_project.archived?
-  = form_for [@current_project, @new_conversation], :html => { :multipart => true, :class => 'new_conversation new_comment', :'data-local' => true, :'data-project-id' => @current_project.id, 'data-turbo' => false } do |form|
+  = form_for [@current_project, @new_conversation], :html => { :multipart => true, :class => 'new_conversation new_comment', :'data-local' => true, :'data-project-id' => @current_project.id, 'data-turbo' => false, 'data-controller' => 'comment' } do |form|
     = form.hidden_field :simple
 
     - form.object.comments.build
@@ -13,7 +13,7 @@
       = render 'comments/fields', :f => fields,
         :placeholder => t('comments.new.project'), :project => @current_project
 
-#activities
+#activities.collapsed
   = list_threads(@threads)
   = show_more_button
   -# 7 days is a bit arbitrary. We should use the activity count for the project

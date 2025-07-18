@@ -3,86 +3,91 @@
   %head
     %meta{ :charset => "UTF-8" }
     %meta{ :'http-equiv' => "X-UA-Compatible", :content => "IE=edge" }
-    %meta{ name: "turbo-visit-control", content: "reload" }
+    -# %meta{ name: "turbo-visit-control", content: "reload" }
     = csrf_meta_tag
     = auto_discovery_link_by_context(current_user, @current_project)
     %link{ :rel => "shortcut icon", :href => "/favicon.ico" }
     %title= "#{@page_title} Teambox"
+
+    = stylesheet_link_tag :custom, :media => :screen
     = stylesheet_link_tag :application, :media => :screen
     = stylesheet_link_tag :print, :media => :print
 
+    :javascript
+      window.locales = #{File.read(Rails.root.join('public', 'locales.json'))};
+
     = javascript_importmap_tags
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js" integrity="sha512-C4LuwXQtQOF1iTRy3zwClYLsLgFLlG8nCV5dCxDjPcWsyFelQXzi3efHRjptsOzbHwwnXC3ZU+sWUh1gmxaTBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    -# <script src="https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js" integrity="sha512-C4LuwXQtQOF1iTRy3zwClYLsLgFLlG8nCV5dCxDjPcWsyFelQXzi3efHRjptsOzbHwwnXC3ZU+sWUh1gmxaTBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js" integrity="sha512-csIng5zcB+XpulRUa+ev1zKo7zRNGpEaVfNB9On1no9KYTEY/rLGAEEpvgdw6nim1WdTuihZY1eqZ31K7/fZjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    = javascript_include_tag 'util'
-    = javascript_include_tag 'trimmer/en'
-    = javascript_include_tag 'showdown'
-    = javascript_include_tag 'effects'
-    = javascript_include_tag 'application_legacy'
-    = javascript_include_tag 'calendar_date_select'
-    = javascript_include_tag 'controls'
-    = javascript_include_tag 'mustache'
-    = javascript_include_tag 'actions'
-    = javascript_include_tag 'autoresize'
-    = javascript_include_tag 'badges'
-    = javascript_include_tag 'banner'
-    = javascript_include_tag 'comment'
-    = javascript_include_tag 'compact_mode'
-    = javascript_include_tag 'conversation'
-    = javascript_include_tag 'datas'
-    = javascript_include_tag 'oauth'
-    = javascript_include_tag 'i18n'
-    = javascript_include_tag 'datetime'
-    = javascript_include_tag 'date_picker'
-    = javascript_include_tag 'expand_comment'
-    = javascript_include_tag 'facebox'
-    = javascript_include_tag 'filter'
-    = javascript_include_tag 'first_steps'
-    = javascript_include_tag 'forms'
-    = javascript_include_tag 'google_docs'
-    = javascript_include_tag 'history'
-    = javascript_include_tag 'hotkeys'
-    = javascript_include_tag 'hours'
-    = javascript_include_tag 'hoverable'
-    = javascript_include_tag 'invitation'
-    = javascript_include_tag 'keyboard'
-    = javascript_include_tag 'toggleform'
-    = javascript_include_tag 'navigation'
-    = javascript_include_tag 'navigation_ajax'
-    = javascript_include_tag 'navigation_tasks'
-    = javascript_include_tag 'overlays'
-    = javascript_include_tag 'pages'
-    = javascript_include_tag 'pagination'
-    = javascript_include_tag 'panes'
-    = javascript_include_tag 'params'
-    = javascript_include_tag 'person'
-    = javascript_include_tag 'preview'
-    = javascript_include_tag 'private_elements'
-    = javascript_include_tag 'projects'
-    = javascript_include_tag 'search'
-    = javascript_include_tag 'sessions'
-    = javascript_include_tag 'splash'
-    = javascript_include_tag 'task'
-    = javascript_include_tag 'task_list'
-    = javascript_include_tag 'task_list_templates'
-    = javascript_include_tag 'tasks_inline'
-    = javascript_include_tag 'threads'
-    = javascript_include_tag 'upload'
-    = javascript_include_tag 'yahoo.color'
-    = javascript_include_tag 'watchers'
-    = javascript_include_tag 'watch_list'
+    -# = javascript_include_tag 'util'
+    -# = javascript_include_tag 'trimmer/en'
+    -# = javascript_include_tag 'showdown'
+    -# = javascript_include_tag 'effects'
+    -# = javascript_include_tag 'application_legacy'
+    -# = javascript_include_tag 'calendar_date_select'
+    -# = javascript_include_tag 'controls'
+    -# = javascript_include_tag 'mustache'
+    -# = javascript_include_tag 'actions'
+    -# = javascript_include_tag 'autoresize'
+    -# = javascript_include_tag 'badges'
+    -# = javascript_include_tag 'banner'
+    -# = javascript_include_tag 'comment'
+    -# = javascript_include_tag 'compact_mode'
+    -# = javascript_include_tag 'conversation'
+    -# = javascript_include_tag 'datas'
+    -# = javascript_include_tag 'oauth'
+    -# = javascript_include_tag 'i18n'
+    -# = javascript_include_tag 'datetime'
+    -# = javascript_include_tag 'date_picker'
+    -# = javascript_include_tag 'expand_comment'
+    -# = javascript_include_tag 'facebox'
+    -# = javascript_include_tag 'filter'
+    -# = javascript_include_tag 'first_steps'
+    -# = javascript_include_tag 'forms'
+    -# = javascript_include_tag 'google_docs'
+    -# = javascript_include_tag 'history'
+    -# = javascript_include_tag 'hotkeys'
+    -# = javascript_include_tag 'hours'
+    -# = javascript_include_tag 'hoverable'
+    -# = javascript_include_tag 'invitation'
+    -# = javascript_include_tag 'keyboard'
+    -# = javascript_include_tag 'toggleform'
+    -# = javascript_include_tag 'navigation'
+    -# = javascript_include_tag 'navigation_ajax'
+    -# = javascript_include_tag 'navigation_tasks'
+    -# = javascript_include_tag 'overlays'
+    -# = javascript_include_tag 'pages'
+    -# = javascript_include_tag 'pagination'
+    -# = javascript_include_tag 'panes'
+    -# = javascript_include_tag 'params'
+    -# = javascript_include_tag 'person'
+    -# = javascript_include_tag 'preview'
+    -# = javascript_include_tag 'private_elements'
+    -# = javascript_include_tag 'projects'
+    -# = javascript_include_tag 'search'
+    -# = javascript_include_tag 'sessions'
+    -# = javascript_include_tag 'splash'
+    -# = javascript_include_tag 'task'
+    -# = javascript_include_tag 'task_list'
+    -# = javascript_include_tag 'task_list_templates'
+    -# = javascript_include_tag 'tasks_inline'
+    -# = javascript_include_tag 'threads'
+    -# = javascript_include_tag 'upload'
+    -# = javascript_include_tag 'yahoo.color'
+    -# = javascript_include_tag 'watchers'
+    -# = javascript_include_tag 'watch_list'
 
     = yield :stylesheet_includes
     = yield :js_includes
     = javascript_tag do
       = yield :js_templates
 
-    :javascript
-      Templates.tasks.calendar_date_select_urgent_header = "#{j render partial: 'tasks/calendar_date_select_urgent_header'}";
-      Templates.comments.private_box = "#{j render template: 'templates/comments/private_box'}";
-      Templates.comments.private_box_readonly = "#{j render template: 'templates/comments/private_box_readonly'}";
+    -# :javascript
+    -#   Templates.tasks.calendar_date_select_urgent_header = "#{j render partial: 'tasks/calendar_date_select_urgent_header'}";
+    -#   Templates.comments.private_box = "#{j render template: 'templates/comments/private_box'}";
+    -#   Templates.comments.private_box_readonly = "#{j render template: 'templates/comments/private_box_readonly'}";
 
   %body{ :class => "#{location_name} #{I18n.locale} #{Rails.env} controller_#{controller.controller_name}", :reload_url => reload_url}
     = load_my_avatar_for_new_comments
@@ -99,11 +104,10 @@
           = show_flash
         .content_wrap
           .content#content= yield
-        .column_wrap
+        .column_wrap.sticky.top-0
           .column#column
             = render 'shared/navigation'
             .view_sidebar
               = yield :column
       = footer
-    = projects_people_data
     = hide_google_docs_if_not_configured

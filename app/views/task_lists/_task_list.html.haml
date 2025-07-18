@@ -8,14 +8,14 @@
     - if !header_on_index
       = task_list_archive_box(project,task_list)
     - if show_the_lists
-      .tasks.open{ :id => task_list_id(:the_main_tasks,project,task_list) }
+      .tasks.open{ :id => task_list_id(:the_main_tasks,project,task_list), 'data-controller': 'tasks-sortable', 'data-tasks-sortable-resource-name-value': :task, :'data-task-list-id' => task_list.id }
         - if !task_list.archived
-          = list_tasks_with_private(task_list,task_list.tasks.unarchived,task_list_editable?(task_list,current_user))
+          = list_tasks_with_private(task_list,TaskFilter.new(scope: task_list.tasks.unarchived, filters: params[:f]).results,task_list_editable?(task_list,current_user))
       - if task_list_editable?(task_list,current_user)
         .new_task
           = link_to t('tasks.link.new'), [:new, project, task_list, :task]
           = render 'tasks/form', :project => project, :task_list => task_list, :task => task_list.tasks.build
-          
+
           %span{ :id => task_list_id(:archive_link,project,task_list), :style => (show_archive_link ? nil : 'display:none') }
             = t('common.or')
             = archive_task_list_link(project,task_list, header_on_index)
@@ -27,4 +27,3 @@
           .show_archived_tasks
             = loading_image(task_list_id(:archived_tasks_loading,project,task_list))
             = show_archived_tasks_link(project,task_list)
-    
