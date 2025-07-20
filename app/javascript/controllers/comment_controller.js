@@ -7,7 +7,7 @@ String.prototype.incrementLastNumber = function () {
 }
 
 export default class extends Controller {
-  static targets = ["privacyArea", "uploadArea", "watchersArea"]
+  static targets = ["bodyInput", "privacyArea", "uploadArea", "watchersArea"]
 
   togglePrivacy(e) {
     e.preventDefault()
@@ -33,6 +33,11 @@ export default class extends Controller {
     if (!this.hasEmptyFileUploads(e.target.form)) {
       e.target.insertAdjacentElement('afterend', newInput);
     }
+  }
+
+  onAddWatcher(e) {
+    e.preventDefault();
+    this.bodyInputTarget.value += `@${e.currentTarget.dataset.login} `;
   }
 
   hasEmptyFileUploads(form) {
