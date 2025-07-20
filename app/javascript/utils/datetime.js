@@ -1,7 +1,4 @@
-import { I18n } from "i18n-js";
-
-const i18n = new I18n();
-i18n.store(window.locales || {});
+import i18n from 'utils/i18n'
 
 Date.months = i18n.t('date.month_names').filter(n => n);
 Date.weekdays = i18n.t('calendar.abbr_weekdays');

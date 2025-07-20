@@ -14,3 +14,4 @@ pin "@stimulus-components/sortable", to: "@stimulus-components--sortable.js" # @
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
 pin "sortablejs" # @1.15.6
 pin "@stimulus-components/auto-submit", to: "@stimulus-components--auto-submit.js" # @6.0.0
+pin "stimulus-datepicker" # @1.0.9

@@ -13,6 +13,8 @@
     = stylesheet_link_tag :application, :media => :screen
     = stylesheet_link_tag :print, :media => :print
 
+    <link rel="stylesheet" href="https://unpkg.com/stimulus-datepicker@1.0.5/css/datepicker.css" data-turbo-track="reload">
+
     :javascript
       window.locales = #{File.read(Rails.root.join('public', 'locales.json'))};
 
