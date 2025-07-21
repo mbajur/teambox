@@ -134,14 +134,14 @@ class TasksController < ApplicationController
     authorize! :watch, @task
     @task.add_watcher(current_user)
     respond_to do |f|
-      f.js { render layout: false }
+      f.turbo_stream
     end
   end
 
   def unwatch
     @task.remove_watcher(current_user)
     respond_to do |f|
-      f.js { render layout: false }
+      f.turbo_stream
     end
   end
 
@@ -155,7 +155,7 @@ class TasksController < ApplicationController
                                    :assigned_id,
                                    :due_on,
                                    :urgent,
-                                   comments_attributes: [ :body ])
+                                   comments_attributes: [ :body, private_ids: [] ])
     end
 
     def load_task_list

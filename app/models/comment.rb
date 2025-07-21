@@ -75,7 +75,8 @@ class Comment < ApplicationRecord
   # TODO: investigate how we can enable this and not break nested attributes
   # validates_presence_of :target_id, :user_id, :project_id
 
-  validate :check_duplicate, if: lambda { |c| !@is_importing and !c.is_private_changed? and c.target_id? and not c.hours? }, on: :create
+  # @todo bring that back in operation
+  # validate :check_duplicate, if: lambda { |c| !@is_importing and !c.is_private_changed? and c.target_id? and not c.hours? }, on: :create
   validates_presence_of :body, unless: lambda { |c| c.is_private_set or c.task_comment? or c.uploads.to_a.any? or c.google_docs.any? }
 
   validates_presence_of :user
@@ -240,12 +241,11 @@ class Comment < ApplicationRecord
 
   def add_target_watchers!
     if target.respond_to?(:add_watchers)
-      can_mention_watchers = true
-
       # Allow the owner to change the privacy status
       if target.respond_to?(:is_private)
-        target.is_private = self.is_private if target_belongs_to_commenter? && @is_private_set
-        if target.is_private && target_belongs_to_commenter? && @private_ids && @is_private_set
+        target.is_private = self.is_private if target_belongs_to_commenter? && is_private_changed?
+
+        if target.is_private && target_belongs_to_commenter? && @private_ids && saved_change_to_is_private?
           target.set_private_watchers(@private_ids)
         elsif target.is_private
           target.add_watchers([ target.user ])

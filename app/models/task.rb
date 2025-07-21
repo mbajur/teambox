@@ -25,7 +25,7 @@ class Task < RoleRecord
   positioned on: :task_list
 
   accepts_nested_attributes_for :comments, allow_destroy: false,
-    reject_if: lambda { |comment| %w[is_private body hours human_hours uploads_attributes google_docs_attributes].all? { |k| comment[k].blank? } }
+    reject_if: lambda { |comment| %w[is_private private_ids body hours human_hours uploads_attributes google_docs_attributes].all? { |k| comment[k].blank? } }
 
   validates_presence_of :user
   validates_presence_of :task_list

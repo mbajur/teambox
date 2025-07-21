@@ -26,10 +26,10 @@ module Watchable
   def set_private_watchers(new_ids)
     new_ids_with_owner = (new_ids.map(&:to_i) + required_watcher_ids).uniq
     watchers_to_remove = watcher_ids - new_ids_with_owner
-    (new_ids_with_owner-watcher_ids).each do |user_id|
+    (new_ids_with_owner - watcher_ids).each do |user_id|
       watcher = Watcher.new(user_id: user_id, project_id: self.project_id,
                             watchable_id: self.id, watchable_type: self.class.to_s)
-      watcher.save
+      watcher.save!
     end
     Watcher.where(watchable: self, user_id: watchers_to_remove).destroy_all
   end
