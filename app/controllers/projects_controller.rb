@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   around_action :set_time_zone, only: [ :index, :show ]
-  before_action :load_projects, only: [ :index ]
   before_action :set_page_title
   before_action :disallow_for_community, only: [ :new, :create ]
   before_action :load_pending_projects, only: [ :index, :show, :new, :create ]
@@ -162,10 +161,6 @@ class ProjectsController < ApplicationController
 
     def load_task_lists
       @task_lists = @current_project.task_lists.unarchived
-    end
-
-    def load_projects
-      @projects = current_user.projects.unarchived
     end
 
     def load_pending_projects

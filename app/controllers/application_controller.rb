@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
                 :set_locale,
                 :set_client,
                 :load_project,
+                :load_projects_and_people,
                 :load_organizations,
                 :touch_user,
                 :belongs_to_project?,
@@ -75,6 +76,13 @@ class ApplicationController < ActionController::Base
           end
         end
       end
+    end
+  end
+
+  def load_projects_and_people
+    if authenticated?
+      @projects = current_user.projects.unarchived
+      Current.projects_and_people = CurrentProjectsAndPeople.new(@projects)
     end
   end
 

@@ -14,7 +14,7 @@ export default class extends Datepicker {
   }
 
   connect() {
-    this.isUrgentValue = this.urgentTarget.checked
+    if (this.hasUrgentTarget) { this.isUrgentValue = this.urgentTarget.checked }
     super.connect()
   }
 
@@ -78,6 +78,19 @@ export default class extends Datepicker {
   //
   // @param isoDate [IsoDate] the date of interest
   render(isoDate, animate) {
+    const urgentInput = this.hasUrgentTarget ? `
+      <div class="urgent">
+        <input class="urgent" type="checkbox" value="1" id="urgent" data-action="input->comment-datepicker#urgentChanged" ${this.isUrgentValue ? 'checked' : ''}/>
+        <label style="display: inline-block" for="urgent">
+          ${i18n.t('date_picker.urgent.long')}
+        </label>
+        <a href="#" class="show-help text_actions invisible">[?]</a>
+        <div class="help" style="display: none">
+          ${i18n.t('date_picker.urgent.info')}
+        </div>
+      </div>
+    ` : ''
+
     const cal = `
       <div class="sdp-cal" data-comment-datepicker-target="calendar" data-action="click@window->comment-datepicker#closeOnOutsideClick keydown->comment-datepicker#key" role="dialog" aria-modal="true" aria-label="${this.text('chooseDate')}">
         <div class="sdp-nav ${this.isUrgentValue} ${this.isUrgentValue ? 'invisible' : ''}">
@@ -127,16 +140,7 @@ export default class extends Datepicker {
         </div>
 
         <div class="sdp-footer" style="margin-top:.5rem">
-          <div class="urgent">
-            <input class="urgent" type="checkbox" value="1" id="urgent" data-action="input->comment-datepicker#urgentChanged" ${this.isUrgentValue ? 'checked' : ''}/>
-            <label style="display: inline-block" for="urgent">
-              ${i18n.t('date_picker.urgent.long')}
-            </label>
-            <a href="#" class="show-help text_actions invisible">[?]</a>
-            <div class="help" style="display: none">
-              ${i18n.t('date_picker.urgent.info')}
-            </div>
-          </div>
+          ${urgentInput}
         </div>
       </div>
     `

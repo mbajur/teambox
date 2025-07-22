@@ -1,4 +1,5 @@
 - task_form = nil unless local_assigns[:task_form]
+- parent_form = (local_assigns[:task_form] || local_assigns[:conversation_form])
 
 .field.text_area
   %a.micro_avatar.my_avatar{ :href => '#' }
@@ -23,13 +24,11 @@
     %p= t('comments.watchers.explain')
     %div{ class: 'watcher'}
       %a{ href: '#', "data-login": 'all', "data-action" => "comment#onAddWatcher" }= 'All users'
-    - if @current_project
-      - @current_project.people.where.not(user_id: current_user.id).each do |person|
-        %div{ class: 'watcher'}
-          %a{ href: '#', "data-login": person.login, "data-action" => "comment#onAddWatcher" }= person.name
 
+    - Current.projects_and_people.people_for_project(parent_form.object.project).each do |person|
+      %div{ class: 'watcher'}
+        %a{ href: '#', "data-login": person.login, "data-action" => "comment#onAddWatcher" }= person.name
 
-  - parent_form = (local_assigns[:task_form] || local_assigns[:conversation_form])
   .private_options.invisible{ 'object-prefix' => "#{f.object.target_type.downcase}_#{f.object.target_id}", 'object-type' => f.object_name, 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => parent_form.object.is_private.to_s }
     .private_users
       - if parent_form
@@ -48,7 +47,7 @@
             %input{ id: "#{f.object.id}_private_all", name: "comment[all_private]", type: 'checkbox', value: 'true', data: { 'checkbox-select-all-target' => 'checkboxAll' } }
             %label{ for: "#{f.object.id}_private_all"}= I18n.t('comments.private.all')
 
-          - @current_project.people.each do |person|
+          - Current.projects_and_people.people_for_project(parent_form.object.project).each do |person|
             %div{ class: 'private_user'}
               %input{ id: "#{f.object.id}_private_#{person.id}", name: "task[comments_attributes][0][private_ids][]", type: 'checkbox', value: person.user_id, checked: parent_form.object.watcher_ids.include?(person.user_id), data: { 'private-box-target' => 'personInput', 'checkbox-select-all-target' => 'checkbox' } }
               %label{ for: "#{f.object.id}_private_#{person.id}"}= person.name
