@@ -71,8 +71,10 @@ module TaskListsHelper
 
     link_to content_tag(:span, t("#{plural_name}.link.#{action}")),
       list_link,
-      { class: "toggleformaction #{action}_#{singular_name}_link",
-      id: js_id("#{action}_link", project, task_list) }.merge(show_task_list(project, task_list))
+      {
+        class: "toggleformaction #{action}_#{singular_name}_link",
+        id: js_id("#{action}_link", project, task_list)
+      }.merge(show_task_list(project, task_list))
   end
 
   def task_list_index_header(project, task_list)

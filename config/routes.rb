@@ -197,13 +197,13 @@ Rails.application.routes.draw do
       collection do
         get :gantt_view
         get :archived
-        put :reorder
       end
       member do
         put :archive
         put :unarchive
         put :watch
         put :unwatch
+        patch :reorder
       end
 
       resources :tasks do
@@ -235,11 +235,9 @@ Rails.application.routes.draw do
     end
 
     resources :pages do
-      collection do
-        post :resort
-      end
       member do
-        post :reorder
+        patch :resort
+        patch :reorder
         put :watch
         put :unwatch
       end

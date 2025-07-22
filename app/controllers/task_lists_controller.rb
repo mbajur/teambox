@@ -1,6 +1,6 @@
 class TaskListsController < ApplicationController
   around_action :set_time_zone, only: [ :index, :show, :gantt_view ]
-  before_action :load_task_list, only: [ :edit, :update, :show, :destroy, :watch, :unwatch, :archive, :unarchive ]
+  before_action :load_task_list, only: [ :edit, :update, :show, :destroy, :watch, :unwatch, :archive, :unarchive, :reorder ]
   before_action :load_task_lists, only: [ :index, :reorder ]
   before_action :set_page_title
 
@@ -19,6 +19,8 @@ class TaskListsController < ApplicationController
   end
 
   def index
+    authorize! :reorder_objects, @current_project if params[:reorder]
+
     @on_index = true
     @filter = TaskFilter.new(scope: Task.none, filters: params[:f])
     respond_to do |f|
@@ -114,12 +116,11 @@ class TaskListsController < ApplicationController
 
   def reorder
     authorize! :reorder_objects, @current_project
-    task_list_ids = params[:task_list_ids].split(",").collect { |t| t.to_i }
-    @task_lists.each do |t|
-      next unless task_list_ids.include?(t.id)
-      t.position = task_list_ids.index(t.id)
-      t.save
-    end
+    task_list_params = params.require(:task_list).permit(:position, position: [ :before, :after ])
+
+    @task_list.position = task_list_params[:position].try(:to_h)
+    @task_list.save!
+
     head :ok
   end
 

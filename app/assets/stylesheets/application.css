@@ -2422,7 +2422,7 @@ form.task_list_template_form ul {
   #column_pages a.new {
     color: #777; }
 
-#column_pages.reordering div.page img.drag {
+#column_pages .reordering div.page img.drag {
   display: block;
   float: left;
   cursor: move; }

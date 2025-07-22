@@ -10,6 +10,7 @@ class Page < RoleRecord
   has_many :slots, -> { order(position: :asc) }, class_name: "PageSlot", dependent: :delete_all
 
   friendly_id :name, use: :scoped, scope: :project_id, slug_column: :permalink
+  positioned on: :project
 
   attr_accessor :suppress_activity
   attr_accessor :updating_user

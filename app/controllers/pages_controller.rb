@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :load_page, only: [ :show, :edit, :update, :reorder, :destroy, :watch, :unwatch ]
+  before_action :load_page, only: [ :show, :edit, :update, :reorder, :resort, :destroy, :watch, :unwatch ]
   before_action :set_page_title
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -15,7 +15,6 @@ class PagesController < ApplicationController
 
     @pages = context.where([ "pages.is_private = ? OR (pages.is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
                      joins("LEFT JOIN watchers ON (pages.id = watchers.watchable_id AND watchers.watchable_type = 'Page') AND watchers.user_id = #{current_user.id}")
-
 
     respond_to do |f|
       f.any(:html, :m)
@@ -111,17 +110,12 @@ class PagesController < ApplicationController
 
   def resort
     authorize! :reorder_objects, @current_project
-    order = params[:pages].map(&:to_i)
 
-    @current_project.pages.each do |page|
-      page.suppress_activity = true
-      page.position = order.index(page.id)
-      page.save
-    end
+    page_params = params.require(:page).permit(:position)
+    @page.position = page_params[:position]
+    @page.save!
 
-    respond_to do |f|
-      f.js { render :reorder, layout: false }
-    end
+    head :ok
   end
 
   def destroy
