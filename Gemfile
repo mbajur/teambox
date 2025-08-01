@@ -89,6 +89,7 @@ gem "haml-rails", "~> 2.1"
 # $ sass app/styles/sessions.sass app/assets/stylesheets/sessions.css
 # $ sass app/styles/sites.sass app/assets/stylesheets/sites.css
 # $ sass app/styles/public_projects.sass app/assets/stylesheets/public_projects.css
+# $ sass app/styles/public_downloads.sass app/assets/stylesheets/public_downloads.css
 gem "sass", "3.7.4"
 
 gem "bcrypt", "~> 3.1"

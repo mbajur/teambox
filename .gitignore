@@ -34,3 +34,5 @@
 /config/master.key
 
 coverage/
+
+.kamal/secrets-common
