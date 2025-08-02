@@ -11,8 +11,7 @@ Capybara.register_driver(:cuprite) do |app|
 
   opts.merge!(
     headless: false,
-    slowmo: 0.3,
-    js_errors: true
+    slowmo: 0.3
   ) if ENV['DEBUG']
 
   Capybara::Cuprite::Driver.new(app, opts)

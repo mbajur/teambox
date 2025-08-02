@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import Tribute from "tributejs";
 
 String.prototype.incrementLastNumber = function () {
   var i = 0, matches = this.match(/\d+/g);
@@ -8,6 +9,24 @@ String.prototype.incrementLastNumber = function () {
 
 export default class extends Controller {
   static targets = ["bodyInput", "privacyArea", "uploadArea", "watchersArea"]
+  static values = {
+    usersToMention: {
+      type: Array,
+      default: []
+    }
+  }
+
+  connect() {
+    super.connect();
+    this.tribute = new Tribute({
+      collection: [{
+        trigger: '@',
+        values: this.usersToMentionValue
+      }]
+    });
+
+    this.tribute.attach(this.bodyInputTarget);
+  }
 
   togglePrivacy(e) {
     e.preventDefault()

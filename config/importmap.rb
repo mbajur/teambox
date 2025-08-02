@@ -16,3 +16,4 @@ pin "sortablejs" # @1.15.6
 pin "@stimulus-components/auto-submit", to: "@stimulus-components--auto-submit.js" # @6.0.0
 pin "stimulus-datepicker" # @1.0.9
 pin "@stimulus-components/checkbox-select-all", to: "@stimulus-components--checkbox-select-all.js" # @6.1.0
+pin "tributejs" # @5.1.3

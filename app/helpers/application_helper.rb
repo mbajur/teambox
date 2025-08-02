@@ -293,4 +293,10 @@ BLOCK
 
     content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
   end
+
+  def users_to_mention(project)
+    Current.projects_and_people
+           .people_for_project_without_current_user(project)
+           .map { |p| { key: p.name, value: p.login } }
+  end
 end
