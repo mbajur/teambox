@@ -38,16 +38,13 @@ class CommentsController < ApplicationController
   def update
     authorize! :update, @comment
 
-    @comment.update comment_params
-
-    respond_to do |wants|
-      wants.any(:html, :m) {
-        if request.xhr? or iframe?
-          render partial: "comment", locals: { comment: @comment }
-        else
-          redirect_to [ target.project, target ]
-        end
-      }
+    if @comment.update(comment_params)
+      redirect_to ([ target.project, target ])
+    else
+      respond_to do |format|
+        format.html { render :edit }
+        format.turbo_stream
+      end
     end
   end
 
@@ -56,10 +53,9 @@ class CommentsController < ApplicationController
     @comment.do_rollback = true
     @comment.destroy
 
-    if request.xhr?
-      head :ok
-    else
-      redirect_to [ target.project, target ]
+    respond_to do |format|
+      format.html { redirect_to [ target.project, target ] }
+      format.turbo_stream
     end
   end
 

@@ -10,8 +10,7 @@
 
     - form.object.comments.build
     = form.fields_for :comments do |fields|
-      = render 'comments/fields', :f => fields, conversation_form: form,
-        :placeholder => t('comments.new.project'), :project => @current_project
+      = render 'comments/fields', :f => fields, conversation_form: form, :placeholder => t('comments.new.project'), target: @new_conversation
 
 #activities.collapsed
   = list_threads(@threads)

@@ -4,17 +4,24 @@
       = micro_avatar(comment.user)
     .block
       - unless rss?
-        .actions_menu
-          %span.actiondate= posted_date comment.created_at
+        .actions_menu{ data: { controller: "comment-actions", "comment-actions-editable-before-value" => datetime_ms(15.minutes.since(comment.created_at)), 'comment-actions-is-admin-value' => comment.project.admin?(current_user) } }
+          %template{ data: { "comment-actions-target": "uneditableTpl" } }
+            %span.edit{ data: { "comment-actions-target": "editLink" } }= t('.cannot_edit')
+
+          %span.actiondate{ data: { action: "mouseover->comment-actions#refreshEditLinkVisibility" } }
+            = posted_date comment.created_at
+
           = image_tag('triangle.png', :class => 'triangle')
+
           .extra
-            - # There are legacy comments targeting projects and task lists, so we need an if here:
-            - if comment.target.is_a?(Conversation) or comment.target.is_a?(Task)
+            - if can?(:update, comment)
               = link_to t('comments.actions.edit'), [:edit, comment.project, comment.target, comment],
-                  :rel => 'facebox', :'data-uneditable-message' => t('.cannot_edit'), :class => :edit
-              = link_to t('comments.actions.post_by_email'), email_posts_path(:target_type => comment.target_type, :target_id => comment.target_id, :project_permalink => comment.project.permalink), :rel => 'facebox'
+               :class => :edit, :'data-turbo-prefetch' => false, :"data-comment-actions-target" => "editLink", data: { turbo_frame: "modal" }
+            = link_to t('comments.actions.post_by_email'), email_posts_path(:target_type => comment.target_type, :target_id => comment.target_id, :project_permalink => comment.project.permalink), :rel => 'facebox'
+
+            - if can?(:destroy, comment)
               = link_to t('common.delete'), [comment.project, comment.target, comment], :'data-method' => 'delete',
-                  :'data-confirm' => t('.confirm_delete'), :'data-remote' => true, :class => :delete
+                :'data-confirm' => t('.confirm_delete'), :'data-turbo' => true, :class => :delete, :'data-turbo-prefetch' => false
       .body.textilized
         .before
           = link_to(comment.user.name, comment.user, :class => :user) + " "

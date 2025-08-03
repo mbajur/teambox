@@ -67,15 +67,5 @@ export default class extends Controller {
       }
     }
     return false; // All file inputs have files
-    }
-
-  // document.on('change', '.upload_area input[type=file]', function(e, input) {
-  //   var newInput = new Element('input', {
-  //     type: 'file',
-  //     name: input.name.incrementLastNumber()
-  //   });
-  //   if (input.form.hasEmptyFileUploads() === false) {
-  //     input.insert({ after: newInput });
-  //   }
-  // });
+  }
 }

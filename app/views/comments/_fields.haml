@@ -25,20 +25,20 @@
     %div{ class: 'watcher'}
       %a{ href: '#', "data-login": 'all', "data-action" => "comment#onAddWatcher" }= 'All users'
 
-    - Current.projects_and_people.people_for_project(parent_form.object.project).each do |person|
+    - Current.projects_and_people.people_for_project(target.project).each do |person|
       %div{ class: 'watcher'}
         %a{ href: '#', "data-login": person.login, "data-action" => "comment#onAddWatcher" }= person.name
 
-  .private_options.invisible{ 'object-prefix' => "#{f.object.target_type.downcase}_#{f.object.target_id}", 'object-type' => f.object_name, 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => parent_form.object.is_private.to_s }
+  .private_options.invisible{ 'object-prefix' => "#{f.object.target_type.downcase}_#{f.object.target_id}", 'object-type' => f.object_name, 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => target.is_private.to_s }
     .private_users
       - if parent_form
         .option.normal
           %label
-            = parent_form.radio_button :is_private, 0, checked: !parent_form.object.is_private?, data: { action: 'private-box#switchToPublic' }
+            = parent_form.radio_button :is_private, 0, checked: !target.is_private?, data: { action: 'private-box#switchToPublic' }
             = I18n.t('comments.private.public')
         .option.private
           %label
-            = parent_form.radio_button :is_private, 1, checked: parent_form.object.is_private?, data: { action: 'private-box#switchToPrivate' }
+            = parent_form.radio_button :is_private, 1, checked: target.is_private?, data: { action: 'private-box#switchToPrivate' }
             = I18n.t('comments.private.private_global')
 
         %div.invisible{ data: { 'private-box-target' => 'privateContent', controller: 'checkbox-select-all' } }
@@ -47,7 +47,7 @@
             %input{ id: "#{f.object.id}_private_all", name: "comment[all_private]", type: 'checkbox', value: 'true', data: { 'checkbox-select-all-target' => 'checkboxAll' } }
             %label{ for: "#{f.object.id}_private_all"}= I18n.t('comments.private.all')
 
-          - Current.projects_and_people.people_for_project(parent_form.object.project).each do |person|
+          - Current.projects_and_people.people_for_project(target.project).each do |person|
             %div{ class: 'private_user'}
               %input{ id: "#{f.object.id}_private_#{person.id}", name: "task[comments_attributes][0][private_ids][]", type: 'checkbox', value: person.user_id, checked: parent_form.object.watcher_ids.include?(person.user_id), data: { 'private-box-target' => 'personInput', 'checkbox-select-all-target' => 'checkbox' } }
               %label{ for: "#{f.object.id}_private_#{person.id}"}= person.name
@@ -68,7 +68,7 @@
         = task_form.label :status
         = task_form.select :status, task_statuses_for_select
         = task_form.label :assigned_id, t('comments.new.assigned_to')
-        = task_form.select :assigned_id, options_for_projects_people(task_form.object.project), { include_blank: true }, :'data-assigned' => task_form.object.assigned_id
+        = task_form.select :assigned_id, options_for_projects_people(target.project), { include_blank: true }, :'data-assigned' => task_form.object.assigned_id
         = task_form.label :due_on
         = date_picker(task_form, :due_on)
 
@@ -78,7 +78,7 @@
         = t('comments.watchers.popup_note_html')
 
     - if local_assigns[:conversation_form] && local_assigns[:project]
-      - if f.object.target && can?(:update, f.object.target) && can?(:make_tasks, local_assigns[:project])
+      - if target && can?(:update, target) && can?(:make_tasks, local_assigns[:project])
         %span.convert_to_task
           = link_to t('comments.conversations.convert_to_task'), '#convert_to_task'
         .convert_to_task{:style => 'display:none;'}
@@ -104,5 +104,4 @@
 
   .submit
     %span.help= formatting_documentation_link
-    = preview_button
     = f.submit t('comments.new.submit'), :'data-disable-with' => t('comments.new.sending')

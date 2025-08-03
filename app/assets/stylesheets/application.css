@@ -3780,8 +3780,6 @@ div.weektable {
       text-decoration: none; }
     .actions_menu .extra span {
       color: #aaa; }
-    .actions_menu .extra a.edit, .actions_menu .extra a.delete {
-      display: none; }
 
 .teambox_data {
   padding: 6px; }
