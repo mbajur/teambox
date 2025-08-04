@@ -236,9 +236,9 @@ module ApplicationHelper
     form_classes << "new_upload" if upload.new_record?
 
     hidden = page || (action_name == "index" && upload.errors.empty?)
-    form_style = hidden ? "display: none" : nil
+    form_classes << "invisible" if hidden
 
-    { html: { multipart: true, id: id, style: form_style, class: form_classes } }
+    { html: { multipart: true, id: id, class: form_classes, data: { "uploads-target" => "uploadForm" } } }
   end
 
   ##
