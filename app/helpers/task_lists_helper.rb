@@ -317,7 +317,8 @@ module TaskListsHelper
     archived_tasks = task_list.tasks.archived.length
     link_to t("task_lists.actions.show_archived", count: archived_tasks),
             project_task_list_path(project, task_list),
-            class: "show_archived_tasks_link"
+            class: "show_archived_tasks_link",
+              data: { turbo_frame: task_list_id(nil, project, task_list) }
   end
 
   def print_task_lists_link(project = nil)
