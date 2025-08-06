@@ -18,4 +18,24 @@
 .option_fields
   .label
     %label= t('.is_private')
-.private_options{ 'object-prefix' => 'page_form', 'object-type' => 'page' }
+.private_options{ 'object-prefix' => "page_form", 'object-type' => 'page', 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => f.object.is_private.to_s }
+  .private_users
+    .option.normal
+      %label
+        = f.radio_button :is_private, 0, checked: !f.object.is_private?, data: { action: 'private-box#switchToPublic' }
+        = I18n.t('comments.private.public')
+    .option.private
+      %label
+        = f.radio_button :is_private, 1, checked: f.object.is_private?, data: { action: 'private-box#switchToPrivate' }
+        = I18n.t('comments.private.private_global')
+
+    %div.invisible{ data: { 'private-box-target' => 'privateContent', controller: 'checkbox-select-all' } }
+      %br
+      %div{ class: 'private_all'}
+        %input{ id: "#{f.object.id}_private_all", name: "comment[all_private]", type: 'checkbox', value: 'true', data: { 'checkbox-select-all-target' => 'checkboxAll' } }
+        %label{ for: "#{f.object.id}_private_all"}= I18n.t('comments.private.all')
+
+      - Current.projects_and_people.people_for_project(f.object.project).each do |person|
+        %div{ class: 'private_user'}
+          %input{ id: "#{f.object.id}_private_#{person.id}", name: "page[private_ids][]", type: 'checkbox', value: person.user_id, checked: f.object.watcher_ids.include?(person.user_id), data: { 'private-box-target' => 'personInput', 'checkbox-select-all-target' => 'checkbox' } }
+          %label{ for: "#{f.object.id}_private_#{person.id}"}= person.name
