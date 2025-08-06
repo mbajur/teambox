@@ -253,11 +253,14 @@ class TaskListsController < ApplicationController
         @task_lists = []
         conditions = { project_id: Array(@projects).map(&:id),
                        status: Task::ACTIVE_STATUS_CODES }
-        @tasks = Task.where(conditions).
+        tasks = Task.where(conditions).
                       includes([ :task_list, :user, :project ]).
                       where([ "is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
-                      joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}").
-                      sort { |a, b| (a.due_on || 1.year.from_now.to_date) <=> (b.due_on || 1.year.from_now.to_date) }
+                      joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}")
+
+        @filter = TaskFilter.new(scope: tasks, filters: params[:f])
+        @tasks = @filter.results
+                        .sort { |a, b| (a.due_on || 1.year.from_now.to_date) <=> (b.due_on || 1.year.from_now.to_date) }
       end
 
       @task_lists_archived = @task_lists.reject { |t| !t.archived? }
