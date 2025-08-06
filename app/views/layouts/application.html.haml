@@ -108,7 +108,8 @@
         %turbo-frame{ id: :flash }
           = show_flash
         .content_wrap
-          .content#content= yield
+          %turbo-frame.content#content{ target: "_top" }
+            = yield
         .column_wrap.sticky.top-0
           .column#column
             = render 'shared/navigation'

@@ -336,6 +336,7 @@ GEM
       snaky_hash (~> 2.0, >= 2.0.3)
       version_gem (>= 1.1.8, < 3)
     ostruct (0.6.2)
+    pagy (9.3.5)
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -611,6 +612,7 @@ DEPENDENCIES
   kamal
   letter_opener
   oa-oauth (~> 0.0.1)
+  pagy (~> 9.3)
   paperclip (~> 6.1)
   permalink_fu (~> 1.0)
   pickle

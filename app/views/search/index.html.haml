@@ -1,0 +1,18 @@
+
+#results
+  %p=raw t('search.found_results', :length => @pagy.count)
+
+  - @tasks.each do |task|
+    .result
+      %div{ :class => '{{icon_class}}' }
+      %a{ :href => project_path(task.project) }
+        = task.project.name
+
+      &rarr;
+
+      %a{ :href => project_task_path(task.project, task) }
+        = task.name
+      %span{ :class => 'time' }
+        = task.created_at
+
+  =raw pagy_nav(@pagy) if @pagy.pages > 1

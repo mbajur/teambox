@@ -115,3 +115,5 @@ gem "i18n-js", "~> 4.2"
 gem "positioning", "~> 0.4.6"
 
 gem "search_object", "~> 1.2"
+
+gem "pagy", "~> 9.3"
