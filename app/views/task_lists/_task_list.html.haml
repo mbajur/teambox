@@ -10,7 +10,7 @@
       - if !header_on_index
         = task_list_archive_box(project,task_list)
       - if show_the_lists
-        .tasks.open{ :id => task_list_id(:the_main_tasks,project,task_list), 'data-controller': 'tasks-sortable', 'data-tasks-sortable-resource-name-value': :task, :'data-task-list-id' => task_list.id }
+        .tasks.open{ :id => task_list_id(:the_main_tasks,project,task_list), 'data-controller': 'tasks-sortable', 'data-tasks-sortable-resource-name-value': :task, 'data-tasks-sortable-handle-value' => ".task_drag", :'data-task-list-id' => task_list.id }
           - if !task_list.archived
             = list_tasks_with_private(task_list,TaskFilter.new(scope: task_list.tasks.unarchived, filters: params[:f]).results,task_list_editable?(task_list,current_user))
         - if task_list_editable?(task_list,current_user)
