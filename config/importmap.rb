@@ -19,3 +19,4 @@ pin "@stimulus-components/checkbox-select-all", to: "@stimulus-components--check
 pin "tributejs" # @5.1.3
 pin "trix"
 pin "@rails/actiontext", to: "actiontext.esm.js"
+pin "@stimulus-components/rails-nested-form", to: "@stimulus-components--rails-nested-form.js" # @5.0.0

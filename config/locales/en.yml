@@ -83,6 +83,7 @@ en:
     delete_upload: Are you sure you want to delete this file?
     delete_folder: Are you sure you want to delete this folder?
     delete_group: Are you sure you want to delete this group?
+    delete_task_list_template: Are you sure you want to delete this task list template?
   not_found:
     user: "User does not exist."
     conversation: "Conversation %{id} not found in this project."
@@ -637,7 +638,7 @@ en:
         other: Show %{count} archived projects
   organizations:
     column:
-      general_settings: General settings
+      general_settings: General
       appearance: Appearance
       admin_users: Manage users
       admin_projects: Manage projects
@@ -2145,6 +2146,21 @@ en:
       new: New Task List Template
     form:
       name_html: Template name <i>eg. Design process</i>
+    new:
+      submit: Create Task List Template
+      sending: Creating Task List Template...
+    edit:
+      submit: Update Task List Template
+      sending: Updating Task List Template...
+    create:
+      success: Task List Template created successfully
+      error: Error creating Task List Template
+    update:
+      success: Task List Template updated successfully
+      error: Error updating Task List Template
+    destroy:
+      success: Task List Template deleted successfully
+      error: Error deleting Task List Template
 
   friends:
     index:

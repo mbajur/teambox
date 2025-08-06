@@ -11,6 +11,7 @@ class TaskList < RoleRecord
   positioned on: :project
 
   attr_accessor :reference_task_objects
+  attr_accessor :template
 
   before_save :ensure_date_order
 

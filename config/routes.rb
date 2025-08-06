@@ -83,9 +83,7 @@ Rails.application.routes.draw do
       end
     end
     resources :task_list_templates do
-      collection do
-        put :reorder
-      end
+      patch :reorder, on: :member
     end
   end
 

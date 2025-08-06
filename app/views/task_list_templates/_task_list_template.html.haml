@@ -1,0 +1,13 @@
+.task_list_templates{ 'data-id' => task_list_template.id, 'id' => dom_id(task_list_template), "data-sortable-update-url" => reorder_organization_task_list_template_path(@organization, task_list_template) }
+  .data
+    .actions
+      = button_to '', organization_task_list_template_path(@organization, task_list_template), method: :delete, class: 'trash_icon', data: { turbo: 'false', confirm: t('confirm.delete_task_list_template') }
+      %a.edit_icon{ :href => edit_organization_task_list_template_path(@organization, task_list_template) }
+    = image_tag('drag.png', :class => 'drag')
+    %span.name= task_list_template.name
+    %ul
+      - task_list_template.tasks.each do |task|
+        %li
+          =t('task_list_templates.task')
+          %span.title= task.name
+          .desc= task.description
