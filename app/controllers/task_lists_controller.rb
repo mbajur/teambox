@@ -171,11 +171,11 @@ class TaskListsController < ApplicationController
 
     if @saved
       respond_to do |f|
-        f.js { render "task_lists/update", layout: false }
+        f.html { redirect_back(fallback_location: project_task_lists_path(@current_project)) }
       end
     else
       respond_to do |f|
-        f.js { render "task_lists/update", layout: false }
+        f.html { redirect_back(fallback_location: project_task_lists_path(@current_project)) }
       end
     end
   end

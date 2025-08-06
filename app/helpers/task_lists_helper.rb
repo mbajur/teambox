@@ -283,25 +283,34 @@ module TaskListsHelper
 
   def delete_task_list_link(project, task_list, on_index = false)
     link_to t("common.delete"),
-      "#",
-      action_url: project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
-      aconfirm: t("confirm.delete_task_list"),
-      class: "taskListDelete"
+            project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListDelete",
+            data: { method: :delete, confirm: t("confirm.delete_task_list"), "turbo-prefetch" => false }
   end
 
   def resolve_archive_task_list_link(project, task_list, on_index = false)
     return if task_list.archived
     link_to t("task_lists.actions.resolve_and_archive"),
-            "#", class: "taskListResolve",
-            aconfirm: t("task_lists.actions.confirm_resolve_and_archive"),
-            action_url: archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0))
+            archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListResolve",
+            data: {
+              turbo: true,
+              method: :put,
+              confirm: t("task_lists.actions.confirm_resolve_and_archive"),
+              "turbo-prefetch" => false
+            }
   end
 
   def archive_task_list_link(project, task_list, on_index = false)
     link_to t("task_lists.actions.archive"),
-            "#", class: "taskListResolve",
-            aconfirm: t("task_lists.actions.confirm_resolve_and_archive"),
-            action_url: archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0))
+            archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListResolve",
+            data: {
+              turbo: true,
+              method: :put,
+              confirm: t("task_lists.actions.confirm_resolve_and_archive"),
+              "turbo-prefetch" => false
+            }
   end
 
   def show_archived_tasks_link(project, task_list)
@@ -328,10 +337,10 @@ module TaskListsHelper
   end
 
   def reopen_task_list_button(project, task_list)
-    link_to content_tag(:span, t("task_lists.link.unarchive")), "#",
-      { class: "unarchive_task_list_link",
-      id: js_id("unarchive_link", project, task_list),
-      action_url: unarchive_project_task_list_path(project, task_list) }
+    button_to t("task_lists.link.unarchive"),
+              unarchive_project_task_list_path(project, task_list),
+              method: :put,
+              class: "unarchive_task_list_link"
   end
 
   def options_for_task_lists(lists)
