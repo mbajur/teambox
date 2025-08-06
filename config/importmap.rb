@@ -17,3 +17,5 @@ pin "@stimulus-components/auto-submit", to: "@stimulus-components--auto-submit.j
 pin "stimulus-datepicker" # @1.0.9
 pin "@stimulus-components/checkbox-select-all", to: "@stimulus-components--checkbox-select-all.js" # @6.1.0
 pin "tributejs" # @5.1.3
+pin "trix"
+pin "@rails/actiontext", to: "actiontext.esm.js"

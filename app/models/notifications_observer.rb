@@ -18,7 +18,6 @@ class NotificationsObserver < ActiveRecord::Observer
     def notify_watchers_on_new_activity(activity)
       watchers = case activity.target_type
       when "Page" then activity.target.people_watching
-      when "Note" then activity.target.page.people_watching
       else return
       end
 

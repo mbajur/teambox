@@ -10,6 +10,11 @@
     .description= t('.description_description')
   = f.text_field :description
 
+.content.text_area
+  .label
+    = f.label :content, t('.content')
+  = f.rich_textarea :content
+
 .option_fields
   .label
     %label= t('.is_private')

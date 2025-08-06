@@ -12,6 +12,8 @@ class Page < RoleRecord
   friendly_id :name, use: :scoped, scope: :project_id, slug_column: :permalink
   positioned on: :project
 
+  has_rich_text :content
+
   attr_accessor :suppress_activity
   attr_accessor :updating_user
   attr_accessor :private_ids
@@ -92,30 +94,6 @@ class Page < RoleRecord
 
        slot
      end
-  end
-
-  def divided_slots
-    groups = []
-    divider = nil
-    items = []
-    slots.each do |slot|
-      if slot.rel_object_type == "Divider"
-        if divider or items.length > 0
-          groups << [ divider, items ]
-          items = []
-        end
-        divider = slot
-      else
-        items << slot
-      end
-    end
-
-    # Final group
-    if divider or items.length > 0
-      groups << [ divider, items ]
-    end
-
-    groups
   end
 
   def log_create

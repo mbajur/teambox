@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :load_page, only: [ :show, :edit, :update, :reorder, :resort, :destroy, :watch, :unwatch ]
+  before_action :load_page, only: [ :show, :edit, :update, :resort, :destroy, :watch, :unwatch ]
   before_action :set_page_title
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -79,35 +79,6 @@ class PagesController < ApplicationController
     end
   end
 
-  def reorder
-    authorize! :update, @page
-    order = params[:slots].collect { |id| id.to_i }
-    current = @page.slots.map { |slot| slot.id }
-
-    # Handle orphaned elements
-    # [1,3,4,5o (4),6o (5),7,8]
-    # 1,4,3,8,7 NEW
-    # << 1,4,3,8,7
-    # insert 1,4,|5|,|6|,3,8,7
-    orphans = (current - order).map { |o|
-      idx = current.index(o)
-      oid = idx == 0 ? -1 : current[idx-1]
-      [ @page.slots[idx], oid ]
-    }
-
-    # Insert orphans back into order list
-    orphans.each { |o| order.insert(o[1], (order.index(o[0]) || -1)+1) }
-
-    @page.slots.each do |slot|
-      slot.position = order.index(slot.id)
-      slot.save!
-    end
-
-    respond_to do |f|
-      f.js   { render layout: false }
-    end
-  end
-
   def resort
     authorize! :reorder_objects, @current_project
 
@@ -151,7 +122,7 @@ class PagesController < ApplicationController
 
   private
     def page_params
-      params.require(:page).permit(:name, :description, :is_private, private_ids: [])
+      params.require(:page).permit(:name, :description, :content, :is_private, private_ids: [])
     end
 
     def load_page

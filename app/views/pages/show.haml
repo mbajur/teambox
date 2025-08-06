@@ -8,26 +8,4 @@
     =h @page
   .description=h @page.description
 
-= page_buttons(@current_project,@page)
-
-.pageSlots
-  -# Util widgets
-  #pageInsert{:style => 'display:none'}
-    %p#PIB= t('pages.slots.insert_here')
-  
-  #pageInsertItems
-    #pageInsertItemsBar{:style => 'display:none'}
-      #pageInsertItemCancel
-        %a{:href => '#'}= t('common.cancel')
-      #pageInsertItemWidgets
-        = page_buttons(@current_project,@page)
-      
-    #pageForms
-      = render 'notes/new', :project => @current_project, :page => @page, :note => Note.new
-      = render 'dividers/new', :project => @current_project, :page => @page, :divider => Divider.new
-      = render 'uploads/form', :project => @current_project, :page => @page, :upload => Upload.new(:page_id => @page.id)
-  
-  #slots{:class => slots_classes}
-    = render :partial => 'slot', :collection => @page.slots.with_widgets, :locals => {:page => @page, :project => @current_project}
-  
-  .page_slot.pageFooter#page_slot_footer{:slot => -1}
+= @page.content

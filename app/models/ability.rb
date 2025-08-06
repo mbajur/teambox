@@ -190,10 +190,6 @@ class Ability
       api_read?(user) && private_access?(user, object)
     end
 
-    can :show, [ Divider, Note ] do |object|
-      api_read?(user) && private_access?(user, object.page)
-    end
-
     can :show, [ Conversation, Task ] do |object|
       api_read?(user) && private_access?(user, object)
     end
