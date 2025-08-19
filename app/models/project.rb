@@ -163,55 +163,57 @@ class Project < ApplicationRecord
 
   protected
 
-  # def self.calendar_for_tasks(current_user, query_tasks, projects, filter_user, host = nil, port = 80)
-  #   calendar_name = case projects
-  #   when Project then projects.name
-  #   else "Teambox - All Projects"
-  #   end
+  def self.calendar_for_tasks(current_user, query_tasks, projects, filter_user, host = nil, port = 80)
+    calendar_name = case projects
+    when Project then projects.name
+    else "Teambox - All Projects"
+    end
 
-  #   # privacy filter
-  #   tasks = query_tasks.includes(:project).
-  #                       where([ "is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
-  #                       joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}")
+    # privacy filter
+    tasks = query_tasks.includes(:project).
+                        where([ "is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
+                        joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}")
 
-  #   if filter_user
-  #     people = Person.where(user_id: filter_user.id)
-  #     tasks = tasks.where(assigned_id: people.map(&:id))
-  #   end
+    if filter_user
+      people = Person.where(user_id: filter_user.id)
+      tasks = tasks.where(assigned_id: people.map(&:id))
+    end
 
-  #   ical = Icalendar::Calendar.new
-  #   ical.product_id = "-//Teambox//iCal 2.0//EN"
-  #   ical.custom_property("X-WR-CALNAME;VALUE=TEXT", calendar_name)
-  #   ical.custom_property("METHOD", "PUBLISH")
-  #   tasks.each do |task|
-  #     next unless task.due_on && task.active?
-  #     date = task.due_on
-  #     created_date = task.created_at.to_time.to_datetime
-  #     ical.event do
-  #       dtstart       Date.new(date.year, date.month, date.day)
-  #       dtend         Date.new(date.year, date.month, date.day) + 1.day
-  #       dtstart.ical_params  = { "VALUE" => "DATE" }
-  #       dtend.ical_params    = { "VALUE" => "DATE" }
-  #       if projects.is_a?(Array) && projects.size > 1
-  #         summary "#{task} (#{task.project})"
-  #       else
-  #         summary task.name
-  #       end
-  #       if host
-  #         base_url = if port == 80
-  #           "http://#{host}"
-  #         elsif port == 443
-  #           "https://#{host}"
-  #         else
-  #           "http://#{host}:#{port}"
-  #         end
-  #         url "#{base_url}/#{task.project.permalink}/tasks/#{task.id}"
-  #       end
-  #       klass         "PUBLIC"
-  #       dtstamp       DateTime.civil(created_date.year, created_date.month, created_date.day, created_date.hour, created_date.min, created_date.sec, created_date.offset)
-  #       uid           "tb-#{task.project.id}-#{task.id}"
-  #     end
-  #   end
-  #   ical.to_ical
-  # end
+    ical = Icalendar::Calendar.new
+    ical.prodid = "-//Teambox//iCal 2.0//EN"
+    ical.properties = {}
+    tasks.each do |task|
+      next unless task.due_on && task.active?
+
+      date = task.due_on
+      created_date = task.created_at.to_time.to_datetime
+
+      ical.event do |e|
+        e.dtstart = Icalendar::Values::Date.new(date)
+        e.dtend = Icalendar::Values::Date.new(date + 1.day)
+
+        if projects.is_a?(Array) && projects.size > 1
+          e.summary = "#{task} (#{task.project})"
+        else
+          e.summary = task.name
+        end
+
+        if host
+          base_url = if port == 80
+            "http://#{host}"
+          elsif port == 443
+            "https://#{host}"
+          else
+            "http://#{host}:#{port}"
+          end
+          e.url = "#{base_url}/#{task.project.permalink}/tasks/#{task.id}"
+        end
+
+        e.dtstamp = Icalendar::Values::Date.new(created_date)
+        e.uid = "tb-#{task.project.id}-#{task.id}"
+      end
+    end
+
+    ical.to_ical
+  end
 end

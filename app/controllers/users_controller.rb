@@ -178,7 +178,7 @@ class UsersController < ApplicationController
   end
 
   def calendars
-    oauth_info = Rails.configuration.teambox.providers.detect { |p| p.provider == "google" }
+    oauth_info = Rails.configuration.teambox.providers.detect { |p| p["provider"] == "google" }
     if oauth_info.nil?
       Rails.logger.debug "There is no Google provider cannot list calendars"
       return true

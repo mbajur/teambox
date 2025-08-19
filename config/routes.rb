@@ -135,6 +135,7 @@ Rails.application.routes.draw do
       post :accept
       post :decline
       get :join
+      get :calendar_sync
     end
 
     get "time/:year/:month" => "hours#index", :as => :hours_by_month, :via => :get
@@ -144,6 +145,7 @@ Rails.application.routes.draw do
     get "picture" => "projects#edit", :as => :picture, :sub_action => "picture"
     get "deletion" => "projects#edit", :as => :deletion, :sub_action => "deletion"
     get "ownership" => "projects#edit", :as => :ownership, :sub_action => "ownership"
+    get "calendar_sync", on: :collection
 
     resources :invitations do
       member do

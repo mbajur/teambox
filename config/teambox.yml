@@ -5,7 +5,10 @@ shared:
   activities_per_page: 25
   email_confirmation_require: true
   app_domain: localhost:3000
-
+  providers:
+    - provider: google
+      key:
+      secret:
   smtp_settings:
     domain: localhost
     safe_from: hello@example.com

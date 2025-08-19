@@ -89,18 +89,18 @@ module ProjectsHelper
   def subscribe_to_all_calendars_link
     content_tag(:div,
       (t(".subscribe_to_all") +
-      link_to(t("shared.task_navigation.all_tasks"), user_rss_token(projects_path(format: :ics))) +
+      link_to(t("shared.task_navigation.all_tasks"), calendar_sync_projects_path(format: :ics, rss_token: current_user.rss_token)) +
       " " + t("common.or") + " " +
-      link_to(t("shared.task_navigation.my_assigned_tasks"), user_rss_token(projects_path(format: :ics), "mine"))).html_safe,
+      link_to(t("shared.task_navigation.my_assigned_tasks"), calendar_sync_projects_path(format: :ics, filter: :mine, rss_token: current_user.rss_token))).html_safe,
       class: "calendar_links_all")
   end
 
   def subscribe_to_calendar_link(project)
     content_tag(:div,
       (t(".subscribe_to_project", project: h(project)) +
-      link_to(t("shared.task_navigation.all_tasks"), user_rss_token(project_path(project, format: :ics))) +
+      link_to(t("shared.task_navigation.all_tasks"), calendar_sync_project_path(project, format: :ics, rss_token: current_user.rss_token)) +
       " " + t("common.or") + " " +
-      link_to(t("shared.task_navigation.my_assigned_tasks"), user_rss_token(project_path(project, format: :ics), "mine"))).html_safe,
+      link_to(t("shared.task_navigation.my_assigned_tasks"), calendar_sync_project_path(project, format: :ics, filter: :mine, rss_token: current_user.rss_token))).html_safe,
       class: :calendar_links)
   end
 

@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   before_action :load_pending_projects, only: [ :index, :show, :new, :create ]
 
   skip_before_action :belongs_to_project?, only: [ :join ]
+  skip_before_action :require_authentication, only: [ :calendar_sync ]
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |f|
@@ -33,8 +34,21 @@ class ProjectsController < ApplicationController
       end
       f.m     { redirect_to activities_path if request.path == "/" }
       # f.rss   { render layout: false }
-      f.ics   { render text: Project.to_ical(@projects, current_user, params[:filter] == "mine" ? current_user : nil, request.host, request.port) }
       f.print { render layout: "print" }
+    end
+  end
+
+  def calendar_sync
+    user = User.find_by!(rss_token: params[:rss_token])
+
+    if @current_project
+      @projects = [ @current_project ]
+    else
+      @projects = user.projects.unarchived
+    end
+
+    respond_to do |f|
+      f.ics { render plain: Project.to_ical(@projects, user, params[:filter] == "mine" ? user : nil, request.host, request.port) }
     end
   end
 
@@ -51,7 +65,6 @@ class ProjectsController < ApplicationController
     respond_to do |f|
       f.any(:html, :m)
       f.rss   { render layout: false }
-      f.ics   { render text: @current_project.to_ical(current_user, params[:filter] == "mine" ? current_user : nil) }
       f.print { render layout: "print" }
     end
   end

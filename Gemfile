@@ -117,3 +117,5 @@ gem "positioning", "~> 0.4.6"
 gem "search_object", "~> 1.2"
 
 gem "pagy", "~> 9.3"
+
+gem "icalendar", "~> 2.11"

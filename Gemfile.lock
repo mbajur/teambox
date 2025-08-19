@@ -217,6 +217,12 @@ GEM
     i18n-js (4.2.3)
       glob (>= 0.4.0)
       i18n
+    icalendar (2.11.2)
+      base64
+      ice_cube (~> 0.16)
+      logger
+      ostruct
+    ice_cube (0.17.0)
     image_processing (1.14.0)
       mini_magick (>= 4.9.5, < 6)
       ruby-vips (>= 2.0.17, < 3)
@@ -606,6 +612,7 @@ DEPENDENCIES
   friendly_id (~> 5.5)
   haml-rails (~> 2.1)
   i18n-js (~> 4.2)
+  icalendar (~> 2.11)
   image_processing (~> 1.14)
   importmap-rails
   jbuilder
