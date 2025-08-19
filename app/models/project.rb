@@ -181,7 +181,6 @@ class Project < ApplicationRecord
 
     ical = Icalendar::Calendar.new
     ical.prodid = "-//Teambox//iCal 2.0//EN"
-    ical.properties = {}
     tasks.each do |task|
       next unless task.due_on && task.active?
 
