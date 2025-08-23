@@ -10,5 +10,5 @@ shared:
       key:
       secret:
   smtp_settings:
-    domain: localhost
-    safe_from: hello@example.com
+    domain: psyjaciele.com
+    safe_from: todo@psyjaciele.com
