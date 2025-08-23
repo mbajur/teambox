@@ -119,3 +119,5 @@ gem "search_object", "~> 1.2"
 gem "pagy", "~> 9.3"
 
 gem "icalendar", "~> 2.11"
+
+gem "clockwork", "~> 3.0"
