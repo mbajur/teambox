@@ -11,4 +11,4 @@ shared:
       secret:
   smtp_settings:
     domain: psyjaciele.com
-    safe_from: todo@psyjaciele.com
+    safe_from: false
