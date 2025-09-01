@@ -226,7 +226,7 @@ Rails.application.routes.draw do
 
     resources :conversations do
       member do
-        patch :convert_to_task
+        post :convert_to_task
         put :watch
         put :unwatch
       end

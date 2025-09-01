@@ -53,9 +53,9 @@
   - if thread.is_a? Task
     = form_for [thread.project, thread], :html => { :id => nil, :class => 'new_comment edit_task', :'data-project-id' => thread.project_id, :'data-mine' => (thread.open? and thread.assigned_to?(current_user)), 'data-controller' => 'comment', 'data-comment-users-to-mention-value' => users_to_mention(thread.project).to_json, 'data-turbo' => false } do |form|
       = form.fields_for :comments, thread.comments.build do |comment_fields|
-        = render 'comments/fields', :f => comment_fields, :task_form => form, :placeholder => t("comments.new.#{thread_class}"), target: thread
+        = render 'comments/fields', :f => comment_fields, :task_form => form, :placeholder => t("comments.new.#{thread_class}"), target: thread, project: thread.project
   - else
     - action = url_for([thread.project, thread, thread.comments.build])
-    = form_with model: [thread.project, thread], :url => action, method: :post, multipart: true, :id => nil, :class => 'new_comment edit_conversation', data: { :'project-id' => thread.project_id, 'controller' => 'comment', 'data-comment-users-to-mention-value' => users_to_mention(thread.project).to_json, 'turbo' => false } do |form|
+    = form_with model: [thread.project, thread], :url => action, method: :post, multipart: true, :id => nil, :class => 'new_comment edit_conversation', data: { :'project-id' => thread.project_id, 'controller' => 'comment', 'comment-default-url-value' => action, 'comment-convert-to-task-url-value' => convert_to_task_project_conversation_path(@current_project, thread), 'comment-users-to-mention-value' => users_to_mention(thread.project).to_json, 'turbo' => false } do |form|
       = fields_for :comment, thread.comments.build do |comment_fields|
-        = render 'comments/fields', :f => comment_fields, :conversation_form => form, :placeholder => t("comments.new.#{thread_class}"), target: thread
+        = render 'comments/fields', :f => comment_fields, :conversation_form => form, :placeholder => t("comments.new.#{thread_class}"), target: thread, project: thread.project

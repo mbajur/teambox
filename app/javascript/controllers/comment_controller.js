@@ -8,13 +8,32 @@ String.prototype.incrementLastNumber = function () {
 }
 
 export default class extends Controller {
-  static targets = ["bodyInput", "privacyArea", "uploadArea", "watchersArea"]
+  static targets = [
+    "bodyInput",
+    "privacyArea",
+    "uploadArea",
+    "watchersArea",
+    "convertToTaskBtn",
+    "convertToTaskForm",
+    "submitContainer",
+    "taskNameInput",
+    "taskTaskListInput",
+    "taskStatusInput",
+    "taskAssignedInput"
+  ];
+
   static values = {
     usersToMention: {
       type: Array,
       default: []
-    }
-  }
+    },
+    convertingToTask: {
+      type: Boolean,
+      default: false
+    },
+    convertToTaskUrl: String,
+    defaultUrl: String
+  };
 
   connect() {
     super.connect();
@@ -26,6 +45,30 @@ export default class extends Controller {
     });
 
     this.tribute.attach(this.bodyInputTarget);
+  }
+
+  convertingToTaskValueChanged() {
+    if (this.convertingToTaskValue) {
+      this.element.action = this.convertToTaskUrlValue;
+      this.convertToTaskFormTarget.classList.remove("invisible");
+      this.convertToTaskBtnTarget.classList.add("invisible");
+      this.submitContainerTarget.classList.add("invisible");
+
+      this.taskNameInputTarget.disabled = false;
+      this.taskTaskListInputTarget.disabled = false;
+      this.taskStatusInputTarget.disabled = false;
+      this.taskAssignedInputTarget.disabled = false;
+    } else {
+      this.element.action = this.defaultUrlValue;
+      this.convertToTaskFormTarget.classList.add("invisible");
+      this.convertToTaskBtnTarget.classList.remove("invisible");
+      this.submitContainerTarget.classList.remove("invisible");
+
+      this.taskNameInputTarget.disabled = true;
+      this.taskTaskListInputTarget.disabled = true;
+      this.taskStatusInputTarget.disabled = true;
+      this.taskAssignedInputTarget.disabled = true;
+    }
   }
 
   togglePrivacy(e) {
@@ -41,6 +84,11 @@ export default class extends Controller {
   toggleWatchers(e) {
     e.preventDefault()
     this.watchersAreaTarget.classList.toggle("invisible")
+  }
+
+  toggleConvertToTaskForm(e) {
+    e.preventDefault();
+    this.convertingToTaskValue = !this.convertingToTaskValue;
   }
 
   onUploadChanged(e) {
