@@ -37,7 +37,7 @@ class TasksController < ApplicationController
     respond_to do |f|
       f.any(:html, :m) {
         if @task.new_record?
-          render :new
+          render :new, status: :unprocessable_entity
         else
           redirect_to_task
         end
