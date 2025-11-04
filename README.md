@@ -1,6 +1,9 @@
 # Teambox
 ## Collaboration just got better
 
+> [!NOTE]
+> This project is abandoned since 2011. For more up-to-date fork, visit https://github.com/mbajur/teambox
+
 [Teambox is collaboration and  project management software][teambox] built on Ruby on Rails.
 
 Teambox workflow is project-centered; with each project visible only to the people invited to it. 
