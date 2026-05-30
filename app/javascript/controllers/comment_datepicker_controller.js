@@ -1,10 +1,10 @@
-import { Datepicker } from 'stimulus-datepicker'
+import {Datepicker} from 'stimulus-datepicker'
 import i18n from 'utils/i18n'
 
 export default class extends Datepicker {
   static targets = ['reset', 'urgent']
   static values = {
-    isUrgent: { type: Boolean, default: false },
+    isUrgent: {type: Boolean, default: false},
   }
 
   dateValueChanged(value, previousValue) {
@@ -14,7 +14,7 @@ export default class extends Datepicker {
   }
 
   connect() {
-    if (this.hasUrgentTarget) { this.isUrgentValue = this.urgentTarget.checked }
+    if (this.hasUrgentTarget) {this.isUrgentValue = this.urgentTarget.checked}
     super.connect()
   }
 
@@ -92,7 +92,7 @@ export default class extends Datepicker {
     ` : ''
 
     const cal = `
-      <div class="sdp-cal" data-comment-datepicker-target="calendar" data-action="click@window->comment-datepicker#closeOnOutsideClick keydown->comment-datepicker#key" role="dialog" aria-modal="true" aria-label="${this.text('chooseDate')}">
+      <div class="sdp-cal calendar_date_select" data-comment-datepicker-target="calendar" data-action="click@window->comment-datepicker#closeOnOutsideClick keydown->comment-datepicker#key" role="dialog" aria-modal="true" aria-label="${this.text('chooseDate')}">
         <div class="sdp-nav ${this.isUrgentValue} ${this.isUrgentValue ? 'invisible' : ''}">
           <div class="sdp-nav-dropdowns">
             <div>

@@ -54,20 +54,14 @@ export default class extends Controller {
       this.convertToTaskBtnTarget.classList.add("invisible");
       this.submitContainerTarget.classList.add("invisible");
 
-      this.taskNameInputTarget.disabled = false;
-      this.taskTaskListInputTarget.disabled = false;
-      this.taskStatusInputTarget.disabled = false;
-      this.taskAssignedInputTarget.disabled = false;
+      this.convertToTaskFormTarget.querySelectorAll('[disabled]').forEach(el => el.disabled = false);
     } else {
       // this.element.action = this.defaultUrlValue;
       this.convertToTaskFormTarget.classList.add("invisible");
       this.convertToTaskBtnTarget.classList.remove("invisible");
       this.submitContainerTarget.classList.remove("invisible");
 
-      this.taskNameInputTarget.disabled = true;
-      this.taskTaskListInputTarget.disabled = true;
-      this.taskStatusInputTarget.disabled = true;
-      this.taskAssignedInputTarget.disabled = true;
+      this.convertToTaskFormTarget.querySelectorAll('input, select').forEach(el => el.disabled = true);
     }
   }
 

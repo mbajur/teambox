@@ -80,7 +80,7 @@
     - if local_assigns[:conversation_form] && local_assigns[:project]
       - if target && can?(:update, target) && can?(:make_tasks, local_assigns[:project])
         %span.convert_to_task{ data: { 'comment-target' => 'convertToTaskBtn' } }
-          %a{ data: { action: 'comment#toggleConvertToTaskForm' } }
+          %a{ href: '#', data: { action: 'click->comment#toggleConvertToTaskForm:prevent' } }
             = t('comments.conversations.convert_to_task')
         .convert_to_task.invisible{ data: { 'comment-target' => 'convertToTaskForm' } }
           .conversation_actions
@@ -91,16 +91,16 @@
               = conversation_form.text_field :name, :placeholder => t('comments.conversations.task_name'), :error_message => t('tasks.errors.name.cant_be_blank'), :disabled => true, :class => 'required', data: { 'comment-target' => "taskNameInput" }
             .fields
               = conversation_form.label :task_list_id, "#{t('conversations.convert_form.task_list')}:"
-              = conversation_form.select :task_list_id, options_from_collection_for_select(@current_project.task_lists, :id, :name), {}, :disabled => true, data: { 'comment-target' => "taskTaskListInput" }
+              = conversation_form.select :task_list_id, options_from_collection_for_select(project.task_lists, :id, :name), {}, :disabled => true, data: { 'comment-target' => "taskTaskListInput" }
             .fields
               = conversation_form.label :status, "#{t('conversations.convert_form.status')}:"
               = conversation_form.select :status, task_statuses_for_select, {}, :disabled => true, data: { 'comment-target' => "taskStatusInput" }
-              = conversation_form.select :assigned_id, options_for_projects_people(@current_project).prepend(['Unassigned', 'Unassigned']), {}, :'data-assigned' => conversation_form.object.assigned_id, :disabled => true, data: { 'comment-target' => "taskAssignedInput" }
+              = conversation_form.select :assigned_id, options_for_projects_people(project).prepend(['Unassigned', 'Unassigned']), {}, :'data-assigned' => conversation_form.object.assigned_id, :disabled => true, data: { 'comment-target' => "taskAssignedInput" }
             .fields.fields-due-on
               = conversation_form.label :due_on, "#{t('conversations.convert_form.due_on')}:"
               = date_picker(conversation_form, :due_on, {}, :disabled => true)
           .submit
-            %a.cancel{ data: { action: 'comment#toggleConvertToTaskForm' } }
+            %a.cancel{ href: '#', data: { action: 'click->comment#toggleConvertToTaskForm:prevent' } }
               = t('common.cancel')
             = f.submit t('comments.convert_form.submit'), :'data-disable-with' => t('comments.new.sending')
 
