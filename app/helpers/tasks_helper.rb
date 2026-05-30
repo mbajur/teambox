@@ -143,7 +143,7 @@ module TasksHelper
     end
 
     classes = [ "date_picker", ("show_urgent" if show_urgent_flag) ].compact
-    content_tag :div, class: classes.join(" "), id: "#{f.object.class.to_s.underscore}_#{f.object.id}_#{field}", data: { controller: "comment-datepicker" } do
+    content_tag :div, class: classes.join(" "), id: "#{f.object.class.to_s.underscore}_#{f.object.id}_#{field}", data: { controller: "comment-datepicker", comment_datepicker_locales_value: [ I18n.locale.to_s ].to_json } do
       [ image_tag("/images/calendar_date_select/calendar.gif", class: :calendar_date_select_popup_icon),
         content_tag(:span, datepicker_info, class: "datepicker_info", data: { comment_datepicker_target: :toggle }),
         f.hidden_field(field, html_options.reverse_merge(class: :datepicker, data: { comment_datepicker_target: :input })),

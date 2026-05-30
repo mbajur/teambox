@@ -48,15 +48,18 @@ export default class extends Controller {
   }
 
   convertingToTaskValueChanged() {
+    if (!this.hasConvertToTaskFormTarget) return;
+
     if (this.convertingToTaskValue) {
       this.element.action = this.convertToTaskUrlValue;
+      this.element.dataset.turbo = 'true';
       this.convertToTaskFormTarget.classList.remove("invisible");
       this.convertToTaskBtnTarget.classList.add("invisible");
       this.submitContainerTarget.classList.add("invisible");
 
       this.convertToTaskFormTarget.querySelectorAll('[disabled]').forEach(el => el.disabled = false);
     } else {
-      // this.element.action = this.defaultUrlValue;
+      this.element.dataset.turbo = 'false';
       this.convertToTaskFormTarget.classList.add("invisible");
       this.convertToTaskBtnTarget.classList.remove("invisible");
       this.submitContainerTarget.classList.remove("invisible");

@@ -176,9 +176,20 @@ Then /^I select the (\w+) "([^"]*)" on the calendar$/ do |field, value|
 end
 
 Then /^I select the day "([^\"]*)" with the date picker$/ do |day|
-  with_css_scope("div[class='calendar_date_select']") do |node|
-    element = node.all(:xpath, "//*[.='#{day}']").detect { |e| e.tag_name == 'td' && !e['innerHTML'].include?('other') }
-    element.try(:click)
+  with_css_scope("div.calendar_date_select") do |node|
+    # New datepicker: buttons with text matching day number, excluding prev/next month buttons
+    button = node.all('button').find do |b|
+      b.text.strip == day &&
+        !b['class'].to_s.include?('sdp-prev-month') &&
+        !b['class'].to_s.include?('sdp-next-month')
+    end
+    if button
+      button.click
+    else
+      # Old datepicker: td elements
+      element = node.all(:xpath, "//*[.='#{day}']").detect { |e| e.tag_name == 'td' && !e['innerHTML'].include?('other') }
+      element.try(:click)
+    end
   end
 end
 

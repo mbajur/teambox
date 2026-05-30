@@ -96,12 +96,12 @@ export default class extends Datepicker {
         <div class="sdp-nav ${this.isUrgentValue} ${this.isUrgentValue ? 'invisible' : ''}">
           <div class="sdp-nav-dropdowns">
             <div>
-              <select class="sdp-month" data-comment-datepicker-target="month" data-action="comment-datepicker#redraw">
+              <select class="month" data-comment-datepicker-target="month" data-action="comment-datepicker#redraw">
                 ${this.monthOptions(+isoDate.mm)}
               </select>
             </div>
             <div>
-              <select class="sdp-year" data-comment-datepicker-target="year" data-action="comment-datepicker#redraw">
+              <select class="year" data-comment-datepicker-target="year" data-action="comment-datepicker#redraw">
                 ${this.yearOptions(+isoDate.yyyy)}
               </select>
             </div>
