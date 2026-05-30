@@ -46,7 +46,7 @@ class Emailer < ActionMailer::Base
       if name.blank? or Rails.configuration.teambox.smtp_settings[:safe_from]
         address
       else
-        %("#{name}" <#{address}>)
+        %(#{name} <#{address}>)
       end
     end
   end

@@ -28,33 +28,21 @@ class TasksController < ApplicationController
     end
   end
 
+  # @todo support turbo streams and refreshing task list on task creation
   def create
     authorize! :make_tasks, @current_project
     @task = @task_list.tasks.build_by_user(current_user, task_params)
     @task.is_private = (task_params[:is_private]||false) if task_params
     @task.save
 
-    respond_to do |f|
-      f.any(:html, :m) {
-        if @task.new_record?
-          render :new, status: :unprocessable_entity
-        else
-          redirect_to_task
-        end
-      }
-      f.js {
-        if @task.new_record?
-          output_errors_json(@task)
-        else
-          response.content_type = Mime::HTML
-          render(partial: "tasks/task", locals: {
-            project: @current_project,
-            task_list: @task_list,
-            task: @task.reload,
-            editable: true
-          })
-        end
-      }
+    if @task.new_record?
+      render :new, status: :unprocessable_entity
+    else
+      if @task.redirect_mode == "back"
+        redirect_back fallback_location: [ @current_project, @task ]
+      else
+        redirect_to_task
+      end
     end
   end
 
@@ -155,6 +143,7 @@ class TasksController < ApplicationController
                                    :assigned_id,
                                    :due_on,
                                    :urgent,
+                                   :redirect_mode,
                                    comments_attributes: [ :body, private_ids: [] ])
     end
 

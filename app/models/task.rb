@@ -39,6 +39,7 @@ class Task < RoleRecord
   # set by controller to indicate user that's doing task updating
   attr_accessor :updating_user
   attr_accessor :updating_date
+  attr_accessor :redirect_mode # @todo move that out to form object
 
   after_save :update_tasks_counts
   before_validation :nilize_assigned_id

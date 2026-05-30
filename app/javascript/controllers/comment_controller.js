@@ -1,10 +1,10 @@
-import { Controller } from "@hotwired/stimulus"
+import {Controller} from "@hotwired/stimulus"
 import Tribute from "tributejs";
 
 String.prototype.incrementLastNumber = function () {
   var i = 0, matches = this.match(/\d+/g);
   matches.push(parseInt(matches.pop()) + 1);
-  return this.replace(/\d+/g, function (m) { return matches[i++]; });
+  return this.replace(/\d+/g, function (m) {return matches[i++];});
 }
 
 export default class extends Controller {
@@ -32,7 +32,7 @@ export default class extends Controller {
       default: false
     },
     convertToTaskUrl: String,
-    defaultUrl: String
+    // defaultUrl: String
   };
 
   connect() {
@@ -59,7 +59,7 @@ export default class extends Controller {
       this.taskStatusInputTarget.disabled = false;
       this.taskAssignedInputTarget.disabled = false;
     } else {
-      this.element.action = this.defaultUrlValue;
+      // this.element.action = this.defaultUrlValue;
       this.convertToTaskFormTarget.classList.add("invisible");
       this.convertToTaskBtnTarget.classList.remove("invisible");
       this.submitContainerTarget.classList.remove("invisible");
