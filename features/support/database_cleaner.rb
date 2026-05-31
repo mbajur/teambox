@@ -1,12 +1,8 @@
 require 'database_cleaner'
 require 'database_cleaner/active_record'
-require 'database_cleaner/cucumber'
+require 'database_cleaner/cucumber'  # registers its own Around { DatabaseCleaner.cleaning }
 
 DatabaseCleaner.strategy = :truncation
-
-Around do |scenario, block|
-  DatabaseCleaner.cleaning(&block)
-end
 
 # Between scenarios, Chrome may still dispatch in-flight requests (e.g. lazy
 # ActiveStorage image loads) that arrive at the server after the database has
