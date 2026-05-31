@@ -17,15 +17,15 @@ class Note < RoleRecord
   after_update :touch_updated
 
   def log_create
-    project.log_activity(self, 'create', updated_by.id) if updated_by
+    project.log_activity(self, "create", updated_by.id) if updated_by
   end
 
   def touch_updated
-    project.log_activity(self, 'edit', updated_by.id) if updated_by
+    project.log_activity(self, "edit", updated_by.id) if updated_by
   end
 
   def slot_view
-    'notes/note'
+    "notes/note"
   end
 
   def to_s

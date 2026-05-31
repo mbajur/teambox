@@ -215,7 +215,7 @@ class Ability
       api_read?(user) && owner?(user, object)
     end
 
-    can :update_privacy, [ Conversation, Task ] do |object|
+    can :update_privacy, [ Conversation, Task, Page ] do |object|
       object.user_id == user.id
     end
   end

@@ -7,9 +7,9 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
   Background:
     Given @jordi exists and is logged in
     And the following confirmed users exist
-      | login  | email                    | first_name | last_name |
-      | pablo  | pablo@teambox.com        | Pablo      | Villalba  |
-      | saimon | saimon@teambox.com       | Saimon     | Moore     |
+      | login  | email              | first_name | last_name |
+      | pablo  | pablo@teambox.com  | Pablo      | Villalba  |
+      | saimon | saimon@teambox.com | Saimon     | Moore     |
     And @pablo is currently in the project ruby_rockstars
     And I am an administrator in the organization called "ACME"
     And "pablo" is a participant in the organization called "ACME"

@@ -17,7 +17,7 @@ class Divider < RoleRecord
   end
 
   def slot_view
-    'dividers/divider'
+    "dividers/divider"
   end
 
   def to_s
