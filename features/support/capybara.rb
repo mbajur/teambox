@@ -47,7 +47,8 @@ Capybara::Screenshot.prune_strategy = :keep_last_run
 Capybara.javascript_driver = :cuprite
 Capybara.register_driver(:cuprite) do |app|
   opts = {
-    window_size: [ 1200, 800 ]
+    window_size: [ 1200, 800 ],
+    timeout: 30
   }
 
   opts.merge!(

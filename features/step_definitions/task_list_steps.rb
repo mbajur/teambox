@@ -42,7 +42,7 @@ When /^I fill in "([^\"]*)" with "([^\"]*)" in the new task form of the "([^\"]*
 end
 
 Then /^(?:|I )should see "([^\"]*)" as a task in the task list$/ do |text|
-  step %(I should see '#{text}' within '.tasks')
+  expect(page).to have_css('.tasks.open', text: text)
 end
 
 Then /^(?:|I )should see "([^\"]*)" as a task name$/ do |text|
