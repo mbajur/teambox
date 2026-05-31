@@ -153,8 +153,11 @@ module ProjectsHelper
 
     # Put current user first
     if data.size > 1
-      item = data.delete_at(data.index { |i| i[2] == current_user.id })
-      data.unshift(item)
+      idx = data.index { |i| i[2] == current_user.id }
+      if idx
+        item = data.delete_at(idx)
+        data.unshift(item)
+      end
     end
 
     data.map do |full_name, person_id, user_id|

@@ -76,7 +76,7 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
     When I follow "Ruby Rockstars"
     And I follow "View threads expanded"
     And I fill in the last comment box with "Hammertime"
-    And I press "Save"
+    And I press the last "Save"
     And I wait for 1 second
     Then I should see "You are not authorized to access this page."
 

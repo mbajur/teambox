@@ -5,7 +5,7 @@ class CurrentProjectsAndPeople
 
   def people_for_project(project)
     return Person.none unless project
-    @projects.find { |p| p.id == project.id }&.people
+    @projects.find { |p| p.id == project.id }&.people || Person.none
   end
 
   def people_for_project_without_current_user(project)
