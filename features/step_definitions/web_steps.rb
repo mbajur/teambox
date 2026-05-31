@@ -50,8 +50,12 @@ end
 
 When /^(?:|I )follow "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
-    expect(page).to have_link(link)
-    click_link(link)
+    begin
+      expect(page).to have_link(link)
+      click_link(link)
+    rescue Capybara::Cuprite::ObsoleteNode
+      click_link(link)
+    end
   end
 end
 
