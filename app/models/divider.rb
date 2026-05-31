@@ -7,6 +7,7 @@ class Divider < RoleRecord
   has_one :page_slot, as: :rel_object
 
   attr_accessor :deleted
+  attr_accessor :updated_by
 
   before_destroy :clear_slot
   after_create :save_slot

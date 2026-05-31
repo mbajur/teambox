@@ -1,15 +1,22 @@
 class TaskListTemplate < ActiveRecord::Base
   belongs_to :organization
-  has_many :tasks, class_name: "TaskListTemplateTask", dependent: :destroy
+
+  serialize :raw_tasks, coder: JSON
 
   validates_length_of :name, maximum: 255, minimum: 1
   validates_presence_of :organization
 
   default_scope -> { order(position: :asc, id: :desc) }
 
-  accepts_nested_attributes_for :tasks, reject_if: :all_blank, allow_destroy: true
-
   positioned on: :organization
+
+  def tasks
+    raw_tasks || []
+  end
+
+  def tasks=(value)
+    self.raw_tasks = value
+  end
 
   def create_task_list(project, user)
     task_list = project.task_lists.new
@@ -17,7 +24,7 @@ class TaskListTemplate < ActiveRecord::Base
     task_list.user = user
     if task_list.save
       tasks.each do |task|
-        task_list.tasks << Task.new(name: task.name, comments_attributes: [ { body: task.description } ], user: user)
+        task_list.tasks << Task.new(name: task[0], comments_attributes: [ { body: task[1] } ], user: user)
       end
     end
     task_list

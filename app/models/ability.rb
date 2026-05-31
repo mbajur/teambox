@@ -26,9 +26,7 @@ class Ability
 
     can :update, Comment do |comment|
       return false unless api_write?(user)
-      comment.project.admin?(user) || (
-        comment.user_id == user.id and Time.now < 15.minutes.since(comment.created_at)
-      )
+      comment.user_id == user.id and Time.now < 15.minutes.since(comment.created_at)
     end
 
     can :destroy, Comment do |comment|

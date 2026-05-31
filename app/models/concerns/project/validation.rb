@@ -2,8 +2,8 @@ module Project::Validation
   extend ActiveSupport::Concern
 
   included do
-    validates_length_of :name, minimum: 2, on: :create
-    validates_length_of :name, minimum: 2, on: :update
+    validates_length_of :name, minimum: 1, on: :create
+    validates_length_of :name, minimum: 1, on: :update
     validates_uniqueness_of :permalink, case_sensitive: false, scope: :deleted
     validates_length_of :permalink, minimum: 2
     validates_format_of :permalink, with: /\A[a-z0-9_\-]{2,}\z/, if: :permalink_length_valid?
