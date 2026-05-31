@@ -33,7 +33,11 @@ end
 
 When /^(?:|I )press "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    click_button(button)
+    begin
+      click_button(button)
+    rescue Capybara::Cuprite::MouseEventFailed
+      find(:button, button).trigger(:click)
+    end
   end
 end
 
@@ -117,7 +121,11 @@ end
 
 When /^(?:|I )click the element that contain "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, selector|
   with_css_scope(selector) do |node|
-    node.find(:xpath, ".//*[.='#{text}']").click
+    begin
+      node.find(:xpath, ".//*[.='#{text}']").click
+    rescue Capybara::Cuprite::MouseEventFailed
+      node.find(:xpath, ".//*[.='#{text}']").trigger(:click)
+    end
   end
 end
 

@@ -208,7 +208,7 @@ Then /^I should see "([^"]*)" within the task header$/ do |text|
 end
 
 Then /^I should see "([^"]*)" within the task actions$/ do |text|
-  step %(I should see "#{text}" within ".task .actions")
+  step %(I should see "#{text}" within ".task_actions")
 end
 
 When /^(?:|I )select "([^\"]*)" in the "([^\"]*)" calendar?$/ do |number, calendar|
