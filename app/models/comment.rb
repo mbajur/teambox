@@ -243,9 +243,9 @@ class Comment < ApplicationRecord
     if target.respond_to?(:add_watchers)
       # Allow the owner to change the privacy status
       if target.respond_to?(:is_private)
-        target.is_private = self.is_private if target_belongs_to_commenter? && is_private_changed?
+        target.is_private = self.is_private if target_belongs_to_commenter? && is_private_change?
 
-        if target.is_private && target_belongs_to_commenter? && @private_ids && saved_change_to_is_private?
+        if target.is_private && target_belongs_to_commenter? && @private_ids
           target.set_private_watchers(@private_ids)
         elsif target.is_private
           target.add_watchers([ target.user ])

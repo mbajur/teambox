@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ['privateContent', 'personInput']
@@ -10,31 +10,32 @@ export default class extends Controller {
   }
 
   isPrivateValueChanged() {
+    if (!this.hasPrivateContentTarget) return
+    const watcherContainer = this.element.closest('form')?.querySelector('.watchers')
     if (this.isPrivateValue) {
       this.privateContentTarget.classList.remove('invisible')
       this.enablePersonInputs()
+      if (watcherContainer) watcherContainer.classList.add('invisible')
     } else {
       this.privateContentTarget.classList.add('invisible')
       this.disablePersonInputs()
+      if (watcherContainer) watcherContainer.classList.remove('invisible')
     }
   }
 
   switchToPublic(event) {
-    event.preventDefault()
     this.isPrivateValue = false
   }
 
   switchToPrivate(event) {
-    console.log('elo')
-    event.preventDefault()
     this.isPrivateValue = true
   }
 
   enablePersonInputs() {
-    this.personInputTargets.forEach((input) => { input.disabled = false })
+    this.personInputTargets.forEach((input) => {input.disabled = false})
   }
 
   disablePersonInputs() {
-    this.personInputTargets.forEach((input) => { input.disabled = true })
+    this.personInputTargets.forEach((input) => {input.disabled = true})
   }
 }
