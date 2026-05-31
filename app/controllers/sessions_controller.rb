@@ -72,8 +72,10 @@ class SessionsController < ApplicationController
 
   # for cucumber testing only
   def backdoor
+    user = User.find_by_login(params[:username])
+    return head :not_found unless user
     terminate_session
-    start_new_session_for(User.find_by_login!(params[:username]))
+    start_new_session_for(user)
     redirect_back fallback_location: root_path
   end
 

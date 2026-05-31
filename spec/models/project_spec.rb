@@ -17,7 +17,7 @@ describe Project, type: :model do
   it { should have_many(:activities) }
 
   it { should validate_presence_of(:user) }
-  it { should validate_length_of(:name).is_at_least(1) }
+  it { should validate_length_of(:name).is_at_least(2) }
   it { should validate_length_of(:permalink).is_at_least(2) }
 
   describe "creating a project" do
@@ -37,20 +37,20 @@ describe Project, type: :model do
       @owner = FactoryBot.create(:user)
     end
 
-    it "should fail on create if the name is shorter than 1 chars" do
+    it "should fail on create if the name is shorter than 2 chars" do
       project = FactoryBot.build(:project, user: @owner, name: "")
       project.should be_invalid
-      project.errors[:name].should == [ "is too short (minimum is 1 characters)" ]
+      project.errors[:name].should == [ "is too short (minimum is 2 characters)" ]
     end
 
-    it "should allow existent projects to have a name at least 1 chars if they don't change it" do
-      project = FactoryBot.build(:project, user: @owner, name: "a", permalink: "abcdefg")
+    it "should allow existent projects to have a name at least 2 chars if they don't change it" do
+      project = FactoryBot.build(:project, user: @owner, name: "ab", permalink: "abcdefg")
       project.save(validate: false)
       project.should be_valid
     end
 
     it "should not allow permalinks with less than 5 chars" do
-      project = FactoryBot.build(:project, user: @owner, name: "a", permalink: "abcdefg")
+      project = FactoryBot.build(:project, user: @owner, name: "ab", permalink: "abcdefg")
       project.save(validate: false)
       project.should be_valid
       project.permalink = "2"

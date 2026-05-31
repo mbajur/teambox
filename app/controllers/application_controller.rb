@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   # include AuthenticatedSystem
   include Authentication
 
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
@@ -19,6 +21,13 @@ class ApplicationController < ActionController::Base
                 :add_chrome_frame_header
 
   private
+
+  def record_not_found
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false }
+      format.any { head :not_found }
+    end
+  end
 
   def confirmed_user?
     raise UnconfirmedUserError if !current_user&.confirmed_user?
@@ -112,7 +121,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    locale = authenticated? ? current_user.locale : (params[:locale] || user_agent_locale)
+    locale = authenticated? ? current_user&.locale : (params[:locale] || user_agent_locale)
     I18n.locale = (locale.present? && I18n.available_locales.include?(locale.to_sym)) ? locale : I18n.default_locale
   end
 
