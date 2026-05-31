@@ -1,0 +1,20 @@
+#pageInsertItems{ data: { controller: 'page-widget' } }
+  #pageInsertItemsBar{ data: { 'page-widget-target' => 'bar' } }
+    = link_to '#', class: 'add_button note_button', data: { action: 'page-widget#show', 'widget-type' => 'note' } do
+      %span= t('pages.buttons.new_note')
+    = link_to '#', class: 'add_button divider_button', data: { action: 'page-widget#show', 'widget-type' => 'divider' } do
+      %span= t('pages.buttons.new_divider')
+    = link_to '#', class: 'add_button upload_button', data: { action: 'page-widget#show', 'widget-type' => 'upload' } do
+      %span= t('pages.buttons.new_upload')
+  = form_for [project, page, page.new_note], html: { style: 'display: none', 'data-turbo' => 'false', 'data-page-widget-target' => 'form', 'data-widget-form' => 'note' } do |f|
+    = page_slot_fields
+    = note_fields(f)
+    .submit
+      = f.submit t('notes.new.submit'), 'data-disable-with' => t('pages.new.sending')
+      = link_to t('common.cancel'), '#', data: { action: 'page-widget#cancel' }
+  = form_for [project, page, page.build_divider], html: { style: 'display: none', 'data-turbo' => 'false', 'data-page-widget-target' => 'form', 'data-widget-form' => 'divider' } do |f|
+    = page_slot_fields
+    = divider_fields(f)
+    .submit
+      = f.submit t('dividers.new.submit'), 'data-disable-with' => t('pages.new.sending')
+      = link_to t('common.cancel'), '#', data: { action: 'page-widget#cancel' }

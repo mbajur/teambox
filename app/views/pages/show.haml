@@ -9,3 +9,11 @@
   .description=h @page.description
 
 = @page.content
+
+#slots
+  - @page.slots.with_widgets.each do |page_slot|
+    = render 'pages/slot', page_slot: page_slot, page: @page, project: @current_project
+
+#pageInsert{ style: 'display: none' }
+
+= page_buttons(@current_project, @page)
