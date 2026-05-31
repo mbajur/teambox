@@ -39,7 +39,11 @@ end
 
 When /^(?:|I )press the last "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    all(:button, button).last.click
+    begin
+      all(:button, button).last.click
+    rescue Capybara::Cuprite::ObsoleteNode
+      all(:button, button).last.click
+    end
   end
 end
 
@@ -53,7 +57,11 @@ end
 
 When /^(?:|I )follow last "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
-    all(:link, link).last.click
+    begin
+      all(:link, link).last.click
+    rescue Capybara::Cuprite::ObsoleteNode
+      all(:link, link).last.click
+    end
   end
 end
 
