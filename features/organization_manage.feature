@@ -3,9 +3,9 @@ Feature: Managing organizations
 
   Background:
     Given the following confirmed users exist
-      | login  | email                    | first_name | last_name |
-      | pablo  | pablo@teambox.com        | Pablo      | Villalba  |
-      | jordi  | jordi@teambox.com        | Jordi      | Romero    |
+      | login | email             | first_name | last_name |
+      | pablo | pablo@teambox.com | Pablo      | Villalba  |
+      | jordi | jordi@teambox.com | Jordi      | Romero    |
     And @mislav exists and is logged in
     And I am currently in the project ruby_rockstars
     And "jordi" is in the project called "Ruby Rockstars"
@@ -24,8 +24,8 @@ Feature: Managing organizations
 
   Scenario: I edit an organization
     When I fill in the following:
-      | organization_name       | War Industries |
-      | organization_permalink  | acmeind        |
+      | organization_name      | War Industries |
+      | organization_permalink | acmeind        |
     And I press "Save changes"
     And I go to the organizations page
     Then I should see "War Industries" within ".organizations"
@@ -111,7 +111,8 @@ Feature: Managing organizations
     Then I should see "You don't have permission to access or edit this organization."
 
   Scenario: I can't delete an organization if I'm not an admin
-    Then I follow "ACME"
+    When I go to the organizations page
+    And I follow "ACME" within ".organizations"
     And I should see "Delete"
     When "pablo" is an administrator in the organization called "ACME"
     And I am a participant in the organization called "ACME"
@@ -120,13 +121,15 @@ Feature: Managing organizations
     Then I should not see "Delete"
 
   Scenario: I can't delete an organization if it has projects
-    Then I follow "ACME"
+    When I go to the organizations page
+    And I follow "ACME" within ".organizations"
     And I follow "Delete"
     Then I should see "You can't delete an organization while it still has projects inside"
 
   Scenario: I can delete an organization if it has no projects
     When the organization called "ACME" has no projects
-    Then I follow "ACME"
+    And I go to the organizations page
+    And I follow "ACME" within ".organizations"
     And I follow "Delete"
     And I press "Delete this organization" confirming with OK
     Then I should see a notice: "You deleted the organization"
