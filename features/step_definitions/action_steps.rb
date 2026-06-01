@@ -3,9 +3,9 @@ When /^I wait for ([\d\.]+) seconds?$/ do |secs|
 end
 
 When /^I reveal all action menus$/ do
-  evaluate_script("$$('.actions_menu .extra').each(function(e){ e.style.display = 'block'; });")
+  evaluate_script("document.querySelectorAll('.actions_menu .extra').forEach(function(e){ e.style.display = 'block'; });")
 end
 
 When /^I hide all action menus$/ do
-  evaluate_script("$$('.actions_menu .extra').each(function(e){ e.style.display = null; });")
+  evaluate_script("document.querySelectorAll('.actions_menu .extra').forEach(function(e){ e.style.display = null; });")
 end

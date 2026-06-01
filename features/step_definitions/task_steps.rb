@@ -166,7 +166,7 @@ Then /^I select the year "([^\"]*)" with the date picker$/ do |year|
 end
 
 Then /^I click on the (\w+) date selector$/ do |field|
-  with_css_scope("#show_task_list div[id$=_#{field}_on]") do |node|
+  with_css_scope("div[id$=_#{field}_on]") do |node|
     node.find("span").click
   end
 end
@@ -212,13 +212,23 @@ Then /^I should see "([^"]*)" within the task actions$/ do |text|
 end
 
 When /^(?:|I )select "([^\"]*)" in the "([^\"]*)" calendar?$/ do |number, calendar|
-  with_css_scope("div[id$='_#{calender}_on']") do |node|
-    find(:css, "table div[contains(#{number})]").click
+  with_css_scope("div[id$='_#{calendar}_on']") do |node|
+    button = node.find('.sdp-cal.calendar_date_select, .calendar_date_select').all('button').find do |b|
+      b.text.strip == number &&
+        !b['class'].to_s.include?('sdp-prev-month') &&
+        !b['class'].to_s.include?('sdp-next-month')
+    end
+    button.click
   end
 end
 
 When /^(?:|I )select "([^\"]*)" in the calendar?$/ do |number|
-  find(:css, "table div[contains(#{number})]").click
+  button = find('.sdp-cal.calendar_date_select').all('button').find do |b|
+    b.text.strip == number &&
+      !b['class'].to_s.include?('sdp-prev-month') &&
+      !b['class'].to_s.include?('sdp-next-month')
+  end
+  button.click
 end
 
 Then /^(?:|I )should see "([^\"]*)" status change?$/ do |text|
