@@ -39,7 +39,10 @@ class TasksController < ApplicationController
       render :new, status: :unprocessable_entity
     else
       if @task.redirect_mode == "back"
-        redirect_back fallback_location: [ @current_project, @task ]
+        respond_to do |f|
+          f.turbo_stream
+          f.html { redirect_back fallback_location: [ @current_project, @task ] }
+        end
       else
         redirect_to_task
       end
@@ -144,7 +147,7 @@ class TasksController < ApplicationController
                                    :due_on,
                                    :urgent,
                                    :redirect_mode,
-                                   comments_attributes: [ :body, private_ids: [] ])
+                                   comments_attributes: [ :body, :is_private, private_ids: [] ])
     end
 
     def load_task_list

@@ -40,7 +40,7 @@
           - if other_people.empty?
             %p= I18n.t('comments.private.private_foreveralone')
           - else
-            - privacy_form = task_form ? parent_form : f
+            - privacy_form = f
             .option.normal
               %label
                 = privacy_form.radio_button :is_private, 0, checked: !target.is_private?, data: { action: 'private-box#switchToPublic' }

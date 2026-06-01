@@ -17,7 +17,7 @@
           .new_task{ data: { controller: :reveal, "reveal-hidden-class" => "invisible" } }
             = link_to t('tasks.link.new'), [:new, project, task_list, :task], data: { action: "reveal#toggle:prevent" }
             %div.invisible{ data: { "reveal-target" => "item" }}
-              = render 'tasks/form', :project => project, :task_list => task_list, :task => task_list.tasks.build, redirect_mode: :back
+              = render 'tasks/form', :project => project, :task_list => task_list, :task => task_list.tasks.build, redirect_mode: :back, form_id: dom_id(task_list, :new_task_form)
 
             %span{ :id => task_list_id(:archive_link,project,task_list), :style => (show_archive_link ? nil : 'display:none') }
               = t('common.or')

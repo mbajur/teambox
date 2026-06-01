@@ -44,7 +44,9 @@ export default class extends Controller {
       }]
     });
 
-    this.tribute.attach(this.bodyInputTarget);
+    if (this.hasBodyInputTarget) {
+      this.tribute.attach(this.bodyInputTarget);
+    }
   }
 
   convertingToTaskValueChanged() {

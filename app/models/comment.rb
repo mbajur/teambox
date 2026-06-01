@@ -109,6 +109,7 @@ class Comment < ApplicationRecord
   # 2h 30m (hours and minutes => hours with decimals)
   # 2:30 (hours and minutes => hours with decimals)
   def human_hours=(duration)
+    return self.hours = duration.to_f if duration.is_a?(Numeric)
     self.hours = if duration.blank?
       nil
     elsif duration =~ /(\d+)h[ ]*(\d+)m/i
