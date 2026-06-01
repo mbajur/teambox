@@ -1,4 +1,0 @@
-= turbo_stream.prepend task_list_id(:the_main_tasks, @current_project, @task_list) do
-  = render @task, project: @current_project, task_list: @task_list, editable: true
-= turbo_stream.replace dom_id(@task_list, :new_task_form) do
-  = render 'tasks/form', project: @current_project, task_list: @task_list, task: @task_list.tasks.build, redirect_mode: :back, form_id: dom_id(@task_list, :new_task_form)

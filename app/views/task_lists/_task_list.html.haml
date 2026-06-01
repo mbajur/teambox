@@ -14,8 +14,8 @@
           - if !task_list.archived
             = list_tasks_with_private(task_list,TaskFilter.new(scope: task_list.tasks.unarchived, filters: params[:f]).results,task_list_editable?(task_list,current_user))
         - if task_list_editable?(task_list,current_user)
-          .new_task{ data: { controller: :reveal, "reveal-hidden-class" => "invisible" } }
-            = link_to t('tasks.link.new'), [:new, project, task_list, :task], data: { action: "reveal#toggle:prevent" }
+          .new_task#new_task{ data: { controller: :reveal, "reveal-hidden-class" => "invisible" } }
+            = link_to t('tasks.link.new'), [:new, project, task_list, :task], data: { action: "reveal#show:prevent" }
             %div.invisible{ data: { "reveal-target" => "item" }}
               = render 'tasks/form', :project => project, :task_list => task_list, :task => task_list.tasks.build, redirect_mode: :back, form_id: dom_id(task_list, :new_task_form)
 

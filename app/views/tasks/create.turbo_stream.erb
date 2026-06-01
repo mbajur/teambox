@@ -1,0 +1,10 @@
+<turbo-stream action="prepend" target="<%= task_list_id(:the_main_tasks, @current_project, @task_list) %>">
+  <template>
+    <%= render @task, project: @current_project, task_list: @task_list, editable: true %>
+  </template>
+</turbo-stream>
+<turbo-stream action="replace" target="<%= dom_id(@task_list, :new_task_form) %>">
+  <template>
+    <%= render 'tasks/form', project: @current_project, task_list: @task_list, task: @task_list.tasks.build, redirect_mode: :back, form_id: dom_id(@task_list, :new_task_form) %>
+  </template>
+</turbo-stream>
