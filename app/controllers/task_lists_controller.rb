@@ -78,7 +78,7 @@ class TaskListsController < ApplicationController
       end
     else
       respond_to do |f|
-        f.html { render :new }
+        f.html { render :new, status: :unprocessable_entity }
         f.m    { render :new }
         f.js   { render layout: false }
       end
