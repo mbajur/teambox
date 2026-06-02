@@ -40,6 +40,15 @@ Before("@javascript") do
   Capybara.current_session.server&.reset_error!
 end
 
+# Reset the community-mode flag after every scenario so that community_mode.feature
+# does not leak `Rails.configuration.teambox.community = true` into subsequent
+# features.  The step "I am using the community version" sets it to true and
+# nothing ever resets it, causing organisation uniqueness validations to fail
+# in unrelated tests that run later.
+After do
+  Rails.configuration.teambox.community = nil
+end
+
 require 'capybara-screenshot/cucumber'
 
 Capybara::Screenshot.prune_strategy = :keep_last_run

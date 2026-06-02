@@ -11,12 +11,12 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "pat
 
 module WithinHelpers
   def with_scope(locator)
-    locator ? within(locator) { yield } : yield
+    locator ? within(locator, match: :first) { yield } : yield
   end
 
   def with_css_scope(selector)
     selector = selector.blank? ? nil : selector
-    scope = page.find(:css, selector) if selector
+    scope = page.first(:css, selector) if selector
     raise "Can't find selector '#{selector}' on page" if selector && !scope
     scope ? yield(scope) : yield(page)
   end
