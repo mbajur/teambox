@@ -309,7 +309,7 @@ class Task < RoleRecord
     # We should only ever execute this method once per callback cycle
     return if @saved_changes_to_comment
 
-    comment = comments.detect(&:new_record?) || comments.build_by_user(updating_user)
+    comment = comments.detect(&:new_record?) || comments.build { |c| c.user = updating_user }
 
     comment.project = project
     comment.created_at = @updating_date if @updating_date

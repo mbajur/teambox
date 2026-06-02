@@ -232,13 +232,7 @@ When /^(?:|I )select "([^\"]*)" in the calendar?$/ do |number|
 end
 
 Then /^(?:|I )should see "([^\"]*)" status change?$/ do |text|
-  if Capybara.current_driver == Capybara.javascript_driver
-    assert page.has_xpath?(XPath::HTML.content(text), visible: true)
-  elsif page.respond_to? :should
-    page.should have_content(text)
-  else
-    assert page.has_content?(text)
-  end
+  expect(page).to have_content(/#{Regexp.escape(text)}/i)
 end
 
 Then /^I should see "([^\"]+)" in the task thread title$/ do |msg|
