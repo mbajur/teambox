@@ -67,7 +67,7 @@ When /^(?:|I )follow last "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector
   with_scope(selector) do
     begin
       all(:link, link).last.click
-    rescue Capybara::Cuprite::ObsoleteNode
+    rescue Capybara::Cuprite::ObsoleteNode, Ferrum::CoordinatesNotFoundError
       all(:link, link).last.click
     end
   end
