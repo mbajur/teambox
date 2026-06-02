@@ -1,0 +1,14 @@
+- content_for :column do
+  = render 'shared/user_navigation'
+
+%h2= t(".title")
+
+.controller_teambox_datas
+  - if @teambox_data.exported?
+    %p
+      = t("teambox_datas.show_export.projects")
+      = @teambox_data.projects.map(&:name).join(", ")
+
+    = link_to t("teambox_datas.show_export.download"), download_teambox_data_path(@teambox_data)
+  - else
+    %p= t("teambox_datas.data.processing")

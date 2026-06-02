@@ -1,0 +1,14 @@
+- content_for :column do
+  = render 'shared/user_navigation'
+
+%h2= t(".title")
+
+.controller_teambox_datas
+  = link_to "Export", new_teambox_data_path
+
+  - if @exports.any?
+    %ul
+      - @exports.each do |export|
+        %li= link_to export.status_name.to_s.humanize, teambox_data_path(export)
+  - else
+    %p= t(".no_exports")

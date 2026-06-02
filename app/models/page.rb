@@ -139,8 +139,8 @@ class Page < RoleRecord
       xml.tag! "user-id",         user_id
       xml.tag! "name",            name
       xml.tag! "description",     description
-      xml.tag! "created-at",      created_at.to_s(:db)
-      xml.tag! "updated-at",      updated_at.to_s(:db)
+      xml.tag! "created-at",      created_at.to_fs(:db)
+      xml.tag! "updated-at",      updated_at.to_fs(:db)
       if Array(options[:include]).include? :slots
         slots.to_xml(options.merge({ skip_instruct: true, root: "slots" }))
       end
@@ -163,8 +163,8 @@ class Page < RoleRecord
       user_id: user_id,
       name: name,
       description: description,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       watchers: Array.wrap(watcher_ids),
       is_private: is_private
     }

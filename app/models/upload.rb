@@ -188,8 +188,8 @@ class Upload < RoleRecord
       xml.tag! "mime-type", asset_content_type
       xml.tag! "bytes", asset_file_size
       xml.tag! "download", url
-      xml.tag! "created-at", created_at.to_s(:db)
-      xml.tag! "updated-at", updated_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
+      xml.tag! "updated-at", updated_at.to_fs(:db)
       xml.tag! "user-id", user_id
       xml.tag! "comment-id", comment_id
     end
@@ -206,8 +206,8 @@ class Upload < RoleRecord
       mime_type: asset_content_type,
       bytes: asset_file_size,
       download: url,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       user_id: user_id,
       comment_id: comment_id,
       is_private: is_private
