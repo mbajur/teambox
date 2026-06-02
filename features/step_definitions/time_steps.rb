@@ -19,7 +19,7 @@ Given /^the time is "([^\"]*)"$/ do |time|
 end
 
 Given /^utc time is now (\d+) hours? and a bit before midnight$/ do |hours|
-  time_in_future = ((Date.today + 1).to_time_in_current_zone - (60 * 60 * hours.to_i)) + 60
+  time_in_future = ((Date.today + 1).in_time_zone - (60 * 60 * hours.to_i)) + 60
   Timecop.travel(time_in_future)
 end
 
