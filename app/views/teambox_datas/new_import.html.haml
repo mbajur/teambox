@@ -1,0 +1,17 @@
+- content_for :column do
+  = render 'shared/user_navigation'
+
+%h2= t("teambox_datas.new_import.title")
+
+.controller_teambox_datas
+  = form_tag create_import_teambox_datas_path, method: :post, multipart: true do
+    .service
+      %p= t("teambox_datas.import_fields.service")
+      = radio_button_tag "teambox_data[service]", "teambox", true, id: "teambox_data_service_teambox"
+      = label_tag "teambox_data_service_teambox", "Teambox"
+      = radio_button_tag "teambox_data[service]", "basecamp", false, id: "teambox_data_service_basecamp"
+      = label_tag "teambox_data_service_basecamp", "Basecamp"
+    .file
+      %p= t("teambox_datas.import_fields.select_file")
+      = file_field_tag "teambox_data[processed_data]", id: "teambox_data_processed_data"
+    .submit= submit_tag t("teambox_datas.new_import.submit")

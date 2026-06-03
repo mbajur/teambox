@@ -1285,6 +1285,7 @@ en:
       submit: Import
       projects: "Imported projects"
       import_error: "There was an error loading your import. Please try again."
+      import_errors: "There were errors with the information you supplied!"
     column:
       description: "Here you can move your data in and out of Teambox."
   oauth_clients:

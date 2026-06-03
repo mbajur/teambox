@@ -108,7 +108,7 @@ end
 When /^(?:|I )select the following(?: within "([^\"]*)")?:$/ do |selector, fields|
   with_scope(selector) do
     fields.rows_hash.each do |value, name|
-      When %(I select "#{name}" from "#{value}")
+      step %(I select "#{name}" from "#{value}")
     end
   end
 end

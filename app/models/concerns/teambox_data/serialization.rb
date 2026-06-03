@@ -125,4 +125,73 @@ module TeamboxData::Serialization
   def import_log(object, remark = "")
     Rails.logger.warn "Imported #{object} (#{remark})"
   end
+
+  # Basecamp metadata: build a users/projects/organizations structure from Basecamp XML
+  def metadata_basecamp(with_details = false)
+    bc_data = data
+    return { "users" => [], "projects" => [], "organizations" => [] } if bc_data.nil?
+
+    account = bc_data["account"] || {}
+    people = Array(account.dig("firm", "people"))
+    bc_users = people.map do |person|
+      username = "#{person['first_name']}#{person['last_name']}"
+      {
+        "username"   => username,
+        "first_name" => person["first_name"].to_s,
+        "last_name"  => person["last_name"].to_s,
+        "id"         => person["id"].to_s,
+        "email"      => person["email_address"].to_s
+      }
+    end
+
+    bc_projects = Array(account["projects"]).map do |project|
+      { "name" => Array(project["name"]).first, "id" => project["id"].to_s }
+    end
+
+    { "users" => bc_users, "projects" => bc_projects, "organizations" => [] }
+  end
+
+  # Import from Basecamp XML format
+  def unserialize_basecamp(object_maps, opts = {})
+    ActiveRecord::Base.transaction do
+      bc_data = data
+      account = bc_data["account"] || {}
+      people = Array(account.dig("firm", "people"))
+
+      # Build user map: "FrodoBaggins" -> local login
+      user_name_map = {}
+      people.each do |person|
+        bc_username = "#{person['first_name']}#{person['last_name']}"
+        local_login = object_maps["User"][bc_username]
+        next if local_login.blank?
+
+        local_user = User.find_by_login(local_login)
+        raise Exception, "User '#{local_login}' could not be resolved" if local_user.nil?
+        user_name_map[person["name"]] = local_user
+      end
+
+      # Org map
+      org_permalink = object_maps["Organization"].values.first || organization.try(:permalink)
+      target_org = Organization.find_by_permalink(org_permalink) || organization
+      raise Exception, "Organization could not be resolved" if target_org.nil?
+
+      imported_project_ids = []
+      Array(account["projects"]).each do |project_data|
+        project_name = Array(project_data["name"]).first
+        next if project_name.blank?
+
+        project = Project.new
+        project.name = project_name
+        project.permalink = project_name.parameterize
+        project.organization = target_org
+        project.user = self.user
+        project.save!
+
+        imported_project_ids << project.id
+        import_log(project, "Basecamp project #{project_name}")
+      end
+
+      self.projects = imported_project_ids
+    end
+  end
 end

@@ -4,7 +4,7 @@
 
 <% if @error %>
 <%= t('emailer.teamboxdata.data_export_failed') %>
-<%= teambox_data_url(@data) %>
+<%= teambox_data_url(@data.id) %>
 <% else %>
 <%= t('emailer.teamboxdata.data_exported') %>
 <%= Rails.configuration.teambox.amazon_s3 ? @data.processed_data.url : "http://#{Rails.configuration.teambox.app_domain}#{@data.processed_data.url}" %>

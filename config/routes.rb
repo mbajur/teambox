@@ -103,8 +103,13 @@ Rails.application.routes.draw do
   post  "/account/first_steps/hide" => "users#hide_first_steps"
 
   resources :teambox_datas, path: "/datas" do
+    collection do
+      get  :new_import
+      post :create_import
+    end
     member do
       get :download
+      patch :update
     end
   end
 

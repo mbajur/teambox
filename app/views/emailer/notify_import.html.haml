@@ -3,10 +3,10 @@
 
   %p= t('emailer.teamboxdata.hey', :user_name => h(@user.name))
   - if @error
-    %p= t('emailer.teamboxdata.data_import_failed') 
-    %div= link_to teambox_data_url(@data), teambox_data_url(@data)
+    %p= t('emailer.teamboxdata.data_import_failed')
+    %div= link_to teambox_data_url(@data.id), teambox_data_url(@data.id)
   - else
     %p= t('emailer.teamboxdata.data_imported')
-    %div= link_to teambox_data_url(@data), teambox_data_url(@data)
+    %div= link_to teambox_data_url(@data.id), teambox_data_url(@data.id)
 
   .footer{ :style => email_text(:small) }

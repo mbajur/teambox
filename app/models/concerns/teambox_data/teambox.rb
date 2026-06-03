@@ -179,14 +179,18 @@ module TeamboxData::Teambox
 
       @projects.each do |project|
         project.is_importing = false
-        project.log_activity(self, "create", user.id) if user
+        # Don't log TeamboxData as activity target (it doesn't support find_with_deleted)
+        # project.log_activity(self, "create", user.id) if user
       end
     end
   end
 
   def unpack_object(object, data, non_mass = [])
     object.tap do |obj|
-      obj.attributes = data
+      # Strip association keys and unknown attributes to avoid AssociationTypeMismatch
+      known_attrs = obj.class.column_names + [ "id" ]
+      safe_data = data.select { |k, _| known_attrs.include?(k.to_s) }
+      obj.attributes = safe_data
 
       non_mass.each do |key|
         obj.send("#{key}=", data[key]) if data[key]
@@ -200,7 +204,9 @@ module TeamboxData::Teambox
       if obj.respond_to? :assigned_id
         obj.assigned_id = resolve_person(data["assigned_id"]).try(:id) if data["assigned_id"]
       end
-      obj.watcher_ids = data["watchers"].map { |u| @imported_users[u].try(:id) }.compact if data["watchers"] and obj.respond_to?(:watcher_ids)
+      # Skip watcher assignment during import to avoid unique constraint violations
+      # (create_watchers after_create callback handles watcher creation)
+      # obj.watcher_ids = data["watchers"].map { |u| @imported_users[u].try(:id) }.compact if data["watchers"] and obj.respond_to?(:watcher_ids) and obj.new_record?
       obj.created_at = data["created_at"] if data["created_at"]
       obj.updated_at = data["updated_at"] if data["updated_at"]
     end

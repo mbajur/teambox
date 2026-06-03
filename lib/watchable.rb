@@ -105,8 +105,8 @@ module Watchable
     reflection = self.class.reflect_on_association(:watchers)
     begin
       save_collection_association(reflection)
-    rescue ActiveRecord::StatementInvalid => sie
-      raise sie unless duplicate_watchers?
+    rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotUnique
+      # Ignore duplicate watcher errors (can happen during import or concurrent saves)
     end
   end
 

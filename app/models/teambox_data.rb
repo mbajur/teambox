@@ -10,12 +10,14 @@ class TeamboxData < ActiveRecord::Base
   include TeamboxData::Serialization
   include TeamboxData::Attributes
   include TeamboxData::Teambox
+  include TeamboxData::Validations
 
   has_attached_file :processed_data,
     url: "/:data_type/:id/:basename.:extension",
     path: Rails.configuration.teambox.amazon_s3 ?
       ":data_type/:id/:filename" :
-      ":rails_root/:data_type/:id/:filename"
+      ":rails_root/:data_type/:id/:filename",
+    validate_media_type: false
 
   do_not_validate_attachment_file_type :processed_data
 
