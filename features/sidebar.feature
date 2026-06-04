@@ -25,5 +25,5 @@ Feature: I navigate using the new sidebar
     And I am in the project called "Ruby Rockstars"
     When I go to the projects page
     Then I should see the project "Ruby Rockstars"
-    When I follow "Ruby Rockstars"
+    When I follow "Ruby Rockstars" within ".nav_links"
     Then I should see "People & Permissions" within "#my_projects"
