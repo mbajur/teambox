@@ -102,6 +102,7 @@ class User < ApplicationRecord
   attr_accessor :activate, :old_password
 
   before_validation :sanitize_name
+  validate :old_password_correct, if: -> { password.present? && persisted? }
   before_destroy :rename_as_deleted
 
   before_create :init_user
@@ -414,5 +415,12 @@ class User < ApplicationRecord
         return nil
       end
       OAuth::Consumer.new(oauth_info.key, oauth_info.secret, GoogleCalendar::RESOURCES)
+    end
+
+    def old_password_correct
+      original_digest = password_digest_was || password_digest
+      if old_password.blank? || original_digest.blank? || !BCrypt::Password.new(original_digest).is_password?(old_password)
+        errors.add(:old_password, "is required")
+      end
     end
 end

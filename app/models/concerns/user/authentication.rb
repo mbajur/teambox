@@ -16,6 +16,14 @@ module User::Authentication
         u && u.authenticated?(password) ? u : nil
       end
     end
+
+    def password_digest(password, salt)
+      Digest::SHA1.hexdigest("--#{salt}--#{password}--")
+    end
+
+    def make_token
+      SecureRandom.hex(20)
+    end
   end
 
   def encrypt(password)
