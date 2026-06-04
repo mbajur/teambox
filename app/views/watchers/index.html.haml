@@ -1,0 +1,10 @@
+%h2 My Watch List
+- if @watchers.empty?
+  %p You are not watching anything.
+- else
+  %ul
+    - @watchers.each do |watcher|
+      %li
+        = watcher.watchable.name
+        %span.remove
+          = link_to "remove", unwatch_path(watch_id: watcher.id), data: { turbo_method: :post }
