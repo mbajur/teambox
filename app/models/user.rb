@@ -102,7 +102,7 @@ class User < ApplicationRecord
   attr_accessor :activate, :old_password
 
   before_validation :sanitize_name
-  validate :old_password_correct, if: -> { password_digest_changed? && persisted? }
+  validate :old_password_correct, if: -> { password_digest_changed? && persisted? && !activate }
   before_destroy :rename_as_deleted
 
   before_create :init_user

@@ -1,0 +1,11 @@
+%h2= t('.title')
+%p= t('.reset_your_password')
+
+= form_tag "/reset_passwords/#{@reset_password.id}", method: :patch do
+  %p
+    = label_tag 'user[password]', "Password"
+    = password_field_tag 'user[password]', nil, tabindex: 1
+  %p
+    = label_tag 'user[password_confirmation]', "Password confirmation"
+    = password_field_tag 'user[password_confirmation]', nil, tabindex: 2
+  = submit_tag t('.submit'), tabindex: 3
