@@ -51,6 +51,8 @@ class Upload < RoleRecord
   # validates_attachment_presence :asset, message: I18n.t("uploads.form.presence")
   # do_not_validate_attachment_file_type :asset
 
+  validate :asset_presence
+  validate :asset_size
   validate :check_page
 
   def copy_project_from_parent
@@ -65,6 +67,18 @@ class Upload < RoleRecord
   def check_page
     if page && (page.project_id != project_id)
       @errors.add :project, "is not valid"
+    end
+  end
+
+  def asset_presence
+    errors.add(:asset, I18n.t("uploads.form.presence")) unless asset.attached?
+  end
+
+  def asset_size
+    max_mb = Rails.configuration.teambox.asset_max_file_size.to_i
+    return unless asset.attached? && max_mb > 0
+    if asset.blob.byte_size > max_mb.megabytes
+      errors.add(:asset, I18n.t("uploads.form.max_size", mb: max_mb))
     end
   end
 
