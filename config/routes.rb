@@ -163,7 +163,7 @@ Rails.application.routes.draw do
     get "activities(.:format)" => "activities#show", :as => :activities, :method => :get
     get "activities/:id/show_more(.:format)" => "activities#show_more", :as => :show_more, :method => :get
 
-    get "move/:id" => "uploads#move", :via => :put, :as => :move_resource
+    match "move/:id" => "uploads#move", via: [ :get, :post ], as: :move_resource
 
     resources :uploads do
       member do

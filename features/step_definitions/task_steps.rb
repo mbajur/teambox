@@ -9,22 +9,19 @@ Given /^I have a task called "([^\"]*)"$/ do |name|
 end
 
 Given /^I have a task called "([^"]*)" with a comment including upload "([^"]*)"$/ do |task_name, file_name|
-  Given %(I have a task called "#{task_name}")
+  step %(I have a task called "#{task_name}")
   @comment = @task.comments.create body: "Something to say"
 
   path = File.join(Rails.root, "spec/fixtures/#{file_name}")
-  if File.exists?(path)
+  if File.exist?(path)
     @upload = FactoryBot.create(:upload, {
       asset: open(path),
-      asset_file_name: file_name,
-      asset_file_size: nil,
-      asset_content_type: nil,
       project: @current_project,
       comment: @comment
      })
 
   else
-    FactoryBot.create(:upload, asset_file_name: file_name, project: @current_project, comment: @comment)
+    FactoryBot.create(:upload, project: @current_project, comment: @comment)
   end
 end
 

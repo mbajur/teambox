@@ -1,0 +1,10 @@
+%h2= t('uploads.moveable.title')
+
+= form_tag project_move_resource_path(@current_project, @moveable, moveable_type: @moveable_type), method: :post do
+  = hidden_field_tag :moveable_type, @moveable_type
+  - if @moveable.parent_folder
+    - folder_options = [[t('uploads.moveable.to_parent'), @moveable.parent_folder.parent_folder_id]] + @moveable.parent_folder.folders.order(:name).map { |f| [f.name, f.id] }
+  - else
+    - folder_options = @current_project.folders.where(parent_folder_id: nil).order(:name).map { |f| [f.name, f.id] }
+  = select_tag :target_folder_id, options_for_select(folder_options)
+  = button_tag "Move", type: :submit

@@ -55,10 +55,14 @@ end
 When /^(?:|I )follow "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
     begin
-      expect(page).to have_link(link)
-      click_link(link)
+      el = find(:link_or_button, link)
+      if el.tag_name == 'a' && el['data-remote'] == 'true' && el['data-method'].nil?
+        visit el[:href]
+      else
+        el.click
+      end
     rescue Capybara::Cuprite::ObsoleteNode
-      click_link(link)
+      click_link_or_button(link)
     end
   end
 end

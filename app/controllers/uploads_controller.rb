@@ -17,17 +17,31 @@ class UploadsController < ApplicationController
   end
 
   def move
-    @moveable_type = params[:moveable_type]
-    @target_folder = @current_project.folders.find_by_id(params[:target_folder_id]) unless params[:target_folder_id].nil?
-    @target_folder_id = @target_folder.try(:id) || nil
+    @moveable_type = params[:moveable_type] || "upload"
+
+    if request.get?
+      @moveable = @current_project.send(@moveable_type.pluralize.to_sym).find(params[:id])
+      render :move_form, layout: false
+      return
+    end
+
+    @target_folder = @current_project.folders.find_by_id(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    @target_folder_id = @target_folder.try(:id)
     if @moveable = @current_project.send(@moveable_type.pluralize.to_sym).find_by_id(params[:id])
-       unless @moveable.update_attribute :parent_folder_id, @target_folder_id
-         flash.now[:error] = t("uploads.moveable.error.#{@moveable_type}")
-       end
+      old_parent_folder_id = @moveable.parent_folder_id
+      unless @moveable.update_attribute :parent_folder_id, @target_folder_id
+        flash.now[:error] = t("uploads.moveable.error.#{@moveable_type}")
+      end
     end
     respond_to do |format|
       format.js { render "move", layout: false }
-      format.any(:html, :m) { render :index }
+      format.any(:html, :m) do
+        if old_parent_folder_id
+          redirect_to project_folder_path(@current_project, old_parent_folder_id)
+        else
+          redirect_to project_uploads_path(@current_project)
+        end
+      end
     end
   end
 
