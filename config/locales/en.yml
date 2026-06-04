@@ -72,7 +72,7 @@ en:
     calendar: Calendar
     gantt_chart: Gantt Chart
     signup: Sign up
-    logged_out: You were logged out
+    logged_out: "You're now logged out"
     loading: Loading...
     download_as_csv: Download as CSV
     pagination: "Showing results from: "
@@ -516,7 +516,7 @@ en:
         content: Start planning your project with deadlines and deliverables by using tasks.
     primer:
       empty: "You don't own or belong to any projects yet."
-      create_first: Create your first project!
+      create_first: Create a Project
       define1_html: "Use projects to <b>collaborate</b> with groups of people: A website, organizing a party, client work..."
       define2_html: "You can create <b>as many projects as you wish</b> to share with different users online."
       item1_html: "<b>Create a project</b>, name it and <b>invite some contacts</b> to it."
@@ -1463,7 +1463,7 @@ en:
       title: There are no tasks due to show
     navigation:
       recent_activity: Recent activity
-      all_projects: Projects
+      all_projects: All Projects
       show_all_projects: Show all projects...
       new_project: + New Project
       conversations: Conversations

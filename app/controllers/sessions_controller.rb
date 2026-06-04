@@ -66,8 +66,8 @@ class SessionsController < ApplicationController
 
   def destroy
     terminate_session
-    # redirect_back_or_to goodbye_path
-    redirect_back fallback_location: goodbye_path
+    flash[:notice] = t('common.logged_out')
+    redirect_to new_session_path
   end
 
   # for cucumber testing only
