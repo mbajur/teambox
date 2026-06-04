@@ -25,8 +25,10 @@ Feature: Update a profile
     And I press "Update account"
     Then I should not see missing avatar image within ".column"
 
+  @ignore
   Scenario: Mislav fails to update his profile picture with blank
 
+  @ignore
   Scenario: Mislav fails to update his profile picture because its too big
 
   Scenario: Mislav updates his notifications
@@ -51,14 +53,19 @@ Feature: Update a profile
     Then I should see "User profile updated!"
     And I should see "mislavrocks"
 
+  @ignore
   Scenario: Mislav fails to update his username because its already in use
 
+  @ignore
   Scenario: Mislav fails to update his username with invalid format
 
+  @ignore
   Scenario: Mislav updates his card profile information
 
   # Given I follow "Profile Information"
   #   And I should see "Your Profile Settings" within "h2"
   #  When I follow "+ Add Phone Number"
   #    And I fill in "user_card_attributes_phone_numbers_attributes_1260832025948_name" with "123456789"
+
+  @ignore
   Scenario: Mislav fails to update his profile information
