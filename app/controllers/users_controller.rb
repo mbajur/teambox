@@ -259,6 +259,7 @@ class UsersController < ApplicationController
                                    :password_confirmation,
                                    :first_name,
                                    :last_name,
+                                   :biography,
                                    :first_day_of_week,
                                    :locale,
                                    :time_zone,
