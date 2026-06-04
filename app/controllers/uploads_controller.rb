@@ -160,7 +160,7 @@ class UploadsController < ApplicationController
 
     respond_to do |f|
       f.js { render layout: false }
-      # f.any(:html, :m)
+      f.any(:html, :m) { render layout: "application" }
     end
   end
 
