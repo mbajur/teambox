@@ -52,7 +52,7 @@ class UploadsController < ApplicationController
 
     if @downloadable.valid?
       @downloadable.send_public_download_email
-      flash[:notice] = t("downloadable.email.sent", downloadable: localized_downloadable_type(@downloadable), email: @downloadable.invited_user_email)
+      flash[:notice] = t("downloadable.email.sent", downloadable: t("downloadable.type.#{downloadable_type}"), email: @downloadable.invited_user_email)
     else
       flash[:error] = t("downloadable.email.not_sent", error: @downloadable.errors.full_messages.to_sentence)
     end

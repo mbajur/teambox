@@ -180,7 +180,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get "downloadable/:id/email_public" => "uploads#email_public", :via => :post, :as => :email_public_download
+    post "downloadable/:id/email_public" => "uploads#email_public", :as => :email_public_download
 
     get "uploads/folders/:id" => "uploads#index", :via => :get
     get "hooks/:hook_name" => "hooks#create", :as => :hooks, :via => :post

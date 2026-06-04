@@ -22,7 +22,7 @@ class Emailer < ActionMailer::Base
 
     def send_with_language(template, language, *args)
       I18n.with_locale(language) do
-        send(template, *args).deliver
+        send(template, *args).deliver_now
       end
     end
 

@@ -1,5 +1,5 @@
-%div[upload]{ :class => ['file_upload', cycle('alternate', '')] }
-  .header
+%div[upload]{ :class => ['file_upload', cycle('alternate', '')], data: { controller: 'upload-item' } }
+  .header{ data: { action: 'click->upload-item#toggleReference' } }
     .icon
       = image_tag file_icon_path(upload, '16px')
     .file
@@ -11,10 +11,10 @@
     .more
       [+]
 
-  .reference{ :style => 'display: none' }
+  .reference{ :style => 'display: none', data: { upload_item_target: 'reference' } }
     -# = link_to_upload upload, t('.download'), {:rel => nil}
     = link_to t('.download'), upload.asset
-    = link_to t('uploads.public_download.link.anchor'), public_download_project_upload_path(upload.project, upload), :rel => 'facebox', :title => t('uploads.public_download.link.title')
+    = link_to t('uploads.public_download.link.anchor'), public_download_project_upload_path(upload.project, upload), :title => t('uploads.public_download.link.title')
     - if can?(:update, upload) # and request.format != :m
       = link_to t('common.rename'), [:edit, upload.project, upload], :remote => true, :class => "link_rename"
       = link_to t('uploads.moveable.title'), project_move_resource_path(upload.project, upload), :class => "move_resource" if upload.moveable?
