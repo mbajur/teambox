@@ -53,3 +53,30 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  cucumber:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:create db:schema:load
+
+      - name: Run Cucumber features
+        env:
+          RAILS_ENV: test
+          CI: true
+        run: bundle exec cucumber --tags 'not @ignore' --format progress
+
