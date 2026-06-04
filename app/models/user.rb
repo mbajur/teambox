@@ -125,7 +125,7 @@ class User < ApplicationRecord
   end
 
   def clear_invites
-    # send_activation_email unless self.confirmed_user
+    send_activation_email unless self.confirmed_user
 
     if invitations = Invitation.where(email: email)
       for invitation in invitations

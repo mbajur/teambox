@@ -146,7 +146,7 @@ class UsersController < ApplicationController
   end
 
   def confirm_email
-    logout_keeping_session!
+    terminate_session
     if @user
       if @user.is_login_token_valid? params[:token]
         if @user.is_active?
@@ -155,7 +155,7 @@ class UsersController < ApplicationController
           flash[:success] = t("users.activation.activated")
           @user.activate!
           @user.expire_login_code!
-          self.current_user = @user
+          start_new_session_for @user
         end
       else
         flash[:error] = t("users.activation.invalid_html")
