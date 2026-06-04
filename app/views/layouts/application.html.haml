@@ -114,6 +114,7 @@
           .column#column
             = render 'shared/navigation'
             .view_sidebar
+              = render 'shared/first_steps' if current_user && current_user.show_badges && current_user.show_first_steps
               = yield :column
       = footer
     = hide_google_docs_if_not_configured

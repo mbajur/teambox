@@ -245,8 +245,8 @@ class UsersController < ApplicationController
   end
 
   def hide_first_steps
-    @current_user.write_setting "show_first_steps", false
-    head :ok
+    current_user.write_setting "show_first_steps", false
+    redirect_to projects_path
   end
 
   private

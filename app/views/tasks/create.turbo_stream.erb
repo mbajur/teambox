@@ -7,4 +7,10 @@
   <template>
     <%= render 'tasks/form', project: @current_project, task_list: @task_list, task: @task_list.tasks.build, redirect_mode: :back, form_id: dom_id(@task_list, :new_task_form) %>
   </template>
+</turbo-stream><% if current_user.show_badges && current_user.show_first_steps %>
+<turbo-stream action="replace" target="first_steps">
+  <template>
+    <%= render 'shared/first_steps' %>
+  </template>
 </turbo-stream>
+<% end %>

@@ -30,6 +30,6 @@ module Project::Callbacks
   end
 
   def update_user_stats
-    # user.increment_stat "projects" if user
+    user.increment_stat "projects" if user
   end
 end

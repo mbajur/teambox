@@ -134,6 +134,8 @@ class ProjectsController < ApplicationController
     @current_project.invite_emails = params[:project][:invite_emails]
     @current_project.invitations_locale = params[:invitations_locale]
     @current_project.send_invitations!
+
+    flash[:success] = t("projects.send_invites.success")
     redirect_to @current_project
   end
 

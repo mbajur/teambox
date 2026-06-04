@@ -153,7 +153,7 @@ class Page < RoleRecord
   end
 
   def update_user_stats
-    # user.increment_stat "pages" if user
+    user.increment_stat "pages" if user
   end
 
   def to_api_hash(options = {})

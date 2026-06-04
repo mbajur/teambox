@@ -1,0 +1,36 @@
+- stats = current_user.stats
+- has_project = stats["projects"].to_i > 0
+- has_invite = stats["invites"].to_i > 0
+- has_conversation = stats["conversations"].to_i > 0
+- has_task = stats["tasks"].to_i > 0
+- has_page = stats["pages"].to_i > 0
+- all_done = has_project && has_invite && has_conversation && has_task && has_page
+
+.first_steps#first_steps
+  %h2= t('first_steps.title')
+
+  - if has_project
+    %p= t('first_steps.steps.first_project.complete')
+  - if has_invite
+    %p= t('first_steps.steps.first_invite.complete')
+  - if has_conversation
+    %p= t('first_steps.steps.first_conversation.complete')
+  - if has_task
+    %p= t('first_steps.steps.first_task.complete')
+  - if has_page
+    %p= t('first_steps.steps.first_page.complete')
+
+  - if all_done
+    %p= t('first_steps.completed')
+  - elsif !has_project
+    %p= t('first_steps.steps.first_project.incomplete')
+  - elsif !has_invite
+    %p= t('first_steps.steps.first_invite.incomplete')
+  - elsif !has_conversation
+    %p= t('first_steps.steps.first_conversation.incomplete')
+  - elsif !has_task
+    %p= t('first_steps.steps.first_task.incomplete')
+  - elsif !has_page
+    %p= t('first_steps.steps.first_page.incomplete')
+
+  = button_to t('first_steps.close'), "/account/first_steps/hide", method: :post

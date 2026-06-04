@@ -613,6 +613,8 @@ en:
       explain_invitations: Choose who will have access to this project. You can add or remove people later.
       submit: Send invitations and start collaborating
       sending: Sending invitations...
+    send_invites:
+      success: "Invitations sent"
     edit:
       title_settings: General Settings for %{project}
       title_picture: Project Logo for %{project}
@@ -2191,4 +2193,25 @@ en:
       facebook:
         signup: "Join my Teambox so we can share projects and tasks online. Follow the link below this post on Facebook."
         project: "Join my '%{project}' project on Teambox so we can share tasks online. Follow the link below this post on Facebook"
+
+  first_steps:
+    title: "Your first steps in Teambox"
+    close: "[ Close this first steps guide ]"
+    completed: "Initiation complete"
+    steps:
+      first_project:
+        incomplete: "Create your first project"
+        complete: "You created your first project to get started!"
+      first_invite:
+        incomplete: "Invite your team to your projects"
+        complete: "You invited your team!"
+      first_conversation:
+        incomplete: "Post your first conversation"
+        complete: "Your first Conversation"
+      first_task:
+        incomplete: "Create your first task"
+        complete: "Your first Task"
+      first_page:
+        incomplete: "Create your first page"
+        complete: "Your first Page"
 

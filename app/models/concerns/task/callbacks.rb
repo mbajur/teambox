@@ -24,7 +24,7 @@ module Task::Callbacks
   end
 
   def update_user_stats
-    # user.increment_stat "tasks" if user
+    user.increment_stat "tasks" if user
   end
 
   def update_activities_privacy
