@@ -38,3 +38,7 @@ coverage/
 .kamal/secrets-common
 
 /config/credentials/production.key
+
+# Ignore import/export data generated during tests
+/imports/
+/exports/
