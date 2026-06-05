@@ -53,6 +53,37 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  rspec:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:create db:schema:load
+
+      - name: Run RSpec
+        env:
+          RAILS_ENV: test
+        run: bundle exec rspec --format progress
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/coverage.xml
+          flags: rspec
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
   cucumber:
     runs-on: ubuntu-latest
     strategy:

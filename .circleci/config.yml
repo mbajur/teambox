@@ -107,9 +107,10 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
+      # test (rspec) disabled - now runs on GitHub CI
+      # - test:
+      #     requires:
+      #       - build
       # cucumber disabled - now runs as parallel matrix on GitHub CI
       # - cucumber:
       #     requires:
