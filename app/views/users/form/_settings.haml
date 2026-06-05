@@ -10,7 +10,7 @@
     = f.text_field :email
   = errors_for user, :email
 
-#password_fields{ :style => 'display: none' }
+#password_fields
   .password.text_field
     = f.label :old_password, t('users.form.old_password')
     = f.password_field :old_password, :autocomplete => 'off'
@@ -30,11 +30,11 @@
 .first_day_of_week.select
   = f.label :first_day_of_week, t('users.form.first_day_of_week')
   = f.select :first_day_of_week, [[t('users.form.sunday'), 'sunday'],[t('users.form.monday'), 'monday']]
-    
+
 .language.select
   = f.label :locale, t('users.form.language')
   = f.select :locale, locale_select_values
-  
+
 .time_zone.select
   = f.label :time_zone, t('users.form.time_zone')
   = f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, :default => "Eastern Time (US & Canada)"

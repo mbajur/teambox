@@ -1,0 +1,7 @@
+user_info:
+  name: Charles
+  email: charles@teambox.com
+uid: charles@teambox.com
+credentials:
+  token: fake_token
+provider: google

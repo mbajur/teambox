@@ -1,19 +1,25 @@
 require "open-uri"
 class TeamboxData < ActiveRecord::Base
+  self.table_name = "teambox_datas"
+
   # include Immortal
 
   belongs_to :user
-  belongs_to :organization
+  belongs_to :organization, optional: true
   # concerned_with :serialization, :attributes, :teambox, :basecamp, :validations
-  extend TeamboxData::Serialization
-  extend TeamboxData::Attributes
-  extend TeamboxData::Teambox
+  include TeamboxData::Serialization
+  include TeamboxData::Attributes
+  include TeamboxData::Teambox
+  include TeamboxData::Validations
 
   has_attached_file :processed_data,
     url: "/:data_type/:id/:basename.:extension",
     path: Rails.configuration.teambox.amazon_s3 ?
       ":data_type/:id/:filename" :
-      ":rails_root/:data_type/:id/:filename"
+      ":rails_root/:data_type/:id/:filename",
+    validate_media_type: false
+
+  do_not_validate_attachment_file_type :processed_data
 
   before_validation :set_service, on: :create
   after_save  :post_check_state
@@ -170,10 +176,10 @@ class TeamboxData < ActiveRecord::Base
       status: status_name,
       user_id: user_id,
       processed_at: processed_at,
-      created_at: created_at.to_s(:api_time)
+      created_at: created_at.to_fs(:api_time)
     }
 
-    base[:processed_at] = processed_at.to_s(:api_time) if processed_at
+    base[:processed_at] = processed_at.to_fs(:api_time) if processed_at
     base[:organization_id] = organization_id if organization_id
     base[:project_ids] = project_ids if project_ids
     base[:type] = self.class.to_s if options[:emit_type]

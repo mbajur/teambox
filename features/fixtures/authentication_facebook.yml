@@ -1,0 +1,10 @@
+user_info:
+  name: Charles Barbier
+  first_name: Charles
+  last_name: Barbier
+  nickname: charles
+  email: charles@teambox.com
+uid: "1111853297"
+credentials:
+  token: fake_token
+provider: facebook

@@ -1,0 +1,4 @@
+= form_for [@organization, @task_list_template], :html => { :class => 'app_form new_task_list_template', data: { turbo: false, controller: 'nested-form', nested_form_wrapper_selector_value: '.nested-form-wrapper' } } do |f|
+  = f.object.errors.full_messages
+  = render 'task_list_templates/fields', :f => f
+  = f.submit t('.submit'), :'data-disable-with' => t('.sending')

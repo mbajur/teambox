@@ -46,8 +46,8 @@ module User::Conversations
       xml.tag! "username", login
       xml.tag! "time_zone", time_zone
       xml.tag! "biography", biography
-      xml.tag! "created-at", created_at.to_s(:db)
-      xml.tag! "updated-at", updated_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
+      xml.tag! "updated-at", updated_at.to_fs(:db)
       xml.tag! "avatar-url", avatar_or_gravatar_url(:thumb)
       xml.tag! "micro-avatar-url", avatar_or_gravatar_url(:micro)
     end

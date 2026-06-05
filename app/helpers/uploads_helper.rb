@@ -20,8 +20,12 @@ module UploadsHelper
     sizes = { thumb: [ 150, 150 ], small: [ 250, 250 ] }
     size = sizes[size]
 
-    url = size ? upload.asset.variant(resize_to_fit: size) : upload.asset.url
-    link_to image_tag(url), upload.asset
+    if upload.asset.representable?
+      url = size ? upload.asset.variant(resize_to_fit: size) : upload.asset
+      link_to image_tag(url), upload.asset
+    else
+      link_to upload.asset.filename, upload.asset
+    end
   end
 
   def page_upload_actions_link(page, upload)

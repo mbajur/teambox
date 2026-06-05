@@ -7,9 +7,9 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
   Background:
     Given @jordi exists and is logged in
     And the following confirmed users exist
-      | login  | email                    | first_name | last_name |
-      | pablo  | pablo@teambox.com        | Pablo      | Villalba  |
-      | saimon | saimon@teambox.com       | Saimon     | Moore     |
+      | login  | email              | first_name | last_name |
+      | pablo  | pablo@teambox.com  | Pablo      | Villalba  |
+      | saimon | saimon@teambox.com | Saimon     | Moore     |
     And @pablo is currently in the project ruby_rockstars
     And I am an administrator in the organization called "ACME"
     And "pablo" is a participant in the organization called "ACME"
@@ -76,7 +76,7 @@ Feature: Public sites for organizations. Allow to view an entrance page and log 
     When I follow "Ruby Rockstars"
     And I follow "View threads expanded"
     And I fill in the last comment box with "Hammertime"
-    And I press "Save"
+    And I press the last "Save"
     And I wait for 1 second
     Then I should see "You are not authorized to access this page."
 

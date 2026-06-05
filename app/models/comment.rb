@@ -109,6 +109,7 @@ class Comment < ApplicationRecord
   # 2h 30m (hours and minutes => hours with decimals)
   # 2:30 (hours and minutes => hours with decimals)
   def human_hours=(duration)
+    return self.hours = duration.to_f if duration.is_a?(Numeric)
     self.hours = if duration.blank?
       nil
     elsif duration =~ /(\d+)h[ ]*(\d+)m/i
@@ -240,12 +241,11 @@ class Comment < ApplicationRecord
 
   def add_target_watchers!
     if target.respond_to?(:add_watchers)
-      can_mention_watchers = true
-
       # Allow the owner to change the privacy status
       if target.respond_to?(:is_private)
-        target.is_private = self.is_private if target_belongs_to_commenter? && @is_private_set
-        if target.is_private && target_belongs_to_commenter? && @private_ids && @is_private_set
+        target.is_private = self.is_private if target_belongs_to_commenter? && is_private_change?
+
+        if target.is_private && target_belongs_to_commenter? && @private_ids && (@is_private_set || target.previously_new_record?)
           target.set_private_watchers(@private_ids)
         elsif target.is_private
           target.add_watchers([ target.user ])

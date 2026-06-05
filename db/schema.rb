@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_14_103517) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_06_133927) do
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -442,6 +452,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_103517) do
     t.integer "account_type", default: 0
   end
 
+  create_table "task_list_template_tasks", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "task_list_template_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_list_template_id"], name: "index_task_list_template_tasks_on_task_list_template_id"
+  end
+
   create_table "task_list_templates", force: :cascade do |t|
     t.string "name"
     t.integer "organization_id"
@@ -645,4 +664,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_103517) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "task_list_template_tasks", "task_list_templates"
 end

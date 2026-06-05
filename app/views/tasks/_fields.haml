@@ -1,0 +1,61 @@
+- if f.object.new_record?
+  %h3= t('.title')
+  %p= t('.task')
+
+.name.text_field
+  = f.label :name, t('.name_html')
+  = f.text_field :name, :autofocus => %w[new edit].include?(action_name) || nil
+
+- if f.object.new_record?
+  %p.optional= t('.optional')
+
+  - f.object.comments.build unless f.object.comments.any?
+  = f.fields_for :comments do |comment_fields|
+    .body.text_field
+      = comment_fields.label :body, t('.body_html')
+      = comment_fields.text_area :body, :rows => 3, data: { 'comment-target' => 'bodyInput' }
+    .extra
+      .upload_area
+        %p= t('uploads.new.select_a_file')
+        - comment_fields.object.uploads.build unless comment_fields.object.uploads.any?
+        = comment_fields.fields_for :uploads do |uploads|
+          = uploads.file_field :asset, :id => 'upload_file'
+      .add_watchers_box{ :style => 'display: none' }
+        %p= t('comments.watchers.explain')
+      .private_options.invisible{ 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => 'false' }
+        .private_users
+          - other_people = Current.projects_and_people.people_for_project(project).where.not(user_id: current_user.id)
+          - unless other_people.empty?
+            .option.normal
+              %label
+                = f.radio_button :is_private, 0, checked: true, data: { action: 'private-box#switchToPublic' }
+                = I18n.t('comments.private.public')
+            .option.private
+              %label
+                = f.radio_button :is_private, 1, checked: false, data: { action: 'private-box#switchToPrivate' }
+                = I18n.t('comments.private.private')
+            %div.invisible{ data: { 'private-box-target' => 'privateContent', controller: 'checkbox-select-all' } }
+              %br
+              %input{ type: 'hidden', name: "#{comment_fields.object_name}[private_ids][]", value: '', data: { 'private-box-target' => 'personInput' } }
+              %div{ class: 'private_all' }
+                %input{ id: "new_task_private_all", name: "comment[all_private]", type: 'checkbox', value: 'true', data: { 'checkbox-select-all-target' => 'checkboxAll' } }
+                %label{ for: "new_task_private_all" }= I18n.t('comments.private.all')
+              - other_people.each do |person|
+                %div{ class: 'private_user' }
+                  %input{ id: "new_task_private_#{person.id}", name: "#{comment_fields.object_name}[private_ids][]", type: 'checkbox', value: person.user_id, checked: false, data: { 'private-box-target' => 'personInput', 'checkbox-select-all-target' => 'checkbox' } }
+                  %label{ for: "new_task_private_#{person.id}" }= person.name
+      .actions
+        .attach
+          %span= t('comments.fields.attach') + ": "
+          = link_to t('uploads.comment_upload_link'), '#uploads', :class => 'attach_icon hoverable', :title => "Attach a file"
+          = render 'google_docs/form', :f => comment_fields
+          = link_to "Watchers", '#watchers', :class => 'add_watchers hoverable', :title => "Notify people"
+          = link_to "Privacy", '#privacy', :class => 'private_switch hoverable', :title => "Control who can see this element", data: { action: 'click->comment#togglePrivacy' }
+
+  .assigned_to.text_field
+    = f.label :assigned_id, t('comments.new.assigned_to')
+    = f.select :assigned_id, options_for_projects_people(@current_project), { include_blank: true }
+
+  .pick_date
+    = f.label :due_on, t('.due_on_html')
+    = date_picker(f, :due_on)

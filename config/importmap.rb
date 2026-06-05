@@ -3,6 +3,20 @@
 pin "application"
 pin "@rails/ujs", to: "https://cdn.jsdelivr.net/npm/@rails/ujs@7.1.3-4/+esm"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
-pin "@hotwired/stimulus", to: "stimulus.min.js"
+pin "@hotwired/stimulus", to: "@hotwired--stimulus.js" # @3.2.2
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
+pin "i18n-js", to: "https://esm.sh/i18n-js"
+pin "bignumber.js", to: "https://esm.sh/bignumber.js"
+pin_all_from "app/javascript/utils", under: "utils"
 pin_all_from "app/javascript/controllers", under: "controllers"
+pin "@stimulus-components/sortable", to: "@stimulus-components--sortable.js" # @5.0.2
+pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
+pin "sortablejs" # @1.15.6
+pin "@stimulus-components/auto-submit", to: "@stimulus-components--auto-submit.js" # @6.0.0
+pin "stimulus-datepicker" # @1.0.9
+pin "@stimulus-components/checkbox-select-all", to: "@stimulus-components--checkbox-select-all.js" # @6.1.0
+pin "tributejs" # @5.1.3
+pin "trix"
+pin "@rails/actiontext", to: "actiontext.esm.js"
+pin "@stimulus-components/rails-nested-form", to: "@stimulus-components--rails-nested-form.js" # @5.0.0
+pin "@stimulus-components/reveal", to: "@stimulus-components--reveal.js" # @5.0.0

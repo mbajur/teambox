@@ -1,0 +1,27 @@
+%h2 Time Tracking
+
+= form_with url: time_path, method: :get, data: { controller: 'auto-submit' } do |f|
+  .hours_filters
+    = f.select :org_filter,
+        @organizations.map { |o| [o.name, o.id] },
+        { include_blank: 'All Organizations', selected: params[:org_filter] },
+        id: 'hours_organization_filter_assigned', data: { action: 'auto-submit#submit' }
+    = f.select :proj_filter,
+        @projects.map { |p| [p.name, p.id] },
+        { include_blank: 'All Projects', selected: params[:proj_filter] },
+        id: 'hours_project_filter_assigned', data: { action: 'auto-submit#submit' }
+
+.hours_report
+  - if @comments.any?
+    - @comments.each do |comment|
+      .hour_entry
+        %span.hours= human_hours(comment.hours)
+        - if comment.target.present?
+          %span.task= comment.target.name
+        %span.project= comment.project.name
+        %span.user= comment.user.name
+    .hours_total
+      Total:
+      %strong= human_hours(@total_hours)
+  - else
+    %p No tracked hours found.

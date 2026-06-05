@@ -1,17 +1,21 @@
 - content_for :column do
 
   - if pages.any?
-    #column_pages.pages{:reorder_url => resort_project_pages_path(@current_project)}
+    %turbo-frame#column_pages.pages
       %h2
         = t('.all_pages')
         - if can? :make_pages, project
-          %a#page_reorder{:href => '#'}= t('.reorder')
-          %a#page_reorder_done{:href => '#', :style => 'display:none'}= t('.reorder_done')
-      - for page in pages
-        .page{ :id => "sidebar_page_#{page.id}", :class => "#{ 'active' if current_target == page }" }
+          - if params[:reorder]
+            %a#page_reorder_done{:href => url_for(request.query_parameters.without(:reorder))}= t('.reorder_done')
+          - else
+            %a#page_reorder{:href => url_for(reorder: 1)}= t('.reorder')
+
+      .pages_list{class: class_names('reordering' => params[:reorder]), 'data-controller' => 'sortable', 'data-sortable-resource-name-value' => 'page', 'data-sortable-handle-value' => '.drag'}
+        - for page in pages
+          .page{ :id => "sidebar_page_#{page.id}", :class => "#{ 'active' if current_target == page }", data: { 'sortable-update-url' => resort_project_page_path(id: page.to_param) } }
+            .title
+              = drag_image
+              = link_to page, project_page_path(@current_project, page), data: { turbo_frame: '_top' }
+        .page
           .title
-            = drag_image
-            = link_to page, project_page_path(@current_project, page)
-      .page
-        .title
-          = link_to t('pages.index.new_page'), new_project_page_path, :class => 'new'
+            = link_to t('pages.index.new_page'), new_project_page_path, :class => 'new', data: { turbo_frame: '_top' }

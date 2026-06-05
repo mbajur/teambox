@@ -1,2 +1,5 @@
-.el= link_to t('shared.collapsed_mode'), "#", :class => 'collapsed_mode'
-.el{ :style => 'display: none' }= link_to t('shared.expanded_mode'), "#", :class => 'expanded_mode'
+%div{ data: { controller: 'threads-collapse-toggle-btn', 'threads-collapse-toggle-btn-collapsed-value' => true } }
+  .el.invisible{ data: { 'threads-collapse-toggle-btn-target' => 'collapseBtn'} }
+    = link_to t('shared.collapsed_mode'), "#", :class => 'collapsed_mode', data: { action: 'click->threads-collapse-toggle-btn#collapse' }
+  .el{ data: { 'threads-collapse-toggle-btn-target' => 'expandBtn'} }
+    = link_to t('shared.expanded_mode'), "#", :class => 'expanded_mode', data: { action: 'click->threads-collapse-toggle-btn#expand' }

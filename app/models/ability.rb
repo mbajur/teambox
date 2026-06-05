@@ -26,8 +26,7 @@ class Ability
 
     can :update, Comment do |comment|
       return false unless api_write?(user)
-      comment.user_id == user.id and
-        Time.now < 15.minutes.since(comment.created_at)
+      comment.user_id == user.id and Time.now < 15.minutes.since(comment.created_at)
     end
 
     can :destroy, Comment do |comment|
@@ -189,10 +188,6 @@ class Ability
       api_read?(user) && private_access?(user, object)
     end
 
-    can :show, [ Divider, Note ] do |object|
-      api_read?(user) && private_access?(user, object.page)
-    end
-
     can :show, [ Conversation, Task ] do |object|
       api_read?(user) && private_access?(user, object)
     end
@@ -218,7 +213,7 @@ class Ability
       api_read?(user) && owner?(user, object)
     end
 
-    can :update_privacy, [ Conversation, Task ] do |object|
+    can :update_privacy, [ Conversation, Task, Page ] do |object|
       object.user_id == user.id
     end
   end

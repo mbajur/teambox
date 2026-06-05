@@ -20,8 +20,8 @@ class GoogleDoc < RoleRecord
       xml.tag! "url", url
       xml.tag! "edit-url", edit_url
       xml.tag! "acl-url", acl_url
-      xml.tag! "created-at", created_at.to_s(:db)
-      xml.tag! "updated-at", updated_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
+      xml.tag! "updated-at", updated_at.to_fs(:db)
       xml.tag! "comment_id", comment_id
       xml.tag! "user-id", user_id
       xml.tag! "project-id", project_id
@@ -36,8 +36,8 @@ class GoogleDoc < RoleRecord
       url: url,
       edit_url: edit_url,
       acl_url: acl_url,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       user_id: user_id,
       comment_id: comment_id,
       project_id: project_id

@@ -97,9 +97,9 @@ Feature: Invite a user to a project
     Then "pablo@teambox.com" should receive an email
     And  "jordi@teambox.com" should receive an email
 
-  Scenario: Mislav leaves a project
+  # Scenario: Mislav leaves a project
 
-  Scenario: Mislav resends invitation email
+  # Scenario: Mislav resends invitation email
 
   Scenario: Mislav deletes an invitation that hasnt been accepted
     Given I am logged in as @mislav

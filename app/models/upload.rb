@@ -47,10 +47,12 @@ class Upload < RoleRecord
   #                                              mb: Rails.configuration.teambox.asset_max_file_size.to_i)
 
   # validates_format_of :asset_file_name, with: /\A[^\/]+\z/, allow_blank: false, message: "Invalid filename"
-  validates_format_of :invited_user_email, with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, allow_nil: true
+  validates_format_of :invited_user_email, with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, allow_nil: true
   # validates_attachment_presence :asset, message: I18n.t("uploads.form.presence")
   # do_not_validate_attachment_file_type :asset
 
+  validate :asset_presence
+  validate :asset_size
   validate :check_page
 
   def copy_project_from_parent
@@ -65,6 +67,18 @@ class Upload < RoleRecord
   def check_page
     if page && (page.project_id != project_id)
       @errors.add :project, "is not valid"
+    end
+  end
+
+  def asset_presence
+    errors.add(:asset, I18n.t("uploads.form.presence")) unless asset.attached?
+  end
+
+  def asset_size
+    max_mb = Rails.configuration.teambox.asset_max_file_size.to_i
+    return unless asset.attached? && max_mb > 0
+    if asset.blob.byte_size > max_mb.megabytes
+      errors.add(:asset, I18n.t("uploads.form.max_size", mb: max_mb))
     end
   end
 
@@ -86,31 +100,15 @@ class Upload < RoleRecord
   end
 
   def rename_asset(new_file_name)
-    styles = [ :original ] + self.asset.styles.keys
-    original_paths = Hash[styles.map do |style|
-      if self.asset.exists?(style)
-        [ style, self.asset.path(style) ]
-      end
-    end.compact]
-
-    if original_paths.empty?
-      self.errors.add(:base, "Cannot rename asset: no files found")
-      false
-    elsif !self.update_attributes(asset_file_name: new_file_name)
-      false
+    if asset.attached?
+      asset.blob.update!(filename: new_file_name)
+      update(asset_file_name: new_file_name)
     else
-      original_paths.each do |style, old_path|
-        new_path = File.join(File.dirname(old_path), new_file_name)
-        if Rails.configuration.teambox.amazon_s3
-          AWS::S3::S3Object.rename(old_path, new_path, self.asset.bucket_name)
-        else
-          FileUtils.mv(old_path, new_path)
-        end
-      end
-      true
+      errors.add(:base, "Cannot rename asset: no files found")
+      false
     end
-  rescue Errno::ENOENT, AWS::S3::S3Exception => exc
-    self.errors.add(:base, "Error renaming asset: [#{exc.class.name}] #{exc}")
+  rescue => exc
+    errors.add(:base, "Error renaming asset: [#{exc.class.name}] #{exc}")
     false
   end
 
@@ -188,8 +186,8 @@ class Upload < RoleRecord
       xml.tag! "mime-type", asset_content_type
       xml.tag! "bytes", asset_file_size
       xml.tag! "download", url
-      xml.tag! "created-at", created_at.to_s(:db)
-      xml.tag! "updated-at", updated_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
+      xml.tag! "updated-at", updated_at.to_fs(:db)
       xml.tag! "user-id", user_id
       xml.tag! "comment-id", comment_id
     end
@@ -206,8 +204,8 @@ class Upload < RoleRecord
       mime_type: asset_content_type,
       bytes: asset_file_size,
       download: url,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       user_id: user_id,
       comment_id: comment_id,
       is_private: is_private

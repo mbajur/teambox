@@ -10,6 +10,9 @@ class Page < RoleRecord
   has_many :slots, -> { order(position: :asc) }, class_name: "PageSlot", dependent: :delete_all
 
   friendly_id :name, use: :scoped, scope: :project_id, slug_column: :permalink
+  positioned on: :project
+
+  has_rich_text :content
 
   attr_accessor :suppress_activity
   attr_accessor :updating_user
@@ -93,30 +96,6 @@ class Page < RoleRecord
      end
   end
 
-  def divided_slots
-    groups = []
-    divider = nil
-    items = []
-    slots.each do |slot|
-      if slot.rel_object_type == "Divider"
-        if divider or items.length > 0
-          groups << [ divider, items ]
-          items = []
-        end
-        divider = slot
-      else
-        items << slot
-      end
-    end
-
-    # Final group
-    if divider or items.length > 0
-      groups << [ divider, items ]
-    end
-
-    groups
-  end
-
   def log_create
     project.log_activity(self, "create")
   end
@@ -160,8 +139,8 @@ class Page < RoleRecord
       xml.tag! "user-id",         user_id
       xml.tag! "name",            name
       xml.tag! "description",     description
-      xml.tag! "created-at",      created_at.to_s(:db)
-      xml.tag! "updated-at",      updated_at.to_s(:db)
+      xml.tag! "created-at",      created_at.to_fs(:db)
+      xml.tag! "updated-at",      updated_at.to_fs(:db)
       if Array(options[:include]).include? :slots
         slots.to_xml(options.merge({ skip_instruct: true, root: "slots" }))
       end
@@ -174,7 +153,7 @@ class Page < RoleRecord
   end
 
   def update_user_stats
-    # user.increment_stat "pages" if user
+    user.increment_stat "pages" if user
   end
 
   def to_api_hash(options = {})
@@ -184,8 +163,8 @@ class Page < RoleRecord
       user_id: user_id,
       name: name,
       description: description,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       watchers: Array.wrap(watcher_ids),
       is_private: is_private
     }

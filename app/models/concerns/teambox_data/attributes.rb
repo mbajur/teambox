@@ -11,7 +11,6 @@ module TeamboxData::Attributes
   EXPORT_STATUSES = EXPORT_STATUS_NAMES.each_with_index.each_with_object({}) { |(name, code), all| all[name] = code }
 
   included do
-    attr_accessor :data
     attr_accessor :import_data
 
     serialize :project_ids, coder: JSON
@@ -90,7 +89,8 @@ module TeamboxData::Attributes
             ActiveSupport::JSON.decode f.read
           end
         end
-      rescue
+      rescue => e
+        Rails.logger.error "TeamboxData#data failed: #{e.class}: #{e.message} path=#{processed_data.path}"
         nil
       end
     else

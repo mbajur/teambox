@@ -1,0 +1,43 @@
+- content_for :column do
+  = render 'shared/user_navigation'
+
+%h2= t(".title")
+
+.controller_teambox_datas
+  - if @teambox_data.type_name == :import
+    - if @teambox_data.imported?
+      %p= t("teambox_datas.show_import.projects")
+      %ul
+        - @teambox_data.projects.each do |project|
+          %li= project.name
+    - elsif @teambox_data.status_name == :mapping
+      - if @teambox_data.data.nil?
+        %p= t("teambox_datas.show_import.import_error")
+      - else
+        - if @teambox_data.errors.any?
+          %ul.errors
+            - @teambox_data.errors.full_messages.each do |msg|
+              %li= msg
+        = form_tag teambox_data_path(@teambox_data), method: :patch do
+          - @teambox_data.users.uniq { |u| u['username'] }.each do |user|
+            - display = "#{user['first_name']} #{user['last_name']} (@#{user['username']})"
+            - field_name = "teambox_data[user_map][#{user['username']}]"
+            - current_val = @teambox_data.user_map[user['username']].to_s
+            .user-field
+              = label_tag field_name.parameterize(separator: '_'), display
+              = text_field_tag field_name, current_val, id: field_name.parameterize(separator: '_')
+          .org-field
+            = label_tag "teambox_data_organization_id", t("teambox_datas.import_fields.in_organization")
+            = select_tag "teambox_data[organization_id]", options_from_collection_for_select(current_user.admin_organizations, :id, :name, @teambox_data.organization_id), include_blank: true, id: "teambox_data_organization_id"
+          .submit= submit_tag t("teambox_datas.show_import.submit")
+    - elsif @teambox_data.status_name == :uploading && @teambox_data.processed_data_file_name.present?
+      %p= t("teambox_datas.show_import.import_errors")
+    - else
+      %p= t("teambox_datas.data.processing")
+  - elsif @teambox_data.exported?
+    %p
+      = t("teambox_datas.show_export.projects")
+      = @teambox_data.projects.map(&:name).join(", ")
+    = link_to t("teambox_datas.show_export.download"), download_teambox_data_path(@teambox_data)
+  - else
+    %p= t("teambox_datas.data.processing")

@@ -1,10 +1,6 @@
 module User::Badges
   extend ActiveSupport::Concern
 
-  included do
-    attr_accessor :show_first_steps, :show_badges
-  end
-
   def badges
     settings["badges"] || []
   end

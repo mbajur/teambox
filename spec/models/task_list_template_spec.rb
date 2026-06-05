@@ -4,6 +4,7 @@ describe TaskListTemplate, type: :model do
   subject { FactoryBot.create(:task_list_template) }
 
   it { should belong_to(:organization) }
+  it { should have_many(:tasks) }
   it { should validate_length_of(:name).is_at_least(1).is_at_most(255) }
   xit { should validate_presence_of(:name) }
 
@@ -22,21 +23,20 @@ describe TaskListTemplate, type: :model do
     end
   end
 
-  it "should return an empty array if empty" do
-    template = FactoryBot.create(:task_list_template, tasks: nil)
-    template.tasks.should == []
-  end
-
-  it "should return an array of titles" do
+  it "should return an empty collection if no tasks" do
     template = FactoryBot.create(:task_list_template)
-    template.tasks.class.should == Array
-    template.tasks.each { |t| t.class.should == Array and t.size.should == 1 }
+    template.tasks.destroy_all
+    template.tasks.reload.should be_empty
   end
 
-  it "should contain task comments if provided" do
+  it "should return TaskListTemplateTask objects" do
+    template = FactoryBot.create(:task_list_template)
+    template.tasks.each { |t| t.class.should == TaskListTemplateTask }
+  end
+
+  it "should contain task descriptions if provided" do
     template = FactoryBot.create(:complete_task_list_template)
-    template.tasks.class.should == Array
-    template.tasks.each { |t| t.class.should == Array and t.size.should == 2 }
+    template.tasks.each { |t| t.description.should_not be_nil }
   end
 
   describe "creating task lists" do
@@ -48,13 +48,13 @@ describe TaskListTemplate, type: :model do
     it "should create a task list from a template without comments" do
       template = FactoryBot.create :task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user)
-      list.tasks.collect { |t| [ t.name ] }.should == template.tasks
+      list.tasks.collect { |t| t.name }.should == template.tasks.collect { |t| t.name }
     end
 
     it "should create a task list with comments from a complete template" do
       template = FactoryBot.create :complete_task_list_template, organization: @project.organization
       list = template.create_task_list(@project, @user).reload
-      list.tasks.collect { |t| [ t.name, t.comments.first.try(:body) ] }.should == template.tasks
+      list.tasks.collect { |t| [ t.name, t.comments.first.try(:body) ] }.should == template.tasks.collect { |t| [ t.name, t.description ] }
     end
 
     it "should set the correct user" do

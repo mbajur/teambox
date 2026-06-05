@@ -1,0 +1,19 @@
+%template{ 'data-nested-form-target' => "template" }
+  = f.fields_for :tasks, TaskListTemplateTask.new, child_index: 'NEW_RECORD' do |task|
+    = render 'task_fields', task: task
+
+.name.text_field
+  .label
+    = f.label :name, t('.name')
+  = f.text_field :name
+
+%h5= t('.tasks')
+= f.fields_for :tasks do |task|
+  = render 'task_fields', task: task
+
+%div{ 'data-nested-form-target' => "target"}
+
+%button{ type: "button", "data-action" => "nested-form#add" }
+  = t('.add_task')
+
+%br

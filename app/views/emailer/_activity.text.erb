@@ -7,11 +7,4 @@
 <%= project_page_url(@project, activity.target) %>
 
 <%= activity.target.description %>
-<% when Note -%>
-
-<%= t("emailer.notify.activity.#{activity.action_type.downcase}.body", :name => activity.user.name, :page => activity.target.page.name) %>
-<%= project_page_url(@project, activity.target.page.target) %>
-
-<%= activity.target.name %>:
-<%= activity.target.body %>
 <% end -%>

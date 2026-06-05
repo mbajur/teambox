@@ -155,6 +155,6 @@ class Invitation < RoleRecord
   end
 
   def update_user_stats
-    # user.increment_stat("invites") if user
+    user.increment_stat("invites") if user
   end
 end

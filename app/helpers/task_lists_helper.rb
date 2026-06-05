@@ -3,26 +3,50 @@ module TaskListsHelper
     render "task_lists/filter", project: project
   end
 
+  def filter_assigned_options(project: nil, selected: "all")
+    base_opts = [
+      [ t("task_lists.filter.anybody"),     "all" ],
+      [ t("task_lists.filter.my_tasks"),    "mine" ],
+      [ t("task_lists.filter.unassigned"),  "unassigned" ]
+    ]
+
+    people = Person.user_names_from_projects([ project ]).map do |project_id, login, first_name, last_name, person_id, user_id|
+      [ "#{first_name} #{last_name}", person_id, user_id ]
+    end
+
+    people.reject! { |_, _, user_id| user_id == current_user.id }
+
+    if project && people.any?
+      base_opts << [ "--------", "divider" ]
+      base_opts += people.map do |name, person_id, user_id|
+        [ name, user_id ]
+      end
+    end
+
+    options_for_select(base_opts, selected)
+  end
+
   def filter_assigned_dropdown(project = nil)
-    options = [ t("task_lists.filter.anybody"),     "all" ],
-              [ t("task_lists.filter.my_tasks"),    "mine" ],
-              [ t("task_lists.filter.unassigned"),  "unassigned" ]
-    select(:filter, :assigned, options, disabled: "divider", selected: "all", 'data-project-id': project.try(:id))
+    select(:filter, :assigned, filter_assigned_options(project: project), disabled: "divider", selected: "all", 'data-project-id': project.try(:id))
+  end
+
+  def filter_due_date_options(selected = "all")
+    options_for_select([
+      [ t("task_lists.filter.anytime"),           "all" ],
+      [ t("task_lists.filter.late_tasks"),        "overdue" ],
+      [ t("task_lists.filter.no_date_assigned"),  "unassigned_date" ],
+      [ "--------",          "divider" ],
+      [ t("task_lists.filter.today"),             "due_today" ],
+      [ t("task_lists.filter.tomorrow"),          "due_tomorrow" ],
+      [ t("task_lists.filter.week"),              "due_week" ],
+      [ t("task_lists.filter.2weeks"),            "due_2weeks" ],
+      [ t("task_lists.filter.3weeks"),            "due_3weeks" ],
+      [ t("task_lists.filter.month"),             "due_month" ]
+    ], selected)
   end
 
   def filter_due_date_dropdown(project = nil)
-    options = [ t("task_lists.filter.anytime"),           "all" ],
-              [ t("task_lists.filter.late_tasks"),        "overdue" ],
-              [ t("task_lists.filter.no_date_assigned"),  "unassigned_date" ],
-              [ "--------",          "divider" ],
-              [ t("task_lists.filter.today"),             "due_today" ],
-              [ t("task_lists.filter.tomorrow"),          "due_tomorrow" ],
-              [ t("task_lists.filter.week"),              "due_week" ],
-              [ t("task_lists.filter.2weeks"),            "due_2weeks" ],
-              [ t("task_lists.filter.3weeks"),            "due_3weeks" ],
-              [ t("task_lists.filter.month"),             "due_month" ]
-
-    select(:filter, :due_date, options, disabled: "divider")
+    select(:filter, :due_date, filter_due_date_options, disabled: "divider")
   end
 
   def task_list_id(element, project, task_list = nil)
@@ -47,8 +71,10 @@ module TaskListsHelper
 
     link_to content_tag(:span, t("#{plural_name}.link.#{action}")),
       list_link,
-      { class: "toggleformaction #{action}_#{singular_name}_link",
-      id: js_id("#{action}_link", project, task_list) }.merge(show_task_list(project, task_list))
+      {
+        class: "toggleformaction #{action}_#{singular_name}_link",
+        id: js_id("#{action}_link", project, task_list)
+      }.merge(show_task_list(project, task_list))
   end
 
   def task_list_index_header(project, task_list)
@@ -257,32 +283,42 @@ module TaskListsHelper
 
   def delete_task_list_link(project, task_list, on_index = false)
     link_to t("common.delete"),
-      "#",
-      action_url: project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
-      aconfirm: t("confirm.delete_task_list"),
-      class: "taskListDelete"
+            project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListDelete",
+            data: { method: :delete, confirm: t("confirm.delete_task_list"), "turbo-prefetch" => false }
   end
 
   def resolve_archive_task_list_link(project, task_list, on_index = false)
     return if task_list.archived
     link_to t("task_lists.actions.resolve_and_archive"),
-            "#", class: "taskListResolve",
-            aconfirm: t("task_lists.actions.confirm_resolve_and_archive"),
-            action_url: archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0))
+            archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListResolve",
+            data: {
+              turbo: true,
+              method: :put,
+              confirm: t("task_lists.actions.confirm_resolve_and_archive"),
+              "turbo-prefetch" => false
+            }
   end
 
   def archive_task_list_link(project, task_list, on_index = false)
     link_to t("task_lists.actions.archive"),
-            "#", class: "taskListResolve",
-            aconfirm: t("task_lists.actions.confirm_resolve_and_archive"),
-            action_url: archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0))
+            archive_project_task_list_path(project, task_list, on_index: (on_index ? 1 : 0)),
+            class: "taskListResolve",
+            data: {
+              turbo: true,
+              method: :put,
+              confirm: t("task_lists.actions.confirm_resolve_and_archive"),
+              "turbo-prefetch" => false
+            }
   end
 
   def show_archived_tasks_link(project, task_list)
     archived_tasks = task_list.tasks.archived.length
     link_to t("task_lists.actions.show_archived", count: archived_tasks),
-            project_task_lists_path(project, task_list),
-            class: "show_archived_tasks_link"
+            project_task_list_path(project, task_list),
+            class: "show_archived_tasks_link",
+              data: { turbo_frame: task_list_id(nil, project, task_list) }
   end
 
   def print_task_lists_link(project = nil)
@@ -302,10 +338,10 @@ module TaskListsHelper
   end
 
   def reopen_task_list_button(project, task_list)
-    link_to content_tag(:span, t("task_lists.link.unarchive")), "#",
-      { class: "unarchive_task_list_link",
-      id: js_id("unarchive_link", project, task_list),
-      action_url: unarchive_project_task_list_path(project, task_list) }
+    button_to t("task_lists.link.unarchive"),
+              unarchive_project_task_list_path(project, task_list),
+              method: :put,
+              class: "unarchive_task_list_link"
   end
 
   def options_for_task_lists(lists)

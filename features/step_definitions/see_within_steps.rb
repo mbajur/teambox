@@ -6,16 +6,10 @@
 }.
 each do |within, selector|
   Then /^(?:|I )should( not)? see "([^\"]*)" #{within}$/ do |negate, text|
-    within(selector) do
-      if page.html
-        if negate
-          expect(page).to_not have_content(text)
-        else
-          expect(page).to have_content(text)
-        end
-      else
-        step %(I should#{negate} see "#{text}")
-      end
+    if negate
+      expect(page).to have_no_css(selector, text: text)
+    else
+      expect(page).to have_css(selector, text: text)
     end
   end
 end

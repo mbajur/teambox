@@ -1,6 +1,6 @@
 class TaskListsController < ApplicationController
   around_action :set_time_zone, only: [ :index, :show, :gantt_view ]
-  before_action :load_task_list, only: [ :edit, :update, :show, :destroy, :watch, :unwatch, :archive, :unarchive ]
+  before_action :load_task_list, only: [ :edit, :update, :show, :destroy, :watch, :unwatch, :archive, :unarchive, :reorder ]
   before_action :load_task_lists, only: [ :index, :reorder ]
   before_action :set_page_title
 
@@ -19,7 +19,10 @@ class TaskListsController < ApplicationController
   end
 
   def index
+    authorize! :reorder_objects, @current_project if params[:reorder]
+
     @on_index = true
+    @filter = TaskFilter.new(scope: Task.none, filters: params[:f])
     respond_to do |f|
       f.any(:html, :m)
       f.rss {
@@ -75,7 +78,7 @@ class TaskListsController < ApplicationController
       end
     else
       respond_to do |f|
-        f.html { render :new }
+        f.html { render :new, status: :unprocessable_entity }
         f.m    { render :new }
         f.js   { render layout: false }
       end
@@ -113,12 +116,11 @@ class TaskListsController < ApplicationController
 
   def reorder
     authorize! :reorder_objects, @current_project
-    task_list_ids = params[:task_list_ids].split(",").collect { |t| t.to_i }
-    @task_lists.each do |t|
-      next unless task_list_ids.include?(t.id)
-      t.position = task_list_ids.index(t.id)
-      t.save
-    end
+    task_list_params = params.require(:task_list).permit(:position, position: [ :before, :after ])
+
+    @task_list.position = task_list_params[:position].try(:to_h)
+    @task_list.save!
+
     head :ok
   end
 
@@ -169,11 +171,11 @@ class TaskListsController < ApplicationController
 
     if @saved
       respond_to do |f|
-        f.js { render "task_lists/update", layout: false }
+        f.html { redirect_back(fallback_location: project_task_lists_path(@current_project)) }
       end
     else
       respond_to do |f|
-        f.js { render "task_lists/update", layout: false }
+        f.html { redirect_back(fallback_location: project_task_lists_path(@current_project)) }
       end
     end
   end
@@ -251,11 +253,14 @@ class TaskListsController < ApplicationController
         @task_lists = []
         conditions = { project_id: Array(@projects).map(&:id),
                        status: Task::ACTIVE_STATUS_CODES }
-        @tasks = Task.where(conditions).
+        tasks = Task.where(conditions).
                       includes([ :task_list, :user, :project ]).
                       where([ "is_private = ? OR (is_private = ? AND watchers.user_id = ?)", false, true, current_user.id ]).
-                      joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}").
-                      sort { |a, b| (a.due_on || 1.year.from_now.to_date) <=> (b.due_on || 1.year.from_now.to_date) }
+                      joins("LEFT JOIN watchers ON (tasks.id = watchers.watchable_id AND watchers.watchable_type = 'Task') AND watchers.user_id = #{current_user.id}")
+
+        @filter = TaskFilter.new(scope: tasks, filters: params[:f])
+        @tasks = @filter.results
+                        .sort { |a, b| (a.due_on || 1.year.from_now.to_date) <=> (b.due_on || 1.year.from_now.to_date) }
       end
 
       @task_lists_archived = @task_lists.reject { |t| !t.archived? }

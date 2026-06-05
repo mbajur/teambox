@@ -8,11 +8,7 @@ module UsersHelper
   end
 
   def show_user_password_fields
-    # update_page do |page|
-    #   page["change_password_link"].hide
-    #   page["password_fields"].show
-    #   page["user_password"].focus
-    # end
+    "document.getElementById('password_fields').style.display='block'; document.getElementById('change_password_link').style.display='none';"
   end
 
   def user_rss_token(url, filter = nil)

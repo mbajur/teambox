@@ -20,6 +20,15 @@ class SessionsController < ApplicationController
     if user = User.authenticate_by(params.permit(:login, :password))
       start_new_session_for user
 
+      if session[:app_link_id]
+        if app_link = AppLink.find_by_id(session[:app_link_id])
+          app_link.user = user
+          app_link.save
+          session.delete :app_link_id
+          flash[:success] = t(:'oauth.account_linked')
+        end
+      end
+
       respond_to do |format|
         format.html { redirect_back_or_to root_url }
         format.m { redirect_back_or_to activities_url }
@@ -66,14 +75,16 @@ class SessionsController < ApplicationController
 
   def destroy
     terminate_session
-    # redirect_back_or_to goodbye_path
-    redirect_back fallback_location: goodbye_path
+    flash[:notice] = t("common.logged_out")
+    redirect_to new_session_path
   end
 
   # for cucumber testing only
   def backdoor
+    user = User.find_by_login(params[:username])
+    return head :not_found unless user
     terminate_session
-    start_new_session_for(User.find_by_login!(params[:username]))
+    start_new_session_for(user)
     redirect_back fallback_location: root_path
   end
 

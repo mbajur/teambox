@@ -30,11 +30,18 @@ ActionController::Base.allow_rescue = false
 
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
-begin
-  DatabaseCleaner.strategy = :transaction
-rescue NameError
-  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
-end
+# DatabaseCleaner strategy is configured in features/support/database_cleaner.rb
+# (which loads before this file). Overriding it here with :transaction breaks
+# @javascript scenarios because the Around hook in database_cleaner.rb calls
+# DatabaseCleaner.start *before* cucumber-rails's javascript_strategy Before
+# hooks run, causing a strategy mismatch that leaves browser-written records
+# in the database across scenarios.
+#
+# begin
+#   DatabaseCleaner.strategy = :transaction
+# rescue NameError
+#   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+# end
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
@@ -54,4 +61,10 @@ end
 # Possible values are :truncation and :transaction
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :truncation
+#
+# We use :truncation for all scenarios via the Around hook in database_cleaner.rb.
+# Do NOT set javascript_strategy here — it installs its own Before hooks that
+# switch the strategy mid-flight (after the Around hook has already called
+# DatabaseCleaner.start), causing strategy mismatches and data leaking between
+# scenarios.
+# Cucumber::Rails::Database.javascript_strategy = :truncation

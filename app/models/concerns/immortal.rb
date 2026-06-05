@@ -112,7 +112,8 @@ module Immortal
     )
 
     @destroyed = true
-    reload
+    # @todo find a better way
+    self.class.unscoped.where(id: id).first.tap { |r| @attributes = r.instance_variable_get(:@attributes) if r }
     freeze
   end
 

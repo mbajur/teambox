@@ -109,7 +109,8 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if params.has_key?(:sub_action)
+    allowed_sub_actions = %w[profile settings notifications picture linked_accounts delete]
+    if params.has_key?(:sub_action) && allowed_sub_actions.include?(params[:sub_action])
       @sub_action = params[:sub_action]
     else
       render file: "#{Rails.root}/public/404.html", status: 404
@@ -146,7 +147,7 @@ class UsersController < ApplicationController
   end
 
   def confirm_email
-    logout_keeping_session!
+    terminate_session
     if @user
       if @user.is_login_token_valid? params[:token]
         if @user.is_active?
@@ -155,7 +156,7 @@ class UsersController < ApplicationController
           flash[:success] = t("users.activation.activated")
           @user.activate!
           @user.expire_login_code!
-          self.current_user = @user
+          start_new_session_for @user
         end
       else
         flash[:error] = t("users.activation.invalid_html")
@@ -178,7 +179,7 @@ class UsersController < ApplicationController
   end
 
   def calendars
-    oauth_info = Rails.configuration.teambox.providers.detect { |p| p.provider == "google" }
+    oauth_info = Rails.configuration.teambox.providers.detect { |p| p["provider"] == "google" }
     if oauth_info.nil?
       Rails.logger.debug "There is no Google provider cannot list calendars"
       return true
@@ -245,8 +246,8 @@ class UsersController < ApplicationController
   end
 
   def hide_first_steps
-    @current_user.write_setting "show_first_steps", false
-    head :ok
+    current_user.write_setting "show_first_steps", false
+    redirect_to projects_path
   end
 
   private
@@ -259,6 +260,7 @@ class UsersController < ApplicationController
                                    :password_confirmation,
                                    :first_name,
                                    :last_name,
+                                   :biography,
                                    :first_day_of_week,
                                    :locale,
                                    :time_zone,
