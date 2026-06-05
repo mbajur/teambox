@@ -38,7 +38,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.14"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -89,6 +89,7 @@ gem "haml-rails", "~> 2.1"
 # $ sass app/styles/sessions.sass app/assets/stylesheets/sessions.css
 # $ sass app/styles/sites.sass app/assets/stylesheets/sites.css
 # $ sass app/styles/public_projects.sass app/assets/stylesheets/public_projects.css
+# $ sass app/styles/public_downloads.sass app/assets/stylesheets/public_downloads.css
 gem "sass", "3.7.4"
 
 gem "bcrypt", "~> 3.1"
@@ -109,4 +110,14 @@ gem "cancancan", "~> 3.6"
 
 gem "redcarpet", "~> 3.6"
 
-gem "image_processing", "~> 1.14"
+gem "i18n-js", "~> 4.2"
+
+gem "positioning", "~> 0.4.6"
+
+gem "search_object", "~> 1.2"
+
+gem "pagy", "~> 9.3"
+
+gem "icalendar", "~> 2.11"
+
+gem "clockwork", "~> 3.0"

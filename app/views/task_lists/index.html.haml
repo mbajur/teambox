@@ -2,23 +2,27 @@
   .task_header
     %p.text_actions
       - if can? :reorder_objects, @current_project
-        = link_to t('task_lists.link.reorder'), "#", :id => :reorder_task_lists_link
-        = link_to t('task_lists.link.reorder_done'), "#", :id => :done_reordering_task_lists_link, :style => 'display:none'
+        - if params[:reorder]
+          = link_to t('task_lists.link.reorder_done'), project_task_lists_path, :id => :done_reordering_task_lists_link, data: { 'turbo-frame' => '_top' }
+        - else
+          = link_to t('task_lists.link.reorder'), url_for(reorder: 1), :id => :reorder_task_lists_link, data: { 'turbo-frame' => '_top' }
+
       - if can? :make_task_lists, @current_project
         = task_list_link(@current_project)
 
     %h2= t('.tasks_for_project', :project => @current_project)
 
-  = filter_task_lists
+  - if !params[:reorder]
+    = filter_task_lists
 
   - if can? :make_task_lists, @current_project
     = task_list_form(@current_project,TaskList.new)
 
-  #task_lists
+  %turbo-frame#task_lists{ target: "_top", data: { controller: "task-lists-sortable", 'task-lists-sortable-resource-name-value' => 'task_list', 'task-lists-sortable-handle-value' => '.drag' } }
     = render_task_lists(@current_project,@task_lists)
 
   = task_list_primer(@current_project, @task_lists.any?)
-  
+
   - content_for :column do
     = task_list_column(@current_project,@task_list)
 

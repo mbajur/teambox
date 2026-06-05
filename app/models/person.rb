@@ -118,7 +118,7 @@ class Person < ApplicationRecord
   end
 
   def self.user_names_from_projects(projects)
-    project_ids = Array.wrap(projects).map(&:id)
+    project_ids = Array.wrap(projects).compact.map(&:id)
     connection.select_rows(<<-SQL)
       SELECT people.project_id, users.login, users.first_name, users.last_name, people.id, users.id
       FROM people

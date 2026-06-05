@@ -31,5 +31,5 @@ When /^I click upload list item for "([^\"]*)" file$/ do |filename|
 end
 
 When /^I select "([^\"]*)" from target folders list$/ do |folder_name|
-  And %(I select "#{folder_name}" from "target_folder_id")
+  step %(I select "#{folder_name}" from "target_folder_id")
 end

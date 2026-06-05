@@ -13,6 +13,10 @@ module Task::Scopes
       joins(assigned: :project).where(people: { user_id: user.id }).where(projects: { archived: false })
     }
 
+    scope :overdue, -> {
+      where("due_on < ? AND tasks.completed_at is null", Date.today)
+    }
+
     scope :urgent, -> { where(urgent: true).includes(:project, :task_list, :assigned) }
     scope :due_sooner_than_two_weeks, lambda {
       where("tasks.due_on < ?", 2.weeks.from_now)
@@ -20,6 +24,19 @@ module Task::Scopes
 
     scope :due_today, -> {
       where("due_on = ? AND tasks.completed_at is null", Date.today).includes(:task_list)
+    }
+
+    scope :due_tomorrow, -> {
+      where("due_on = ? AND tasks.completed_at is null", Date.tomorrow).includes(:task_list)
+    }
+
+    scope :due_in, ->(duration) {
+      where("due_on >= ? AND due_on <= ? AND tasks.completed_at is null",
+        Date.today, Date.today + duration).includes(:task_list)
+    }
+
+    scope :due_week, -> {
+      due_in(1.week)
     }
 
     scope :upcoming, -> {

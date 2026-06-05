@@ -22,8 +22,10 @@ class Task < RoleRecord
   belongs_to :assigned, class_name: "Person", optional: true
   has_many :comments, -> { order("created_at DESC") }, as: :target, dependent: :destroy
 
+  positioned on: :task_list
+
   accepts_nested_attributes_for :comments, allow_destroy: false,
-    reject_if: lambda { |comment| %w[is_private body hours human_hours uploads_attributes google_docs_attributes].all? { |k| comment[k].blank? } }
+    reject_if: lambda { |comment| %w[is_private private_ids body hours human_hours uploads_attributes google_docs_attributes].all? { |k| comment[k].blank? } }
 
   validates_presence_of :user
   validates_presence_of :task_list
@@ -37,6 +39,7 @@ class Task < RoleRecord
   # set by controller to indicate user that's doing task updating
   attr_accessor :updating_user
   attr_accessor :updating_date
+  attr_accessor :redirect_mode # @todo move that out to form object
 
   after_save :update_tasks_counts
   before_validation :nilize_assigned_id
@@ -306,7 +309,7 @@ class Task < RoleRecord
     # We should only ever execute this method once per callback cycle
     return if @saved_changes_to_comment
 
-    comment = comments.detect(&:new_record?) || comments.build_by_user(updating_user)
+    comment = comments.detect(&:new_record?) || comments.build { |c| c.user = updating_user }
 
     comment.project = project
     comment.created_at = @updating_date if @updating_date

@@ -8,7 +8,7 @@ module Comment::Conversions
     xml.comment id: id do
       xml.tag! "body", body
       xml.tag! "body-html", body_html
-      xml.tag! "created-at", created_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
       xml.tag! "user-id", user_id
       unless Array(options[:include]).include? :comments
         xml.tag! "project-id", project_id
@@ -36,8 +36,8 @@ module Comment::Conversions
       id: id,
       body: body,
       body_html: body_html,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       user_id: user_id,
       project_id: project_id,
       target_id: target_id,

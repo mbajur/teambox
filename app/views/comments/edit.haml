@@ -1,2 +1,8 @@
-= form_for [@target.project, @target, @comment], :html => { :'data-remote' => true, :multipart => true } do |form|
-  = render 'fields', :f => form
+= turbo_frame_tag "modal" do
+  %dialog#comment_edit_dialog
+    = form_for [@target.project, @target, @comment], :html => { data: { turbo_frame: "_top", 'data-controller' => 'comment' } } do |form|
+      = render 'fields', :f => form, target: @target
+
+  :javascript
+    document.getElementById('comment_edit_dialog').showModal();
+

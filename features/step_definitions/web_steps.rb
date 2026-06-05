@@ -11,12 +11,12 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "pat
 
 module WithinHelpers
   def with_scope(locator)
-    locator ? within(locator) { yield } : yield
+    locator ? within(locator, match: :first) { yield } : yield
   end
 
   def with_css_scope(selector)
     selector = selector.blank? ? nil : selector
-    scope = page.find(:css, selector) if selector
+    scope = page.first(:css, selector) if selector
     raise "Can't find selector '#{selector}' on page" if selector && !scope
     scope ? yield(scope) : yield(page)
   end
@@ -33,27 +33,47 @@ end
 
 When /^(?:|I )press "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    click_button(button)
+    begin
+      click_button(button)
+    rescue Capybara::Cuprite::MouseEventFailed
+      find(:button, button).trigger(:click)
+    end
   end
 end
 
 When /^(?:|I )press the last "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
   with_scope(selector) do
-    all(:button, button).last.click
+    begin
+      all(:button, button).last.click
+    rescue Capybara::Cuprite::ObsoleteNode
+      all(:button, button).last.click
+    end
   end
 end
 
 
 When /^(?:|I )follow "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
-    expect(page).to have_link(link)
-    click_link(link)
+    begin
+      el = find(:link_or_button, link)
+      if el.tag_name == 'a' && el['data-remote'] == 'true' && el['data-method'].nil?
+        visit el[:href]
+      else
+        el.click
+      end
+    rescue Capybara::Cuprite::ObsoleteNode
+      click_link_or_button(link)
+    end
   end
 end
 
 When /^(?:|I )follow last "([^\"]*)"(?: within "([^\"]*)")?$/ do |link, selector|
   with_scope(selector) do
-    all(:link, link).last.click
+    begin
+      all(:link, link).last.click
+    rescue Capybara::Cuprite::ObsoleteNode, Ferrum::CoordinatesNotFoundError
+      all(:link, link).last.click
+    end
   end
 end
 
@@ -92,7 +112,7 @@ end
 When /^(?:|I )select the following(?: within "([^\"]*)")?:$/ do |selector, fields|
   with_scope(selector) do
     fields.rows_hash.each do |value, name|
-      When %(I select "#{name}" from "#{value}")
+      step %(I select "#{name}" from "#{value}")
     end
   end
 end
@@ -105,7 +125,11 @@ end
 
 When /^(?:|I )click the element that contain "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, selector|
   with_css_scope(selector) do |node|
-    node.find(:xpath, ".//*[.='#{text}']").click
+    begin
+      node.find(:xpath, ".//*[.='#{text}']").click
+    rescue Capybara::Cuprite::MouseEventFailed
+      node.find(:xpath, ".//*[.='#{text}']").trigger(:click)
+    end
   end
 end
 
@@ -276,23 +300,13 @@ end
 
 Then /^the "([^\"]*)" checkbox(?: within "([^\"]*)")? should be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    if field_checked.respond_to? :should
-      field_checked.should be true
-    else
-      assert field_checked
-    end
+    expect(find_field(label)).to be_checked
   end
 end
 
 Then /^the "([^\"]*)" checkbox(?: within "([^\"]*)")? should not be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    if field_checked.respond_to? :should
-      field_checked.should be_false
-    else
-      assert !field_checked
-    end
+    expect(find_field(label)).not_to be_checked
   end
 end
 

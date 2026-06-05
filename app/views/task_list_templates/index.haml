@@ -1,0 +1,7 @@
+%h2= t '.title', :name => @organization
+
+%a.new_task_list_template{ :href => new_organization_task_list_template_path(@organization) }
+  %span= t('.new')
+
+#task_list_templates{ 'data-controller' => "sortable", "data-sortable-handle-value" => ".drag", "data-sortable-resource-name-value" => "task_list_template" }
+  = render @task_list_templates

@@ -1,0 +1,8 @@
+user_info:
+  name: Charles Barbier
+  nickname: charles
+  email: charles@teambox.com
+uid: "78458"
+credentials:
+  token: fake_token
+provider: github

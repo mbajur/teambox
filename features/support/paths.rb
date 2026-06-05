@@ -80,7 +80,7 @@ module NavigationHelpers
     when /project settings page/
       project_settings_path(@current_project)
     when /the "(.+)" tasks page/
-      project = Project.find_by_name($1)
+      project = Project.where("LOWER(name) = LOWER(?)", $1).first
       project_task_lists_path(project)
     when /the "([^\"]*)" task list page of the "([^\"]*)" project/
       task_list = TaskList.find_by_name($1)

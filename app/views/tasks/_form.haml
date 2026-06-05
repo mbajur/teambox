@@ -2,7 +2,8 @@
 - task_action = task.new_record?? :new : :edit
 - i18n_scope = [:tasks, task_action]
 
-= form_for [project, task_list, task], :format => :js, :html => { :class => "app_form #{task_action}_task", :multipart => true, :style => shown ? nil : 'display:none', :'data-remote' => !shown || nil, :'data-project-id' => project.id, :'data-mine' => (task.open? and task.assigned_to?(current_user)) } do |form|
+= form_for [project, task_list, task], :html => { :class => "app_form #{task_action}_task", :multipart => true, :'data-remote' => false, :'data-project-id' => project.id, :'data-mine' => (task.open? and task.assigned_to?(current_user)), 'data-controller' => 'comment', 'data-comment-users-to-mention-value' => users_to_mention(project).to_json, :id => local_assigns[:form_id] } do |form|
+  = form.hidden_field :redirect_mode, value: local_assigns[:redirect_mode] || :show
   = render 'tasks/fields', :f => form, :project => project
   .submit
     - unless shown

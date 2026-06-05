@@ -1,0 +1,52 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "0721b303bb7c27ba76306e8d0e4a5e6e95e3a93bce4120dd757e4096796295f5",
+      "note": "body_html is sanitized at save time via Rails::Html::SafeListSanitizer in HtmlFormatting module"
+    },
+    {
+      "fingerprint": "8176f4e1a2a9724d2c3b8b9f9a20260ce5a524cf9864d1b864f993dd852200a8",
+      "note": "body_html is sanitized at save time via Rails::Html::SafeListSanitizer in HtmlFormatting module"
+    },
+    {
+      "fingerprint": "86146b97ddb6349d9811ee3fb3de79ebf4029070cde17bbcb2fe81499de04ab5",
+      "note": "body_html is sanitized at save time via Rails::Html::SafeListSanitizer in HtmlFormatting module"
+    },
+    {
+      "fingerprint": "cd54816088f0327cc90eed1176b2f31feb941344c0429f7f089289f0274083c2",
+      "note": "Dynamic render path uses @sub_action which is whitelisted in users_controller#edit to allowed values only"
+    },
+    {
+      "fingerprint": "ac12bc835a4f62ad39a622f7ba40a9fc7895d4f427837ac771122b0cedc554a1",
+      "note": "SQL built with integer IDs via Array#map(&:id) and connection.quoted_false - no user input interpolated"
+    },
+    {
+      "fingerprint": "7a48275ad8e643aab9be225a501179394bbb0169f9d548263cdef7f5d4a85419",
+      "note": "login and email values are from stored model attributes prefixed with 'deleted', not direct user params"
+    },
+    {
+      "fingerprint": "1090ea67b9064dd63c6452bd67973867453e2500aa4fc504b5713a9efd2465cd",
+      "note": "File path comes from Paperclip-managed model attribute, access is authenticated and scoped to current_user"
+    },
+    {
+      "fingerprint": "29d0bc3a03c81ccf522cb6fa7b1efe71cf599f92b5b53f55c596da7488052609",
+      "note": "HEAD/GET verb confusion is acceptable here; the move action is only accessible to project members"
+    },
+    {
+      "fingerprint": "9cda1fe43d0a85cd87464276404ba500f5195dbf0049b370525f5e747c90dbf1",
+      "note": "Haml escapes class attribute values by default; params[:reorder] used only as a CSS class name"
+    },
+    {
+      "fingerprint": "7467fd173785fb8ff5e4bb3590241fbaec50341aabe8b125f9cf8a324136e220",
+      "note": "Haml escapes class attribute values by default; params[:reorder] used only as a CSS class name"
+    },
+    {
+      "fingerprint": "67c9b624ac5e5ebbd348fd1cd21be6fa87be22d4d122c601baa5a786b5645a75",
+      "note": "role and membership are intentional permit fields for invitation management"
+    },
+    {
+      "fingerprint": "b37c1d0df3ae3e213cee0fdd957923a9b312a3c7c92c23c53fb72df2f999ebed",
+      "note": "role permit is intentional for project person management"
+    }
+  ]
+}

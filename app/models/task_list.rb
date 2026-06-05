@@ -8,7 +8,10 @@ class TaskList < RoleRecord
   include TaskList::Callbacks
   include TaskList::Conversions
 
+  positioned on: :project
+
   attr_accessor :reference_task_objects
+  attr_accessor :template
 
   before_save :ensure_date_order
 

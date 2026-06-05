@@ -10,5 +10,5 @@
         = t('.not_logged_in_recently')
   - if request.format != :m and can?(:update, person)
     .actions
-      = link_to t('people.link.edit'), '#edit'
+      = link_to t('people.link.edit'), '#', data: { action: 'reveal#toggle:prevent' }
       = button_to t('people.header.remove'), project_person_path(project, person), method: :delete, data: { confirm: t('people.header.confirm_delete'), remote: false, turbo: false }

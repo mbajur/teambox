@@ -1,1 +1,34 @@
-= javascript_tag "Projects.showAllProjects();"
+%h2= t('projects.index.projects')
+
+.projects_pane
+  - current_user.organizations.each do |organization|
+    %h4
+      %a{ :href => organization_path(organization) }
+        = organization.name
+
+    .projects
+      - if organization.projects.unarchived.none?
+        %p.none= t('organizations.active_projects.no_active_projects')
+
+      - organization.projects.unarchived.each do |project|
+        %p.project
+          %a{ :href => project_path(project) }
+            = project.name
+          %span.status
+            = project.people.where(user: current_user).first&.role_name
+
+            - if project.admin?(current_user)
+              %a{ :href => project_settings_path(project) }
+                == (#{t 'organizations.active_projects.settings' })
+
+      - if organization.projects.archived.count.positive?
+        %div{ data: { controller: :reveal, 'reveal-hidden-class' => "invisible" } }
+          %p
+            %a.show_archived{ :href => '#', 'data-action' => "reveal#toggle:prevent" }
+              = t('projects.list.show_archived', :count => organization.projects.archived.count)
+
+          .archived_projects.invisible{ 'data-reveal-target' => "item" }
+            - organization.projects.archived.each do |project|
+              %p.project
+                %a{ :href => project_path(project) }
+                  = project.name

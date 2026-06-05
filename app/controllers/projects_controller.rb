@@ -1,11 +1,11 @@
 class ProjectsController < ApplicationController
   around_action :set_time_zone, only: [ :index, :show ]
-  before_action :load_projects, only: [ :index ]
   before_action :set_page_title
   before_action :disallow_for_community, only: [ :new, :create ]
   before_action :load_pending_projects, only: [ :index, :show, :new, :create ]
 
   skip_before_action :belongs_to_project?, only: [ :join ]
+  skip_before_action :require_authentication, only: [ :calendar_sync ]
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |f|
@@ -34,8 +34,21 @@ class ProjectsController < ApplicationController
       end
       f.m     { redirect_to activities_path if request.path == "/" }
       # f.rss   { render layout: false }
-      f.ics   { render text: Project.to_ical(@projects, current_user, params[:filter] == "mine" ? current_user : nil, request.host, request.port) }
       f.print { render layout: "print" }
+    end
+  end
+
+  def calendar_sync
+    user = User.find_by!(rss_token: params[:rss_token])
+
+    if @current_project
+      @projects = [ @current_project ]
+    else
+      @projects = user.projects.unarchived
+    end
+
+    respond_to do |f|
+      f.ics { render plain: Project.to_ical(@projects, user, params[:filter] == "mine" ? user : nil, request.host, request.port) }
     end
   end
 
@@ -52,7 +65,6 @@ class ProjectsController < ApplicationController
     respond_to do |f|
       f.any(:html, :m)
       f.rss   { render layout: false }
-      f.ics   { render text: @current_project.to_ical(current_user, params[:filter] == "mine" ? current_user : nil) }
       f.print { render layout: "print" }
     end
   end
@@ -122,6 +134,8 @@ class ProjectsController < ApplicationController
     @current_project.invite_emails = params[:project][:invite_emails]
     @current_project.invitations_locale = params[:invitations_locale]
     @current_project.send_invitations!
+
+    flash[:success] = t("projects.send_invites.success")
     redirect_to @current_project
   end
 
@@ -162,10 +176,6 @@ class ProjectsController < ApplicationController
 
     def load_task_lists
       @task_lists = @current_project.task_lists.unarchived
-    end
-
-    def load_projects
-      @projects = current_user.projects.unarchived
     end
 
     def load_pending_projects

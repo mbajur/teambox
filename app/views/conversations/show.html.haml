@@ -2,4 +2,4 @@
 = render 'conversations/header', :project => @current_project, :conversation => @conversation
 
 = people_watching(@current_project,current_user,@conversation)
-= render 'activities/thread', :thread => @conversation
+= render 'activities/thread', :thread => @conversation, expanded: true

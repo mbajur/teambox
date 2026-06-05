@@ -1,2 +1,7 @@
-%div[slot]
-  = render :partial => slot.rel_object.slot_view, :object => slot.rel_object, :locals => {:page => page, :project => project}, :as => slot.rel_object_type.downcase.singularize.to_sym
+.page_slot{ id: "page_slot_#{page_slot.id}" }
+  - if page_slot.rel_object.is_a?(Note)
+    = render 'notes/note', note: page_slot.rel_object
+  - elsif page_slot.rel_object.is_a?(Divider)
+    = render 'dividers/divider', divider: page_slot.rel_object
+  - elsif page_slot.rel_object.is_a?(Upload)
+    = render 'uploads/upload', upload: page_slot.rel_object, project: project

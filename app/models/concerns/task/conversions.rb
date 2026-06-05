@@ -13,11 +13,11 @@ module Task::Conversions
       xml.tag! "comments-count",  comments_count
       xml.tag! "assigned-id",     assigned_id
       xml.tag! "status",          status
-      xml.tag! "due-on",          due_on.to_s(:db) if due_on
+      xml.tag! "due-on",          due_on.to_fs(:db) if due_on
       xml.tag! "urgent",          urgent?
-      xml.tag! "created-at",      created_at.to_s(:db)
-      xml.tag! "updated-at",      updated_at.to_s(:db)
-      xml.tag! "completed-at",    completed_at.to_s(:db) if completed_at
+      xml.tag! "created-at",      created_at.to_fs(:db)
+      xml.tag! "updated-at",      updated_at.to_fs(:db)
+      xml.tag! "completed-at",    completed_at.to_fs(:db) if completed_at
       xml.tag! "watchers",        Array.wrap(watcher_ids).join(",")
       unless Array(options[:include]).include? :tasks
         task_list.to_xml(options.merge({ skip_instruct: true }))
@@ -36,16 +36,16 @@ module Task::Conversions
       comments_count: comments_count,
       assigned_id: assigned_id,
       status: status,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       watchers: Array.wrap(watcher_ids),
       is_private: is_private
     }
 
     base[:type] = self.class.to_s if options[:emit_type]
-    base[:due_on] = due_on.to_s(:db) if due_on
+    base[:due_on] = due_on.to_fs(:db) if due_on
     base[:urgent] = urgent?
-    base[:completed_at] = completed_at.to_s(:db) if completed_at
+    base[:completed_at] = completed_at.to_fs(:db) if completed_at
 
     if Array(options[:include]).include? :task_list
       base[:task_list] = task_list.to_api_hash(options)

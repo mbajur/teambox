@@ -1,5 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include Pagy::Frontend
+
   def content_for(*args)
     super unless args.first.to_sym == :column and mobile?
   end
@@ -74,7 +76,7 @@ module ApplicationHelper
   def posted_date(datetime)
     datetime = datetime.in_time_zone(current_user.time_zone) if current_user
 
-    content_tag :time, localize(datetime, format: :long), class: "timeago",
+    content_tag :time, localize(datetime, format: :long), class: "timeago", 'data-controller': "timeago",
       datetime: datetime.xmlschema, pubdate: true, 'data-msec': datetime_ms(datetime)
   end
 
@@ -236,9 +238,9 @@ module ApplicationHelper
     form_classes << "new_upload" if upload.new_record?
 
     hidden = page || (action_name == "index" && upload.errors.empty?)
-    form_style = hidden ? "display: none" : nil
+    form_classes << "invisible" if hidden
 
-    { html: { multipart: true, id: id, style: form_style, class: form_classes } }
+    { html: { multipart: true, id: id, class: form_classes, data: { "uploads-target" => "uploadForm" } } }
   end
 
   ##
@@ -292,5 +294,11 @@ BLOCK
     href = html_options[:href] || "#"
 
     content_tag(:a, name, html_options.merge(href: href, onclick: onclick))
+  end
+
+  def users_to_mention(project)
+    Current.projects_and_people
+           .people_for_project_without_current_user(project)
+           .map { |p| { key: p.name, value: p.login } }
   end
 end

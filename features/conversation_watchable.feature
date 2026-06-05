@@ -3,17 +3,17 @@ Feature: Watchers for conversations
 
   Background:
     Given the following confirmed users exist
-      | login  | email                    | first_name | last_name |
-      | pablo  | pablo@teambox.com        | Pablo      | Villalba  |
-      | enric  | enric@teambox.com        | Enric      | Lluelles  |
-      | james  | james@teambox.com        | James      | Urquhart  |
+      | login | email             | first_name | last_name |
+      | pablo | pablo@teambox.com | Pablo      | Villalba  |
+      | enric | enric@teambox.com | Enric      | Lluelles  |
+      | james | james@teambox.com | James      | Urquhart  |
     Given a project called "Teambox #999" with users @mislav, @enric, @pablo and @james
     And I am logged in as @mislav
     And no emails have been sent
 
   Scenario: Adding watchers to an untitled conversation
     Given I go to the projects page
-    And I follow "Teambox #999"
+    And I follow "Teambox #999" within ".nav_links"
     When I fill in the comment box with "Hey, guys..."
     And I wait for 1 second
     When I follow "Watchers"

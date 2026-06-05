@@ -3,7 +3,7 @@ FactoryBot.define do
     name { 'Buy milk' }
     association :user
     association :project
-    association :task_list
+    association :task_list, strategy: :create
 
     factory :archived_task do
       archived { true }

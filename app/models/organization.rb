@@ -118,8 +118,8 @@ class Organization < ActiveRecord::Base
       domain: domain,
       description: description,
       logo_url: logo.url,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:db)
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:db)
     }
 
     base[:type] = self.class.to_s if options[:emit_type]

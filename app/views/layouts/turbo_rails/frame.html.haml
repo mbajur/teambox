@@ -1,0 +1,20 @@
+%html
+  %head
+    = csrf_meta_tags
+    = yield :head
+
+  %body
+    #header_wrap
+      = header
+    #container.container
+      .wrapper
+        %turbo-frame{ id: :flash }
+          = show_flash
+        .content_wrap
+          %turbo-frame.content#content{ target: "_top" }
+            = yield
+        .column_wrap.sticky.top-0
+          .column#column
+            = render 'shared/navigation'
+            .view_sidebar
+              = yield :column

@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback" => "auth#callback", :as => :auth_callback
   get "/auth/failure" => "auth#failure", :as => :auth_failure
+  get "/auth/:provider" => "auth#mock"
   get "/complete_signup" => "users#complete_signup", :as => :complete_signup
   get "/auth/:provider/unlink" => "users#unlink_app", :as => :unlink_app
 
@@ -83,9 +84,7 @@ Rails.application.routes.draw do
       end
     end
     resources :task_list_templates do
-      collection do
-        put :reorder
-      end
+      patch :reorder, on: :member
     end
   end
 
@@ -105,8 +104,13 @@ Rails.application.routes.draw do
   post  "/account/first_steps/hide" => "users#hide_first_steps"
 
   resources :teambox_datas, path: "/datas" do
+    collection do
+      get  :new_import
+      post :create_import
+    end
     member do
       get :download
+      patch :update
     end
   end
 
@@ -137,6 +141,7 @@ Rails.application.routes.draw do
       post :accept
       post :decline
       get :join
+      get :calendar_sync
     end
 
     get "time/:year/:month" => "hours#index", :as => :hours_by_month, :via => :get
@@ -146,6 +151,7 @@ Rails.application.routes.draw do
     get "picture" => "projects#edit", :as => :picture, :sub_action => "picture"
     get "deletion" => "projects#edit", :as => :deletion, :sub_action => "deletion"
     get "ownership" => "projects#edit", :as => :ownership, :sub_action => "ownership"
+    get "calendar_sync", on: :collection
 
     resources :invitations do
       member do
@@ -158,7 +164,7 @@ Rails.application.routes.draw do
     get "activities(.:format)" => "activities#show", :as => :activities, :method => :get
     get "activities/:id/show_more(.:format)" => "activities#show_more", :as => :show_more, :method => :get
 
-    get "move/:id" => "uploads#move", :via => :put, :as => :move_resource
+    match "move/:id" => "uploads#move", via: [ :get, :post ], as: :move_resource
 
     resources :uploads do
       member do
@@ -175,7 +181,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get "downloadable/:id/email_public" => "uploads#email_public", :via => :post, :as => :email_public_download
+    post "downloadable/:id/email_public" => "uploads#email_public", :as => :email_public_download
 
     get "uploads/folders/:id" => "uploads#index", :via => :get
     get "hooks/:hook_name" => "hooks#create", :as => :hooks, :via => :post
@@ -185,7 +191,7 @@ Rails.application.routes.draw do
 
     resources :tasks do
       member do
-        put :reorder
+        patch :reorder
         put :watch
         put :unwatch
       end
@@ -197,13 +203,13 @@ Rails.application.routes.draw do
       collection do
         get :gantt_view
         get :archived
-        put :reorder
       end
       member do
         put :archive
         put :unarchive
         put :watch
         put :unwatch
+        patch :reorder
       end
 
       resources :tasks do
@@ -226,7 +232,7 @@ Rails.application.routes.draw do
 
     resources :conversations do
       member do
-        patch :convert_to_task
+        post :convert_to_task
         put :watch
         put :unwatch
       end
@@ -235,11 +241,9 @@ Rails.application.routes.draw do
     end
 
     resources :pages do
-      collection do
-        post :resort
-      end
       member do
-        post :reorder
+        patch :resort
+        patch :reorder
         put :watch
         put :unwatch
       end

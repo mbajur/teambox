@@ -28,33 +28,24 @@ class TasksController < ApplicationController
     end
   end
 
+  # @todo support turbo streams and refreshing task list on task creation
   def create
     authorize! :make_tasks, @current_project
     @task = @task_list.tasks.build_by_user(current_user, task_params)
     @task.is_private = (task_params[:is_private]||false) if task_params
     @task.save
 
-    respond_to do |f|
-      f.any(:html, :m) {
-        if @task.new_record?
-          render :new
-        else
-          redirect_to_task
+    if @task.new_record?
+      render :new, status: :unprocessable_entity
+    else
+      if @task.redirect_mode == "back"
+        respond_to do |f|
+          f.turbo_stream
+          f.html { redirect_back fallback_location: [ @current_project, @task ] }
         end
-      }
-      f.js {
-        if @task.new_record?
-          output_errors_json(@task)
-        else
-          response.content_type = Mime::HTML
-          render(partial: "tasks/task", locals: {
-            project: @current_project,
-            task_list: @task_list,
-            task: @task.reload,
-            editable: true
-          })
-        end
-      }
+      else
+        redirect_to_task
+      end
     end
   end
 
@@ -69,10 +60,10 @@ class TasksController < ApplicationController
   def update
     if can? :update, @task
       @task.updating_user = current_user
-      success = @task.update(task_params)
+      success = @task.update!(task_params)
     elsif can? :comment, @task
       @task.updating_user = current_user
-      success = @task.update_attributes(comments_attributes: params["task"]["comments_attributes"])
+      success = @task.update!(comments_attributes: params["task"]["comments_attributes"])
     else
       authorize! :comment, @task
     end
@@ -87,13 +78,13 @@ class TasksController < ApplicationController
             render partial: "comments/comment",
               locals: { comment: comment }
           else
-            render nothing: true
+            render nothing: true, status: :unprocessable_entity
           end
         else
           if success
             redirect_to_task
           else
-            render :edit
+            render :edit, status: :unprocessable_entity
           end
         end
       }
@@ -120,17 +111,12 @@ class TasksController < ApplicationController
 
   def reorder
     authorize! :reorder_objects, @current_project
-    target_task_list = @current_project.task_lists.find params[:task_list_id]
-    if @task.task_list != target_task_list
-      @task.task_list = target_task_list
-      @task.save
-    end
 
-    task_ids = params[:task_ids].split(",").collect { |t| t.to_i }
-    target_task_list.tasks.each do |t|
-      next unless task_ids.include?(t.id)
-      Task.thin_model.find(t.id).update_attribute :position, task_ids.index(t.id)
-    end
+    task_params = params.require(:task).permit(:task_list_id, :position, position: [ :before, :after ])
+
+    @task.position = task_params[:position].try(:to_h)
+    @task.task_list = @current_project.task_lists.find(task_params[:task_list_id])
+    @task.save!
 
     head :ok
   end
@@ -139,14 +125,14 @@ class TasksController < ApplicationController
     authorize! :watch, @task
     @task.add_watcher(current_user)
     respond_to do |f|
-      f.js { render layout: false }
+      f.turbo_stream
     end
   end
 
   def unwatch
     @task.remove_watcher(current_user)
     respond_to do |f|
-      f.js { render layout: false }
+      f.turbo_stream
     end
   end
 
@@ -160,7 +146,8 @@ class TasksController < ApplicationController
                                    :assigned_id,
                                    :due_on,
                                    :urgent,
-                                   comments_attributes: [ :body ])
+                                   :redirect_mode,
+                                   comments_attributes: [ :body, :is_private, private_ids: [] ])
     end
 
     def load_task_list

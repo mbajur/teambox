@@ -1,0 +1,5 @@
+= form_for @upload,
+    url: rename_project_upload_path(@current_project, @upload),
+    html: { method: :put, id: "edit_upload_#{@upload.id}" } do |f|
+  = f.text_field :asset_file_name
+  = f.submit t('common.save'), class: 'button'

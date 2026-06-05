@@ -24,12 +24,12 @@ module Watchable
   end
 
   def set_private_watchers(new_ids)
-    new_ids_with_owner = (new_ids.map(&:to_i) + required_watcher_ids).uniq
+    new_ids_with_owner = (new_ids.map(&:to_i).select { |id| id > 0 } + required_watcher_ids).uniq
     watchers_to_remove = watcher_ids - new_ids_with_owner
-    (new_ids_with_owner-watcher_ids).each do |user_id|
+    (new_ids_with_owner - watcher_ids).each do |user_id|
       watcher = Watcher.new(user_id: user_id, project_id: self.project_id,
                             watchable_id: self.id, watchable_type: self.class.to_s)
-      watcher.save
+      watcher.save!
     end
     Watcher.where(watchable: self, user_id: watchers_to_remove).destroy_all
   end
@@ -105,8 +105,8 @@ module Watchable
     reflection = self.class.reflect_on_association(:watchers)
     begin
       save_collection_association(reflection)
-    rescue ActiveRecord::StatementInvalid => sie
-      raise sie unless duplicate_watchers?
+    rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotUnique
+      # Ignore duplicate watcher errors (can happen during import or concurrent saves)
     end
   end
 

@@ -1,0 +1,9 @@
+%h2= t('.title')
+
+= form_for @reset_password, url: reset_passwords_path, html: { class: 'new_reset_password' } do |f|
+  %p
+    = f.label :email, "Email"
+    = f.text_field :email, tabindex: 1
+  = submit_tag t('.submit'), tabindex: 2
+
+%p= link_to t('.back'), new_session_path

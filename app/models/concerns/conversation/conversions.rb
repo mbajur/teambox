@@ -9,8 +9,8 @@ module Conversation::Conversions
       xml.tag! "project-id",      project_id
       xml.tag! "user-id",         user_id
       xml.tag! "name",            name
-      xml.tag! "created-at",      created_at.to_s(:db)
-      xml.tag! "updated-at",      updated_at.to_s(:db)
+      xml.tag! "created-at",      created_at.to_fs(:db)
+      xml.tag! "updated-at",      updated_at.to_fs(:db)
       xml.tag! "watchers",        watcher_ids.join(",")
       if Array(options[:include]).include? :comments
         comments.to_xml(options.merge({ skip_instruct: true }))
@@ -25,8 +25,8 @@ module Conversation::Conversions
       user_id: user_id,
       name: name,
       simple: simple,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       watchers: Array.wrap(watcher_ids),
       comments_count: comments_count,
       is_private: is_private

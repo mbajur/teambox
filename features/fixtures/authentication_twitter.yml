@@ -1,0 +1,8 @@
+user_info:
+  name: Charles Barbier
+  nickname: charles
+uid: "cbdb0cc7"
+credentials:
+  token: fake_token
+  secret: fake_secret
+provider: twitter

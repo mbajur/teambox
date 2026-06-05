@@ -117,6 +117,6 @@ class Conversation < RoleRecord
   end
 
   def update_user_stats
-    # user.increment_stat "conversations" if user
+    user.increment_stat "conversations" if user
   end
 end

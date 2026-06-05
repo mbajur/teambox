@@ -4,7 +4,7 @@
 
 %h2= t('.title')
 
-= form_for [@current_project, @conversation], :html => { 'data-project-id' => @current_project.id, :multipart => true, 'data-turbo' => false, 'data-local' => true } do |f|
+= form_for [@current_project, @conversation], :html => { 'data-project-id' => @current_project.id, :multipart => true, 'data-turbo' => false, 'data-local' => true, 'data-controller' => 'comment', 'data-comment-users-to-mention-value' => users_to_mention(@current_project).to_json } do |f|
   = render 'fields', :f => f, :project => @current_project
   = render 'watcher_fields', :f => f, :project => @current_project
   .submit

@@ -1,0 +1,15 @@
+- content_for :column do
+  = render 'shared/user_navigation'
+
+%h2= t(".title")
+
+.controller_teambox_datas
+  %p= t("teambox_datas.export_fields.description")
+
+  = form_tag teambox_datas_path, method: :post do
+    - @projects.each do |project|
+      .project
+        = check_box_tag "teambox_data[projects][]", project.id, false, id: "project_#{project.id}"
+        = label_tag "project_#{project.id}", project.name
+
+    .submit= submit_tag t("teambox_datas.new_export.submit")

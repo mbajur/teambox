@@ -5,10 +5,9 @@
 
 <%= render 'activity', :activity => @activity %>
 
-<% 
-  link = case @activity 
+<%
+  link = case @activity
   when Page then project_page_url(@project, @target)
-  when Note then project_page_url(@project, @target.page)
   end
 -%>
 

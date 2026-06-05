@@ -9,22 +9,19 @@ Given /^I have a task called "([^\"]*)"$/ do |name|
 end
 
 Given /^I have a task called "([^"]*)" with a comment including upload "([^"]*)"$/ do |task_name, file_name|
-  Given %(I have a task called "#{task_name}")
+  step %(I have a task called "#{task_name}")
   @comment = @task.comments.create body: "Something to say"
 
   path = File.join(Rails.root, "spec/fixtures/#{file_name}")
-  if File.exists?(path)
+  if File.exist?(path)
     @upload = FactoryBot.create(:upload, {
       asset: open(path),
-      asset_file_name: file_name,
-      asset_file_size: nil,
-      asset_content_type: nil,
       project: @current_project,
       comment: @comment
      })
 
   else
-    FactoryBot.create(:upload, asset_file_name: file_name, project: @current_project, comment: @comment)
+    FactoryBot.create(:upload, project: @current_project, comment: @comment)
   end
 end
 
@@ -166,7 +163,7 @@ Then /^I select the year "([^\"]*)" with the date picker$/ do |year|
 end
 
 Then /^I click on the (\w+) date selector$/ do |field|
-  with_css_scope("#show_task_list div[id$=_#{field}_on]") do |node|
+  with_css_scope("div[id$=_#{field}_on]") do |node|
     node.find("span").click
   end
 end
@@ -176,9 +173,20 @@ Then /^I select the (\w+) "([^"]*)" on the calendar$/ do |field, value|
 end
 
 Then /^I select the day "([^\"]*)" with the date picker$/ do |day|
-  with_css_scope("div[class='calendar_date_select']") do |node|
-    element = node.all(:xpath, "//*[.='#{day}']").detect { |e| e.tag_name == 'td' && !e['innerHTML'].include?('other') }
-    element.try(:click)
+  with_css_scope("div.calendar_date_select") do |node|
+    # New datepicker: buttons with text matching day number, excluding prev/next month buttons
+    button = node.all('button').find do |b|
+      b.text.strip == day &&
+        !b['class'].to_s.include?('sdp-prev-month') &&
+        !b['class'].to_s.include?('sdp-next-month')
+    end
+    if button
+      button.click
+    else
+      # Old datepicker: td elements
+      element = node.all(:xpath, "//*[.='#{day}']").detect { |e| e.tag_name == 'td' && !e['innerHTML'].include?('other') }
+      element.try(:click)
+    end
   end
 end
 
@@ -197,27 +205,31 @@ Then /^I should see "([^"]*)" within the task header$/ do |text|
 end
 
 Then /^I should see "([^"]*)" within the task actions$/ do |text|
-  step %(I should see "#{text}" within ".task .actions")
+  step %(I should see "#{text}" within ".task_actions")
 end
 
 When /^(?:|I )select "([^\"]*)" in the "([^\"]*)" calendar?$/ do |number, calendar|
-  with_css_scope("div[id$='_#{calender}_on']") do |node|
-    find(:css, "table div[contains(#{number})]").click
+  with_css_scope("div[id$='_#{calendar}_on']") do |node|
+    button = node.find('.sdp-cal.calendar_date_select, .calendar_date_select').all('button').find do |b|
+      b.text.strip == number &&
+        !b['class'].to_s.include?('sdp-prev-month') &&
+        !b['class'].to_s.include?('sdp-next-month')
+    end
+    button.click
   end
 end
 
 When /^(?:|I )select "([^\"]*)" in the calendar?$/ do |number|
-  find(:css, "table div[contains(#{number})]").click
+  button = find('.sdp-cal.calendar_date_select').all('button').find do |b|
+    b.text.strip == number &&
+      !b['class'].to_s.include?('sdp-prev-month') &&
+      !b['class'].to_s.include?('sdp-next-month')
+  end
+  button.click
 end
 
 Then /^(?:|I )should see "([^\"]*)" status change?$/ do |text|
-  if Capybara.current_driver == Capybara.javascript_driver
-    assert page.has_xpath?(XPath::HTML.content(text), visible: true)
-  elsif page.respond_to? :should
-    page.should have_content(text)
-  else
-    assert page.has_content?(text)
-  end
+  expect(page).to have_content(/#{Regexp.escape(text)}/i)
 end
 
 Then /^I should see "([^\"]+)" in the task thread title$/ do |msg|

@@ -25,7 +25,8 @@ Given /^a current project has nested folders$/ do |folders_table|
 end
 
 When /^I enter "([^"]*)" folder$/ do |name|
-  find(:xpath, "//a[text()='#{name}']").click
+  link = find(:xpath, "//a[text()='#{name}']")
+  visit link[:href]
 end
 
 When /^I click upload list item for "([^\"]*)" folder$/ do |foldername|

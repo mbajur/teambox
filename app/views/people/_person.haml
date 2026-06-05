@@ -1,9 +1,9 @@
-%div[person]
+%div[person]{ data: { controller: :reveal, "reveal-hidden-class" => "invisible" } }
   = thumb_avatar(person.user)
   = render 'header', :person => person, :project => project
-  
+
   - if can? :update, person
-    = form_for person, :url => [project, person], :html => { 'data-remote' => true } do |f|
+    = form_for person, :url => [project, person], :html => { class: 'edit_person invisible', 'data-remote' => false, data: { reveal_target: "item" } } do |f|
       %h2= person.user.name
       %ol.roles
         %li
@@ -25,4 +25,4 @@
       .actions
         = submit_tag t('people.edit.submit')
         = t('common.or')
-        = link_to t('common.cancel'), '#cancel'
+        = link_to t('common.cancel'), '#', data: { action: 'reveal#hide:prevent' }

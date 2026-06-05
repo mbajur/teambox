@@ -1,0 +1,9 @@
+---
+translations:
+  - file: public/locales.json
+    patterns:
+      - "*"
+      - "!*.activerecord"
+      - "!*.errors"
+      - "!*.number.nth"
+

@@ -141,8 +141,8 @@ class Activity < ApplicationRecord
 
     xml.activity id: id do
       xml.tag! "action", action
-      xml.tag! "created-at", created_at.to_s(:db)
-      xml.tag! "updated-at", updated_at.to_s(:db)
+      xml.tag! "created-at", created_at.to_fs(:db)
+      xml.tag! "updated-at", updated_at.to_fs(:db)
 
       xml.user id: user_id do
         xml.tag! "username",   user.login
@@ -169,8 +169,8 @@ class Activity < ApplicationRecord
       id: id,
       last_activity_id: last_activity_id,
       action: action,
-      created_at: created_at.to_s(:api_time),
-      updated_at: updated_at.to_s(:api_time),
+      created_at: created_at.to_fs(:api_time),
+      updated_at: updated_at.to_fs(:api_time),
       user_id: user_id,
       project_id: project_id,
       target_id: target_id,

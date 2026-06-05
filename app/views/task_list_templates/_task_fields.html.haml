@@ -1,0 +1,14 @@
+%fieldset.nested-form-wrapper{ 'data-new-record' => task.object.new_record?.to_s }
+  %div
+    .label
+      = task.label :name
+    = task.text_field :name
+  %div
+    .label
+      = task.label :description
+    = task.text_area :description
+
+  %button{ type: "button", 'data-action' => "nested-form#remove"}
+    = t('.remove_task')
+
+  = task.hidden_field :_destroy

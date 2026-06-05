@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   # include AuthenticatedSystem
   include Authentication
 
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
@@ -11,6 +13,7 @@ class ApplicationController < ActionController::Base
                 :set_locale,
                 :set_client,
                 :load_project,
+                :load_projects_and_people,
                 :load_organizations,
                 :touch_user,
                 :belongs_to_project?,
@@ -19,13 +22,20 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def record_not_found
+    respond_to do |format|
+      format.html { render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false }
+      format.any { head :not_found }
+    end
+  end
+
   def confirmed_user?
     raise UnconfirmedUserError if !current_user&.confirmed_user?
   end
 
   def check_permissions
     unless @current_project.editable?(current_user)
-      render text: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
+      render plain: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
     end
   end
 
@@ -43,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_no_permissions
-    render text: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
+    render plain: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
   end
 
   def rss_token
@@ -78,6 +88,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def load_projects_and_people
+    if authenticated?
+      @projects = current_user.projects.unarchived
+      Current.projects_and_people = CurrentProjectsAndPeople.new(@projects)
+    end
+  end
+
   def load_project
     if project_id = params[:project_id] || params[:id]
       unless @current_project = Project.find_by_id_or_permalink(project_id)
@@ -104,7 +121,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    locale = authenticated? ? current_user.locale : (params[:locale] || user_agent_locale)
+    locale = authenticated? ? current_user&.locale : (params[:locale] || user_agent_locale)
     I18n.locale = (locale.present? && I18n.available_locales.include?(locale.to_sym)) ? locale : I18n.default_locale
   end
 

@@ -177,8 +177,6 @@ class ApiV1::ApiController < ApplicationController
         Upload.where(id: values).includes(:page_slot).all
       when "GoogleDoc"
         GoogleDoc.where(id: values).all
-      when "Note"
-        Note.where(id: values).includes(:page_slot).all
       when "Conversation"
         convs = Conversation.where(id: values).includes(:first_comment).includes(:recent_comments).includes(:watchers).all
         convs + convs.collect(&:first_comment) + convs.collect(&:recent_comments)

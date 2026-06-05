@@ -6,17 +6,39 @@
 - if f.object.new_record?
   = f.fields_for :comments, f.object.comments.build do |comment_fields|
     .field.text_area
-      = comment_fields.text_area :body, :placeholder => t("comments.new.conversation")
+      = comment_fields.text_area :body, :placeholder => t("comments.new.conversation"), data: { 'comment-target' => 'bodyInput' }
     .extra
       .upload_area
         %p= t('uploads.new.select_a_file')
         - comment_fields.object.uploads.build
         = comment_fields.fields_for :uploads do |uploads|
           = uploads.file_field :asset, :id => 'upload_file'
-      .private_options{ :style => 'display: none', 'object-prefix' => "conversation_new", 'object-type' => 'conversation[comments_attributes][0]' }
+      .private_options.invisible{ 'object-prefix' => "conversation_new", 'object-type' => comment_fields.object_name, 'data-comment-target' => 'privacyArea', 'data-controller' => 'private-box', 'data-private-box-is-private-value' => f.object.is_private.to_s }
+        .private_users
+          - other_people = @current_project.people.where.not(user_id: current_user.id)
+          - if other_people.empty?
+            %p= I18n.t('comments.private.private_foreveralone')
+          - else
+            .option.normal
+              %label
+                = f.radio_button :is_private, 0, checked: !f.object.is_private?, data: { action: 'private-box#switchToPublic' }
+                = I18n.t('comments.private.public')
+            .option.private
+              %label
+                = f.radio_button :is_private, 1, checked: f.object.is_private?, data: { action: 'private-box#switchToPrivate' }
+                = I18n.t('comments.private.private')
+            %div.invisible{ data: { 'private-box-target' => 'privateContent', controller: 'checkbox-select-all' } }
+              %br
+              %div{ class: 'private_all'}
+                %input{ id: "conversation_new_private_all", name: "#{comment_fields.object_name}[all_private]", type: 'checkbox', value: 'true', data: { 'checkbox-select-all-target' => 'checkboxAll' } }
+                %label{ for: "conversation_new_private_all"}= I18n.t('comments.private.all')
+              - other_people.each do |person|
+                %div{ class: 'private_user'}
+                  %input{ id: "conversation_new_private_#{person.id}", name: "#{comment_fields.object_name}[private_ids][]", type: 'checkbox', value: person.user_id, checked: true, data: { 'private-box-target' => 'personInput', 'checkbox-select-all-target' => 'checkbox' } }
+                  %label{ for: "conversation_new_private_#{person.id}"}= person.name
       .actions
         .attach
           %span= t('comments.fields.attach') + ": "
           = link_to t('uploads.comment_upload_link'), '#uploads', :class => 'attach_icon hoverable', :title => "Attach a file"
         = render 'google_docs/form', :f => comment_fields
-        = link_to "Privacy", '#privacy', :class => 'private_switch hoverable', :title => "Control who can see this element"
+        = link_to "Privacy", '#privacy', :class => 'private_switch hoverable', :title => "Control who can see this element", data: { action: 'click->comment#togglePrivacy' }

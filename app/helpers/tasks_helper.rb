@@ -28,7 +28,7 @@ module TasksHelper
 
   def render_due_on(task, user)
     if task.urgent?
-      content_tag(:span, "!".html_safe, class: "urgent")
+      content_tag(:span, t("tasks.urgent.caption"), class: "urgent")
     else
       content_tag(:span, due_on(task), class: "due_on")
     end
@@ -143,11 +143,11 @@ module TasksHelper
     end
 
     classes = [ "date_picker", ("show_urgent" if show_urgent_flag) ].compact
-    content_tag :div, class: classes.join(" "), id: "#{f.object.class.to_s.underscore}_#{f.object.id}_#{field}" do
+    content_tag :div, class: classes.join(" "), id: "#{f.object.class.to_s.underscore}_#{f.object.id}_#{field}", data: { controller: "comment-datepicker", comment_datepicker_locales_value: [ I18n.locale.to_s ].to_json } do
       [ image_tag("/images/calendar_date_select/calendar.gif", class: :calendar_date_select_popup_icon),
-        content_tag(:span, datepicker_info, class: "datepicker_info"),
-        f.hidden_field(field, html_options.reverse_merge(class: :datepicker)),
-        (f.hidden_field("urgent", html_options.reverse_merge(class: :urgent)) if show_urgent_flag)
+        content_tag(:span, datepicker_info, class: "datepicker_info", data: { comment_datepicker_target: :toggle }),
+        f.hidden_field(field, html_options.reverse_merge(class: :datepicker, data: { comment_datepicker_target: :input })),
+        (f.check_box("urgent", html_options.reverse_merge(class: [ :urgent, :invisible ], data: { comment_datepicker_target: :urgent })) if show_urgent_flag)
       ].join.html_safe
     end
   end
