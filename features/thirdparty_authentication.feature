@@ -1,4 +1,3 @@
-@ignore
 Feature: Authentication with third party service
 
   Scenario Outline: The user can link their account with third party and login

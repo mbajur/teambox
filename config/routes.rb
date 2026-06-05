@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback" => "auth#callback", :as => :auth_callback
   get "/auth/failure" => "auth#failure", :as => :auth_failure
+  get "/auth/:provider" => "auth#mock"
   get "/complete_signup" => "users#complete_signup", :as => :complete_signup
   get "/auth/:provider/unlink" => "users#unlink_app", :as => :unlink_app
 

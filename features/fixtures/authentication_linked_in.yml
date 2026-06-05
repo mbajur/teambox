@@ -1,0 +1,9 @@
+user_info:
+  name: Charles Barbier
+  first_name: Charles
+  last_name: Barbier
+uid: HbQXh0a0
+credentials:
+  token: fake_token
+  secret: fake_secret
+provider: linked_in
