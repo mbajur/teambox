@@ -102,7 +102,7 @@ jobs:
             --only-group ${{ matrix.ci_node_index }} \
             -n 4 \
             --runtime-log tmp/parallel_runtime_cucumber.log \
-            -- --tags 'not @ignore' --format progress
+            --test-options "--tags 'not @ignore' --format progress"
 
       - name: Upload timing artifact
         uses: actions/upload-artifact@v4
