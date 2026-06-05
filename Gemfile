@@ -73,6 +73,7 @@ group :test do
   gem "cuprite"
   gem "capybara-screenshot"
   gem "email_spec"
+  gem "parallel_tests"
 end
 
 gem "paperclip", "~> 6.1"
