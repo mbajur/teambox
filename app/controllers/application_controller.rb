@@ -73,16 +73,16 @@ class ApplicationController < ActionController::Base
       elsif @current_project.invitations.exists?(invited_user_id: current_user)
         # there is an invitation pending for accept
         redirect_to project_invitations_path(@current_project)
-      elsif @current_project.organization.is_admin?(current_user)
+      elsif @current_project.organization && @current_project.organization.is_admin?(current_user)
         nil
+      elsif @current_project.public
+        render "projects/not_in_project", status: :forbidden
       else
         # sorry, no dice
         if [ :rss, :ics ].include? request.formats.map(&:symbol)
           render nothing: true
         else
-          respond_to do |f|
-            f.any(:html, :m, :print) { render "projects/not_in_project", status: :forbidden }
-          end
+          render plain: "This is a private project and you're not authorized to access it.", status: :forbidden
         end
       end
     end

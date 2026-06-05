@@ -10,7 +10,7 @@
   = permalink_example(project.permalink)
   = watch_permalink_example
 
-- if @current_project.organization.is_admin?(current_user)
+- if @current_project.organization && @current_project.organization.is_admin?(current_user)
   .text_field
     = f.label :organization_id, t('projects.fields.organization')
     = errors_for project, :organization_id

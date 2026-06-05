@@ -149,7 +149,7 @@ class ProjectsController < ApplicationController
   end
 
   def join
-    if @current_project.organization.is_admin?(current_user)
+    if @current_project.organization && @current_project.organization.is_admin?(current_user)
       @current_project.add_user(current_user, role: Person::ROLES[:admin])
       flash[:success] = t("projects.join.welcome")
       redirect_to project_path(@current_project)

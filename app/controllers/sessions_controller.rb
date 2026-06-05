@@ -82,7 +82,8 @@ class SessionsController < ApplicationController
     return head :not_found unless user
     terminate_session
     start_new_session_for(user)
-    redirect_back fallback_location: root_path
+    # Avoid inheriting a stale referrer from a previous Capybara scenario.
+    redirect_to root_path
   end
 
 protected

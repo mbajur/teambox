@@ -6,6 +6,7 @@ Given /^I am currently "([^\"]*)"$/ do |login|
 end
 
 Given /^(?:I am|I'm) logged in as @(\w+)$/ do |username|
+  Capybara.reset_sessions!
   visit "/login/#{username}"
   @current_user = User.find_by_login(username)
 end
