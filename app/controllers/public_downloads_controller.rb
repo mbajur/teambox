@@ -2,7 +2,6 @@ class PublicDownloadsController < ApplicationController
   include Downloads::Downloading
 
   skip_before_action :set_locale,
-                     :confirmed_user?,
                      :load_project,
                      :load_organizations,
                      :set_client,
