@@ -107,9 +107,7 @@ Then /^I should see "([^\"]+)" in the thread title$/ do |msg|
 end
 
 Then /^I should see "([^\"]+)" in the page title$/ do |msg|
-  header = find(".task_header h2")
-  title = header.text
-  title.should match(/#{msg}/)
+  expect(page).to have_css(".task_header h2, #content h2", text: /#{Regexp.escape(msg)}/)
 end
 
 Then /^I should see "([^\"]+)" in the thread starter$/ do |msg|

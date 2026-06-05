@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |f|
       flash[:error] = t("common.not_allowed")
-      f.any(:html, :m) { redirect_to projects_path }
+      f.any(:html) { redirect_to projects_path }
     end
   end
 
@@ -32,7 +32,6 @@ class ProjectsController < ApplicationController
           render "projects/new"
         end
       end
-      f.m     { redirect_to activities_path if request.path == "/" }
       # f.rss   { render layout: false }
       f.print { render layout: "print" }
     end
@@ -63,7 +62,7 @@ class ProjectsController < ApplicationController
     @new_conversation = @current_project.conversations.new(simple: true)
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.rss   { render layout: false }
       f.print { render layout: "print" }
     end
@@ -75,7 +74,7 @@ class ProjectsController < ApplicationController
     @project.build_organization
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -89,10 +88,9 @@ class ProjectsController < ApplicationController
         redirect_path = project_invite_people_path(@project)
 
         f.html { redirect_to redirect_path }
-        f.m { redirect_to @project }
       else
         flash.now[:error] = t("projects.new.invalid_project")
-        f.any(:html, :m) { render :new }
+        f.any(:html) { render :new }
       end
     end
   end
@@ -102,7 +100,7 @@ class ProjectsController < ApplicationController
     @sub_action = params[:sub_action] || "settings"
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -118,7 +116,7 @@ class ProjectsController < ApplicationController
     end
 
     respond_to do |f|
-      f.any(:html, :m) { render :edit }
+      f.any(:html) { render :edit }
     end
   end
 
@@ -143,7 +141,7 @@ class ProjectsController < ApplicationController
     authorize! :destroy, @current_project
     @current_project.destroy
     respond_to do |f|
-      f.any(:html, :m) {
+      f.any(:html) {
         flash[:success] = t("projects.edit.deleted")
         redirect_to projects_path
       }
@@ -151,7 +149,7 @@ class ProjectsController < ApplicationController
   end
 
   def join
-    if @current_project.organization.is_admin?(current_user)
+    if @current_project.organization && @current_project.organization.is_admin?(current_user)
       @current_project.add_user(current_user, role: Person::ROLES[:admin])
       flash[:success] = t("projects.join.welcome")
       redirect_to project_path(@current_project)

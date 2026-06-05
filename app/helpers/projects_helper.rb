@@ -117,7 +117,7 @@ module ProjectsHelper
 
   def join_project_link(project)
     msg = ""
-    if project.organization.is_admin?(current_user)
+    if project.organization && project.organization.is_admin?(current_user)
       msg = t("projects.not_in_project.explain_admin_html", organization: h(@current_project.organization))
       link_to t("projects.not_in_project.join"), join_project_path(project), title: msg, class: :join_link
     elsif project.public

@@ -11,7 +11,7 @@ class TasksController < ApplicationController
   def show
     authorize! :show, @task
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.js {
         @show_part = params[:part]
         render template: "tasks/reload"
@@ -24,7 +24,7 @@ class TasksController < ApplicationController
     @task = @task_list.tasks.new
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -52,7 +52,7 @@ class TasksController < ApplicationController
   def edit
     authorize! :update, @task
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.js { render layout: false }
     end
   end
@@ -69,7 +69,7 @@ class TasksController < ApplicationController
     end
 
     respond_to do |f|
-      f.any(:html, :m) {
+      f.any(:html) {
         if request.xhr? or iframe?
           if success and @task.comment_created?
             comment = @task.comments(true).first
@@ -101,7 +101,7 @@ class TasksController < ApplicationController
     @task.destroy
 
     respond_to do |f|
-      f.any(:html, :m) {
+      f.any(:html) {
         flash[:success] = t("deleted.task", name: @task.to_s)
         redirect_to [ @current_project, @task_list ]
       }

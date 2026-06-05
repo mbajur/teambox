@@ -73,16 +73,16 @@ class ApplicationController < ActionController::Base
       elsif @current_project.invitations.exists?(invited_user_id: current_user)
         # there is an invitation pending for accept
         redirect_to project_invitations_path(@current_project)
-      elsif @current_project.organization.is_admin?(current_user)
+      elsif @current_project.organization && @current_project.organization.is_admin?(current_user)
         nil
+      elsif @current_project.public
+        render "projects/not_in_project", status: :forbidden
       else
         # sorry, no dice
         if [ :rss, :ics ].include? request.formats.map(&:symbol)
           render nothing: true
         else
-          respond_to do |f|
-            f.any(:html, :m, :print) { render "projects/not_in_project", status: :forbidden }
-          end
+          render plain: "This is a private project and you're not authorized to access it.", status: :forbidden
         end
       end
     end
@@ -188,26 +188,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  MobileClients = /(iPhone|iPod|Android|Opera mini|Blackberry|Palm|Windows CE|Opera mobi|iemobile|webOS)/i
-
   def set_client
-    if [ :html, :m ].include?(request.format.try(:to_sym)) and session[:format]
-      # Format has been forced by Sessions#change_format
-      request.format = session[:format].to_sym
-    else
-      # We should autodetect mobile clients and redirect if they ask for html
-      mobile =   request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][MobileClients]
-      mobile ||= request.env["HTTP_PROFILE"] || request.env["HTTP_X_WAP_PROFILE"]
-      if mobile and request.format == :html
-        request.format = :m
-      end
-    end
+    # Mobile-specific format negotiation has been removed in favor of responsive HTML.
   end
-
-  def mobile?
-    request.format == :m
-  end
-  helper_method :mobile?
 
   def iframe?
     params[:iframe] == "true"

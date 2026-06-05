@@ -10,7 +10,7 @@ class FoldersController < ApplicationController
 
     respond_to do |f|
       f.js   { render layout: false }
-      f.any(:html, :m) { }
+      f.any(:html) { }
     end
   end
 
@@ -20,7 +20,7 @@ class FoldersController < ApplicationController
     @folder.update(folder_params)
     respond_to do |f|
       f.js   { render layout: false }
-      f.any(:html, :m) do
+      f.any(:html) do
         if @folder.valid?
           flash[:notice] = t("folders.rename.success")
         else
@@ -54,7 +54,7 @@ class FoldersController < ApplicationController
 
     respond_to do |f|
       f.js   { render layout: false }
-      f.any(:html, :m) do
+      f.any(:html) do
         flash[:success] = t("deleted.folder", name: @folder.name)
         redirect_to @parent_folder.nil? ? project_uploads_path(@current_project) : project_folder_path(@current_project, @parent_folder)
       end

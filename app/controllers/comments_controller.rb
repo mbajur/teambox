@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
     comment = target.comments.create_by_user current_user, comment_params
 
     respond_to do |wants|
-      wants.any(:html, :m)  {
+      wants.any(:html)  {
         if request.xhr? or iframe?
           if comment.new_record?
             output_errors_json(comment)
@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
     authorize! :edit, @comment
 
     respond_to do |wants|
-      wants.any(:html, :m) { render layout: false if request.xhr? }
+      wants.any(:html) { render layout: false if request.xhr? }
     end
   end
 

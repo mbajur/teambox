@@ -21,7 +21,6 @@ class ActivitiesController < ApplicationController
           redirect_to projects_path
         end
       end
-      format.m
     end
   end
 
@@ -72,7 +71,7 @@ class ActivitiesController < ApplicationController
         @current_project = Project.find_by_permalink(params[:project_id])
         if @current_project
           unless current_user.project_ids.include?(@current_project.id) ||
-                 @current_project.organization.is_admin?(current_user)
+                 (@current_project.organization && @current_project.organization.is_admin?(current_user))
             @current_project = nil
           end
         end

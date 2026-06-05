@@ -1,4 +1,4 @@
-- can_update = !mobile? and can?(:update, task)
+- can_update = can?(:update, task)
 
 .task_header
   - if can_update
@@ -8,7 +8,7 @@
         = t('common.or')
         = link_to t('common.delete'), [project, task_list, task], :'data-method' => 'delete',
           :'data-confirm' => t('confirm.delete_task')
-  
+
   %h2=h task.name
 
 - if can_update

@@ -48,8 +48,6 @@ Rails.application.routes.draw do
   get "/forgetting" => "reset_passwords#update_after_forgetting", :as => :update_after_forgetting, :method => :put
   get "/reset_password_sent" => "reset_passwords#sent", :as => :sent_password
 
-  get "/format/:f" => "sessions#change_format", :as => :change_format
-
   get "/projects/:project_id/invite/:login" => "invitations#create", :as => :create_project_invitation, :method => :post
 
   get "/auth/:provider/callback" => "auth#callback", :as => :auth_callback

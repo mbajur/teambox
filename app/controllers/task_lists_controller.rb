@@ -8,7 +8,7 @@ class TaskListsController < ApplicationController
     # Can they even edit the project?
     if @task_list
       respond_to do |f|
-        f.any(:html, :m) { flash[:error] = t("common.not_allowed"); redirect_to_task_list @task_list }
+        f.any(:html) { flash[:error] = t("common.not_allowed"); redirect_to_task_list @task_list }
         f.js   {
           render text: "alert(\"#{t('common.not_allowed')}\");", status: :unprocessable_entity
         }
@@ -24,7 +24,7 @@ class TaskListsController < ApplicationController
     @on_index = true
     @filter = TaskFilter.new(scope: Task.none, filters: params[:f])
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.rss {
         @activities = @current_project.activities.for_task_lists.latest
         render layout: false
@@ -41,7 +41,7 @@ class TaskListsController < ApplicationController
     @comments = @task_list.comments
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.js    { calc_onindex; @show_part = params[:part]; render "task_lists/reload", layout: false }
     end
     #   Use this snippet to test the notification emails that we send:
@@ -54,7 +54,7 @@ class TaskListsController < ApplicationController
     @on_index = true
     @task_list = @current_project.task_lists.new
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.js { render layout: false }
     end
   end
@@ -73,13 +73,11 @@ class TaskListsController < ApplicationController
     if @task_list and !@task_list.new_record?
       respond_to do |f|
         f.html { redirect_to_task_list @task_list }
-        f.m    { redirect_to_task_list }
         f.js   { render layout: false }
       end
     else
       respond_to do |f|
         f.html { render :new, status: :unprocessable_entity }
-        f.m    { render :new }
         f.js   { render layout: false }
       end
     end
@@ -91,7 +89,7 @@ class TaskListsController < ApplicationController
     calc_onindex
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.js { render layout: false }
     end
   end
@@ -103,12 +101,12 @@ class TaskListsController < ApplicationController
 
     if @saved
       respond_to do |f|
-        f.any(:html, :m) { non_js_list_redirect }
+        f.any(:html) { non_js_list_redirect }
         f.js   { render layout: false }
       end
     else
       respond_to do |f|
-        f.any(:html, :m) { render :edit }
+        f.any(:html) { render :edit }
         f.js   { render layout: false }
       end
     end
@@ -149,12 +147,12 @@ class TaskListsController < ApplicationController
       @task_list.save!
 
       respond_to do |f|
-        f.any(:html, :m) { non_js_list_redirect }
+        f.any(:html) { non_js_list_redirect }
         f.js   { render layout: false }
       end
     else
       respond_to do |f|
-        f.any(:html, :m) { flash[:error] = "Not allowed!"; non_js_list_redirect }
+        f.any(:html) { flash[:error] = "Not allowed!"; non_js_list_redirect }
         f.js   { render text: 'alert("Not allowed!");' }
       end
     end
@@ -187,7 +185,7 @@ class TaskListsController < ApplicationController
     @task_list.try(:destroy)
 
     respond_to do |f|
-      f.any(:html, :m) {
+      f.any(:html) {
         flash[:success] = t("deleted.task_list", name: @task_list.to_s)
         redirect_to_task_list }
       f.js   { render layout: false }

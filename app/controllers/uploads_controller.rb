@@ -12,7 +12,7 @@ class UploadsController < ApplicationController
     respond_to do |f|
       error_message = "You are not allowed to do that!"
       f.js             { render text: "alert('#{error_message}')" }
-      f.any(:html, :m) { render text: "alert('#{error_message}')" }
+      f.any(:html) { render text: "alert('#{error_message}')" }
     end
   end
 
@@ -38,7 +38,7 @@ class UploadsController < ApplicationController
     end
     respond_to do |format|
       format.js { render "move", layout: false }
-      format.any(:html, :m) do
+      format.any(:html) do
         if old_parent_folder_id
           redirect_to project_folder_path(@current_project, old_parent_folder_id)
         else
@@ -97,7 +97,7 @@ class UploadsController < ApplicationController
     unless params[:extractparts]
       respond_to do |format|
         format.js   { render "browsing", layout: false }
-        format.any(:html, :m) { }
+        format.any(:html) { }
       end
     end
   end
@@ -119,7 +119,7 @@ class UploadsController < ApplicationController
     previous_url = @upload.parent_folder_id ? project_folder_path(@current_project, @upload.parent_folder_id) : [ @current_project, :uploads ]
 
     respond_to do |wants|
-      wants.any(:html, :m) {
+      wants.any(:html) {
         if error
           flash[:error] = t("uploads.errors.general")
           redirect_to previous_url
@@ -143,7 +143,7 @@ class UploadsController < ApplicationController
 
     respond_to do |format|
       format.js   { render layout: false }
-      format.any(:html, :m)  { redirect_to project_uploads_path(@current_project) }
+      format.any(:html)  { redirect_to project_uploads_path(@current_project) }
     end
   end
 
@@ -154,7 +154,7 @@ class UploadsController < ApplicationController
 
     respond_to do |f|
       f.js   { render layout: false }
-      f.any(:html, :m) do
+      f.any(:html) do
         flash[:success] = t("deleted.upload", name: @upload.to_s)
         redirect_to project_uploads_path(@current_project)
       end
@@ -166,7 +166,7 @@ class UploadsController < ApplicationController
 
     respond_to do |f|
       f.js { render layout: false }
-      f.any(:html, :m) { render layout: "application" }
+      f.any(:html) { render layout: "application" }
     end
   end
 
@@ -176,7 +176,7 @@ class UploadsController < ApplicationController
 
     respond_to do |f|
       f.js { render layout: false }
-      f.any(:html, :m) do
+      f.any(:html) do
         if @rename_successful
           flash[:notice] = t("uploads.rename.success")
         else

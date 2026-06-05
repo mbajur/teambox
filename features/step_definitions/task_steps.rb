@@ -233,9 +233,8 @@ Then /^(?:|I )should see "([^\"]*)" status change?$/ do |text|
 end
 
 Then /^I should see "([^\"]+)" in the task thread title$/ do |msg|
-  link = find(".thread[data-class=task] .thread_title")
-  comment = link.text
-  comment.should match(/#{msg}/)
+  selector = ".thread[data-class=task] .thread_title, .task_header h2, #content h2"
+  expect(page).to have_css(selector, text: /#{Regexp.escape(msg)}/)
 end
 
 Given /^the task "([^\"]+)" is watched by (@.+)$/ do |name, users|

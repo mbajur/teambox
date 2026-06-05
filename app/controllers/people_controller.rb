@@ -12,7 +12,7 @@ class PeopleController < ApplicationController
     @invitations = @current_project.invitations
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.xml   { render xml: @people.to_xml(root: "people") }
     end
   end

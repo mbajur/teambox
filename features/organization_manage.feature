@@ -44,7 +44,7 @@ Feature: Managing organizations
 
   Scenario: I remove a participant from an organization
     When I follow "Manage users"
-    And I follow "remove from this organization"
+    And I follow "remove from this organization" within ".users_participants"
     And I wait for 1 second
     Then I should see "Pablo" within ".users_external"
 
@@ -55,19 +55,20 @@ Feature: Managing organizations
 
   Scenario: I promote an external to an admin
     When I follow "Manage users"
-    And I follow "add as an admin"
+    And I follow "add as an admin" within ".users_external"
     Then I should see "Jordi" within ".users_admins"
 
   Scenario: I promote an admin and then demote him to participant
     When I follow "Manage users"
-    And I follow "add as an admin"
+    And I follow "add as an admin" within ".users_external"
     And I follow "Remove admin rights"
     Then I should see "Jordi" within ".users_participants"
 
   Scenario: I promote an admin and then remove him from the organization
     When I follow "Manage users"
-    And I follow "add as an admin"
+    And I follow "add as an admin" within ".users_external"
     And I follow last "remove from this organization"
+    And I wait for 1 second
     Then I should see "Jordi" within ".users_external"
 
   Scenario: As a participant, I can't edit the organization's settings
