@@ -110,6 +110,7 @@ workflows:
       - test:
           requires:
             - build
-      - cucumber:
-          requires:
-            - build
+      # cucumber disabled - now runs as parallel matrix on GitHub CI
+      # - cucumber:
+      #     requires:
+      #       - build
