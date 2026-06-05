@@ -353,6 +353,8 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.27.0)
+    parallel_tests (5.7.0)
+      parallel
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
@@ -625,6 +627,7 @@ DEPENDENCIES
   oa-oauth (~> 0.0.1)
   pagy (~> 9.3)
   paperclip (~> 6.1)
+  parallel_tests
   permalink_fu (~> 1.0)
   pickle
   positioning (~> 0.4.6)

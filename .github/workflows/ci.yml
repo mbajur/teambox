@@ -53,8 +53,43 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  rspec:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:create db:schema:load
+
+      - name: Run RSpec
+        env:
+          RAILS_ENV: test
+        run: bundle exec rspec --format progress
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/coverage.xml
+          flags: rspec
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
   cucumber:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_index: [1, 2, 3, 4]
 
     steps:
       - name: Checkout code
@@ -72,14 +107,78 @@ jobs:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
+      - name: Restore test timing data
+        uses: actions/cache/restore@v4
+        with:
+          path: tmp/parallel_runtime_cucumber.log
+          # Primary key will never match (run_id not yet saved), so always falls back to restore-keys
+          key: parallel-timings-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            parallel-timings-${{ github.ref_name }}-
+            parallel-timings-
+
       - name: Set up database
         env:
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load
 
-      - name: Run Cucumber features
+      - name: Run Cucumber features (group ${{ matrix.ci_node_index }} of 4)
         env:
           RAILS_ENV: test
           CI: true
-        run: bundle exec cucumber --tags 'not @ignore' --format progress
+        run: |
+          mkdir -p tmp
+          bundle exec parallel_test features/ \
+            --type cucumber \
+            --only-group ${{ matrix.ci_node_index }} \
+            -n 4 \
+            --runtime-log tmp/parallel_runtime_cucumber.log \
+            --test-options "--tags 'not @ignore' --format progress"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/coverage.xml
+          flags: cucumber-${{ matrix.ci_node_index }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+      - name: Upload timing artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: timing-${{ matrix.ci_node_index }}
+          path: tmp/parallel_runtime_cucumber.log
+          if-no-files-found: ignore
+
+  save_timings:
+    runs-on: ubuntu-latest
+    needs: cucumber
+    if: always()
+
+    steps:
+      - name: Download all timing artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: timing-*
+          path: tmp/timings
+
+      - name: Merge timing data from all shards
+        run: |
+          mkdir -p tmp
+          if ls tmp/timings/*/parallel_runtime_cucumber.log 1>/dev/null 2>&1; then
+            # Keep the last recorded time for each file (later shards win on duplicates)
+            awk -F: '{ times[$1] = $0 } END { for (f in times) print times[f] }' \
+              tmp/timings/*/parallel_runtime_cucumber.log \
+              > tmp/parallel_runtime_cucumber.log
+            echo "Merged $(wc -l < tmp/parallel_runtime_cucumber.log) file timings"
+          else
+            echo "No timing artifacts found"
+          fi
+
+      - name: Save merged timing data
+        uses: actions/cache/save@v4
+        with:
+          path: tmp/parallel_runtime_cucumber.log
+          key: parallel-timings-${{ github.ref_name }}-${{ github.run_id }}
 
