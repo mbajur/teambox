@@ -44,7 +44,10 @@ class ActivitiesController < ApplicationController
   end
 
   def show_thread
-    # FIXME: insecure!
+    # Whitelist permitted thread types to prevent Remote Code Execution via constantize
+    allowed_types = %w[Conversation Task TaskList]
+    raise ActionController::BadRequest, "Invalid thread type" unless allowed_types.include?(params[:thread_type])
+
     target = params[:thread_type].constantize.find params[:id]
     authorize! :show, target
 

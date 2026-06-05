@@ -16,8 +16,11 @@ class UploadsController < ApplicationController
     end
   end
 
+  ALLOWED_MOVEABLE_TYPES = %w[upload folder].freeze
+
   def move
     @moveable_type = params[:moveable_type] || "upload"
+    raise ActionController::BadRequest, "Invalid moveable type" unless ALLOWED_MOVEABLE_TYPES.include?(@moveable_type)
 
     if request.get?
       @moveable = @current_project.send(@moveable_type.pluralize.to_sym).find(params[:id])
@@ -59,8 +62,11 @@ class UploadsController < ApplicationController
     render :public_download, layout: false
   end
 
+  ALLOWED_DOWNLOADABLE_TYPES = %w[upload folder].freeze
+
   def email_public
     downloadable_type = params[:downloadable][:downloadable_type]
+    raise ActionController::BadRequest, "Invalid downloadable type" unless ALLOWED_DOWNLOADABLE_TYPES.include?(downloadable_type)
     @downloadable = @current_project.send(downloadable_type.pluralize.to_sym).find(params[:id])
     @downloadable.invited_user_email = params[:downloadable][:invited_user_email]
 

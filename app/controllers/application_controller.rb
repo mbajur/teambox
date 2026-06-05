@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def check_permissions
     unless @current_project.editable?(current_user)
-      render text: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
+      render plain: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
     end
   end
 
@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_no_permissions
-    render text: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
+    render plain: "You don't have permission to edit/update/delete within \"#{@current_project.name}\" project", status: :forbidden
   end
 
   def rss_token

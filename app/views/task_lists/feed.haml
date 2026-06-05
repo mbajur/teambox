@@ -1,5 +1,5 @@
--content_for :column do
-=task_list_column(@current_project,@task_list)
+- content_for :column do
+  = task_list_column(@current_project, @task_list)
 
 - unless @task_lists.empty?
   #activities.collapsed
