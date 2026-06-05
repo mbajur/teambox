@@ -10,14 +10,14 @@ While Teambox has been dormant for over a decade, its spirit and ideas live on. 
 This is not a direct continuation — it’s a ground-up rewrite. The objectives of this revamped version include:
 
 ### Core Architecture
-- [ ] Upgrade to Rails 8
+- [x] Upgrade to Rails 8
 - [ ] Refactor as a mountable Rails engine
 - [ ] Support installation into existing Rails apps
 
 ### Frontend
 - [ ] Replace legacy UI with Tailwind CSS
 - [ ] Implement fully responsive design (RWD)
-- [ ] Integrate Hotwire (Turbo + Stimulus) for interactivity
+- [x] Integrate Hotwire (Turbo + Stimulus) for interactivity
 - [ ] Remove legacy JavaScript dependencies (jQuery, Backbone, etc.)
 
 ### Extensibility
@@ -38,7 +38,7 @@ This is not a direct continuation — it’s a ground-up rewrite. The objectives
 - [ ] Provide development setup instructions and seed data
 - [ ] Write specs for all core modules
 - [ ] Ensure engine is testable in isolation and within a host app
-- [ ] CI / Specs suite
+- [x] CI / Specs suite
 
 ## 🎓 Tribute
 
