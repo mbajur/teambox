@@ -182,21 +182,3 @@ jobs:
           path: tmp/parallel_runtime_cucumber.log
           key: parallel-timings-${{ github.ref_name }}-${{ github.run_id }}
 
-  tests:
-    runs-on: ubuntu-latest
-    needs: [rspec, cucumber]
-    if: always()
-
-    steps:
-      - name: Verify all test jobs passed
-        run: |
-          echo "rspec result: ${{ needs.rspec.result }}"
-          echo "cucumber result: ${{ needs.cucumber.result }}"
-
-          if [ "${{ needs.rspec.result }}" != "success" ] || [ "${{ needs.cucumber.result }}" != "success" ]; then
-            echo "One or more required test jobs failed"
-            exit 1
-          fi
-
-          echo "All required test jobs passed"
-
