@@ -100,7 +100,7 @@ jobs:
           bundle exec parallel_test features/ \
             --type cucumber \
             --only-group ${{ matrix.ci_node_index }} \
-            --groups 4 \
+            -n 4 \
             --runtime-log tmp/parallel_runtime_cucumber.log \
             -- --tags 'not @ignore' --format progress
 
