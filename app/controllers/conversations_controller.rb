@@ -124,15 +124,18 @@ class ConversationsController < ApplicationController
     end
 
     if success
-      if request.xhr? or iframe?
+      task_path = project_task_path(@current_project, @task)
+
+      if request.format.turbo_stream?
+        redirect_to task_path, status: :see_other
+      elsif request.xhr? or iframe?
         if request.referer.ends_with?(project_conversation_path(@current_project, @conversation))
-          render plain: project_task_path(@current_project, @task)
+          render plain: task_path
         else
           render partial: "activities/thread", locals: { thread: @task }
         end
       else
-        # redirect_to current_conversation
-        redirect_to project_task_path(@current_project, @task)
+        redirect_to task_path
       end
     else
       respond_to do |f|

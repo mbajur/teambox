@@ -1,6 +1,8 @@
 When /^(?:|I )fill in the comment box with "([^\"]*)"(?: within "([^\"]*)")?$/ do |value, selector|
   with_scope(selector) do
-    find(:xpath, '//textarea[contains(@name, \'[body]\')]').set(value)
+    field = first(:css, 'textarea[name*="[body]"], textarea[name*="comment[body]"], form.new_comment textarea, form.edit_comment textarea', visible: :visible)
+    raise Capybara::ElementNotFound, 'Unable to find a visible comment textarea' unless field
+    field.set(value)
   end
 end
 
