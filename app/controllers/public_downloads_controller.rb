@@ -1,17 +1,17 @@
 class PublicDownloadsController < ApplicationController
   include Downloads::Downloading
 
-  skip_action :set_locale,
-              :rss_token,
-              :confirmed_user?,
-              :load_project,
-              :load_organizations,
-              :set_client,
-              :login_required,
-              :touch_user,
-              :belongs_to_project?,
-              :load_community_organization,
-              :add_chrome_frame_header
+  skip_before_action :set_locale,
+                     :rss_token,
+                     :confirmed_user?,
+                     :load_project,
+                     :load_organizations,
+                     :set_client,
+                     :login_required,
+                     :touch_user,
+                     :belongs_to_project?,
+                     :load_community_organization,
+                     :add_chrome_frame_header
 
   # TODO before_filter :set_headers no store, no cache
   before_action :get_upload_by_token, only: [ :download, :download_send ]
