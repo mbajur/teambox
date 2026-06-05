@@ -21,7 +21,6 @@ class ActivitiesController < ApplicationController
           redirect_to projects_path
         end
       end
-      format.m
     end
   end
 

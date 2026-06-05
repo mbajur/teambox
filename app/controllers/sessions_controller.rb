@@ -12,7 +12,6 @@ class SessionsController < ApplicationController
     @signups_enabled = signups_enabled?
     respond_to do |format|
       format.html { redirect_to root_path if authenticated? }
-      format.m { redirect_to activities_path if authenticated? }
     end
   end
 
@@ -31,7 +30,6 @@ class SessionsController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_back_or_to root_url }
-        format.m { redirect_back_or_to activities_url }
       end
     else
       note_failed_signin
@@ -63,7 +61,6 @@ class SessionsController < ApplicationController
 
     #   respond_to do |format|
     #     format.html { redirect_back_or_to root_url }
-    #     format.m { redirect_back_or_to activities_url }
     #   end
     # else
     #   note_failed_signin
@@ -88,17 +85,6 @@ class SessionsController < ApplicationController
     redirect_back fallback_location: root_path
   end
 
-  # This puts a parameter on your session to force mobile or web version
-  def change_format
-    if %w[m html].include? params[:f]
-      session[:format] = params[:f]
-    else
-      flash[:error] = "Invalid format"
-    end
-
-    redirect_back_or_to root_path
-  end
-
 protected
   # Track failed login attempts
   def note_failed_signin
@@ -112,18 +98,15 @@ protected
       if User.count == 0
         respond_to do |f|
           f.html { render :configure_your_deployment }
-          f.m { render :configure_your_deployment }
         end
       elsif @organization = Organization.first
         respond_to do |f|
           f.html { render "sites/show", layout: "sites" }
-          f.m { render "sites/show", layout: "sites" }
         end
       else
         flash[:error] = "The configuration didn't finish. Please log in as #{User.first} and complete it by creating an organization."
         respond_to do |f|
           f.html { render :new }
-          f.m { render :new }
         end
       end
     end

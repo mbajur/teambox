@@ -3,7 +3,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def content_for(*args)
-    super unless args.first.to_sym == :column and mobile?
+    super
   end
 
   def logo_image
@@ -104,10 +104,6 @@ module ApplicationHelper
     if url = Rails.configuration.teambox.support_url
       link_to t(".support"), url
     end
-  end
-
-  def mobile_link
-    link_to t(".mobile"), change_format_path(:m)
   end
 
   def help_link

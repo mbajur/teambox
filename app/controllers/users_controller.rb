@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   def index
     # show current user
     respond_to do |f|
-      f.any(:html, :m)  { redirect_to root_path }
+      f.any(:html)  { redirect_to root_path }
     end
   end
 
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |f|
-      f.any(:html, :m) { render layout: "sessions" }
+      f.any(:html) { render layout: "sessions" }
     end
   end
 
@@ -56,12 +56,12 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user != current_user and (!@shares_invited_projects and @projects_shared.empty?)
-        format.any(:html, :m) {
+        format.any(:html) {
           flash[:error] = t("users.activation.invalid_user")
           redirect_to root_path
         }
       else
-        format.any(:html, :m)
+        format.any(:html)
       end
     end
   end
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
       end
     else
       respond_to do |f|
-        f.any(:html, :m) { render action: :new, layout: "sessions", status: :unprocessable_entity }
+        f.any(:html) { render action: :new, layout: "sessions", status: :unprocessable_entity }
       end
     end
   end

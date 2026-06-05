@@ -11,7 +11,7 @@ class ConversationsController < ApplicationController
     @conversation = @current_project.conversations.new
 
     respond_to do |f|
-      f.any(:html, :m) { }
+      f.any(:html) { }
     end
   end
 
@@ -22,7 +22,7 @@ class ConversationsController < ApplicationController
 
     if @conversation.save
       respond_to do |f|
-        f.any(:html, :m) {
+        f.any(:html) {
           if request.xhr? or iframe?
             render partial: "activities/thread", locals: { thread: @conversation }
           else
@@ -32,7 +32,7 @@ class ConversationsController < ApplicationController
       end
     else
       respond_to do |f|
-        f.any(:html, :m) {
+        f.any(:html) {
           if request.xhr? or iframe?
             output_errors_json(@conversation)
           else
@@ -51,7 +51,7 @@ class ConversationsController < ApplicationController
       joins("LEFT JOIN watchers ON (conversations.id = watchers.watchable_id AND watchers.watchable_type = 'Conversation') AND watchers.user_id = #{current_user.id}")
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.rss   { render layout: false }
     end
   end
@@ -64,7 +64,7 @@ class ConversationsController < ApplicationController
 
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -74,7 +74,7 @@ class ConversationsController < ApplicationController
 
     respond_to do |f|
       f.js   { head :ok }
-      f.any(:html, :m) { redirect_to current_conversation }
+      f.any(:html) { redirect_to current_conversation }
     end
   end
 
@@ -83,7 +83,7 @@ class ConversationsController < ApplicationController
     @conversation.destroy
 
     respond_to do |f|
-      f.any(:html, :m) do
+      f.any(:html) do
         flash[:success] = t("deleted.conversation", name: @conversation.to_s)
         redirect_to project_conversations_path(@current_project)
       end
@@ -97,7 +97,7 @@ class ConversationsController < ApplicationController
 
     respond_to do |f|
       f.js { render layout: false }
-      f.any(:html, :m) { redirect_to current_conversation }
+      f.any(:html) { redirect_to current_conversation }
     end
   end
 
@@ -106,7 +106,7 @@ class ConversationsController < ApplicationController
 
     respond_to do |f|
       f.js { render layout: false }
-      f.any(:html, :m) { redirect_to current_conversation }
+      f.any(:html) { redirect_to current_conversation }
     end
   end
 

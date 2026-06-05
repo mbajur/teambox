@@ -188,26 +188,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  MobileClients = /(iPhone|iPod|Android|Opera mini|Blackberry|Palm|Windows CE|Opera mobi|iemobile|webOS)/i
-
   def set_client
-    if [ :html, :m ].include?(request.format.try(:to_sym)) and session[:format]
-      # Format has been forced by Sessions#change_format
-      request.format = session[:format].to_sym
-    else
-      # We should autodetect mobile clients and redirect if they ask for html
-      mobile =   request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][MobileClients]
-      mobile ||= request.env["HTTP_PROFILE"] || request.env["HTTP_X_WAP_PROFILE"]
-      if mobile and request.format == :html
-        request.format = :m
-      end
-    end
+    # Mobile-specific format negotiation has been removed in favor of responsive HTML.
   end
-
-  def mobile?
-    request.format == :m
-  end
-  helper_method :mobile?
 
   def iframe?
     params[:iframe] == "true"

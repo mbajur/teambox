@@ -17,7 +17,7 @@ class PagesController < ApplicationController
                      joins("LEFT JOIN watchers ON (pages.id = watchers.watchable_id AND watchers.watchable_type = 'Page') AND watchers.user_id = #{current_user.id}")
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
       f.rss { render layout: false }
     end
   end
@@ -27,7 +27,7 @@ class PagesController < ApplicationController
     @page = @current_project.new_page(current_user, params[:page])
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -36,9 +36,9 @@ class PagesController < ApplicationController
     @page = @current_project.new_page(current_user, page_params)
     respond_to do |f|
       if @page.save
-        f.any(:html, :m) { redirect_to project_page_path(@current_project, @page) }
+        f.any(:html) { redirect_to project_page_path(@current_project, @page) }
       else
-        f.any(:html, :m) { render :new }
+        f.any(:html) { render :new }
       end
     end
   end
@@ -48,7 +48,7 @@ class PagesController < ApplicationController
     @pages = @current_project.pages
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -56,14 +56,6 @@ class PagesController < ApplicationController
     authorize! :update, @page
     respond_to do |f|
       f.html
-      f.m   {
-        @edit_part = params[:edit_part]
-        if @edit_part == "page"
-          render :show
-        else
-          render :edit
-        end
-      }
     end
   end
 
@@ -72,9 +64,9 @@ class PagesController < ApplicationController
     @page.updating_user = current_user
     respond_to do |f|
       if @page.update(page_params)
-        f.any(:html, :m)  { redirect_to project_page_path(@current_project, @page) }
+        f.any(:html)  { redirect_to project_page_path(@current_project, @page) }
       else
-        f.any(:html, :m)  { render :edit }
+        f.any(:html)  { render :edit }
       end
     end
   end
@@ -95,12 +87,12 @@ class PagesController < ApplicationController
 
       respond_to do |f|
         flash[:success] = t("deleted.page", name: @page.to_s)
-        f.any(:html, :m)  { redirect_to project_pages_path(@current_project) }
+        f.any(:html)  { redirect_to project_pages_path(@current_project) }
       end
     else
       respond_to do |f|
         flash[:error] = t("common.not_allowed")
-        f.any(:html, :m) { redirect_to project_page_path(@current_project, @page) }
+        f.any(:html) { redirect_to project_page_path(@current_project, @page) }
       end
     end
   end

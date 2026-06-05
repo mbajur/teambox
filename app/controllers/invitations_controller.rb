@@ -30,7 +30,7 @@ class InvitationsController < ApplicationController
       end
 
       respond_to do |f|
-        f.any(:html, :m) {
+        f.any(:html) {
           if @invitation
             render action: "index_project"
           else
@@ -40,7 +40,7 @@ class InvitationsController < ApplicationController
     else
       @invitations = current_user.invitations.pending_projects
       respond_to do |f|
-        f.any(:html, :m) { render action: "index_user" }
+        f.any(:html) { render action: "index_user" }
       end
     end
   end
@@ -50,7 +50,7 @@ class InvitationsController < ApplicationController
     @invitation = @invite_target.invitations.new
 
     respond_to do |f|
-      f.any(:html, :m)
+      f.any(:html)
     end
   end
 
@@ -74,11 +74,11 @@ class InvitationsController < ApplicationController
 
     respond_to do |f|
       if @invitations and @saved_count.to_i > 0
-        f.any(:html, :m) { redirect_to target_people_path }
+        f.any(:html) { redirect_to target_people_path }
       else
         message = @invitations.length == 1 ? @invitations.first.errors.full_messages.first :
                                              t("people.errors.users_or_emails")
-        f.any(:html, :m) { flash[:error] = message; redirect_to target_people_path }
+        f.any(:html) { flash[:error] = message; redirect_to target_people_path }
       end
     end
   end
@@ -89,7 +89,7 @@ class InvitationsController < ApplicationController
     @invitation.send_email
 
     respond_to do |wants|
-      wants.any(:html, :m) {
+      wants.any(:html) {
         flash[:notice] = t("invitations.resend.resent", recipient: @invitation.email)
         if @invitation.project
           redirect_to project_people_path(@invitation.project)
