@@ -6,6 +6,12 @@
   = f.label :name, t('.name_html')
   = f.text_field :name, :autofocus => %w[new edit].include?(action_name) || nil
 
+  %br/
+  %br/
+
+  = f.label :description, t('.description_html')
+  = f.rich_text_area :description, :rows => 5
+
 - if f.object.new_record?
   %p.optional= t('.optional')
 

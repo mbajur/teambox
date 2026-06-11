@@ -933,6 +933,7 @@ en:
       title: New Task
       task: "Choose an actionable task. The more specific, the better."
       name_html: Enter a Task title <i>eg. Upload Logo Proposal</i>
+      description_html: Description
       optional: You can provide better instructions for this Task below.
       body_html: What needs to be done? <i>optional</i>
       due_on_html: Needs to be done before... <i>optional</i>

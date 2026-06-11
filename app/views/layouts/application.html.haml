@@ -17,6 +17,9 @@
 
     <link rel="stylesheet" href="https://unpkg.com/stimulus-datepicker@1.0.5/css/datepicker.css" data-turbo-track="reload">
 
+    -# Can this be somehow fetched from the gem?
+    <link rel="stylesheet" href="https://unpkg.com/@37signals/lexxy@latest/dist/stylesheets/lexxy.css">
+
     :javascript
       window.locales = #{File.read(Rails.root.join('public', 'locales.json'))};
 

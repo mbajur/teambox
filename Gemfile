@@ -122,3 +122,5 @@ gem "pagy", "~> 9.3"
 gem "icalendar", "~> 2.11"
 
 gem "clockwork", "~> 3.0"
+
+gem "lexxy", "~> 0.1.26.beta"

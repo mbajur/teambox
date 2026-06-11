@@ -3,6 +3,7 @@ import "@hotwired/turbo-rails"
 import Rails from "@rails/ujs"
 import "trix"
 import "@rails/actiontext"
+import "lexxy"
 
 import "utils"
 import "controllers"

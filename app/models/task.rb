@@ -22,6 +22,8 @@ class Task < RoleRecord
   belongs_to :assigned, class_name: "Person", optional: true
   has_many :comments, -> { order("created_at DESC") }, as: :target, dependent: :destroy
 
+  has_rich_text :description
+
   positioned on: :task_list
 
   accepts_nested_attributes_for :comments, allow_destroy: false,
